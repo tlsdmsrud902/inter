@@ -9,7 +9,7 @@ eppum 저장소(`tlsdmsrud902/k_eppum`)는 읽기만 하고 건드리지 않았�
 | 카페24 계정 (mall_id) | `inter902` (`https://inter902.cafe24.com`) |
 | 스킨 폴더 | `inter902_s2_260925195134_d_skin1_E/skin1` |
 | 디자인 코드 · 번호 | `base` · `1` (`ez/ez-settings.json`) |
-| 이미지 서버 번호 | **아직 모름** → 파일업로더 주소의 `pg…` 를 받아 `ez/ez-product-display-setting.data.json` 의 `PG_NUMBER` 와 `docs/pack.py` 실행 값으로 쓴다 |
+| 이미지 서버 번호 | `pg3424b38727055046` (파일업로더 주소 `https://ecimg.cafe24img.com/pg3424b38727055046/inter902/inter/…`) |
 | 이미지 폴더 | `SkinImg/inter/` (파일업로더 폴더도 `inter`) |
 | 코드 이름 | 클래스 `inter-*`, 전역 변수 `INTER_*`, 페이지 `/inter/guide.html` |
 
@@ -53,3 +53,9 @@ eppum 저장소(`tlsdmsrud902/k_eppum`)는 읽기만 하고 건드리지 않았�
 3. PC Claude 세션 : 분류 이름(24~28) → 상품 24개 등록 · 사진 파일 업로드 → 메인 진열 → [연출 예시] 리뷰 → 뉴스/이벤트(2번) 게시판 켜기
 4. 실제 상품번호로 메인 "장면 속 그 상품" `data-prd` 교체
 5. 디자인센터 상세페이지의 편집 화면 캡처는 적용 후 새로 찍어 넣기
+
+## 8. 디자인 복구 파일 (2026-09-29)
+- 백업 : `inter902_s2_260929211054_d_base_E.tar.gz` (카페24 기본디자인, 파일 496 · 폴더 77 · 바로가기 51)
+- 만들기 : `python3 docs/pack.py <백업.tar.gz> pg3424b38727055046` → `_deploy/inter902_s2_260929211054_d_base_E.tar.gz` (git 제외)
+- 결과 : 바로가기 51 그대로 · 교체 496 · 추가 38 · 0.62MB, 로컬 이미지 경로 0, 스킨이 쓰는 이미지는 모두 파일업로더에 있음
+- 두 번째 복구부터는 새로 백업해서 **새 이름**으로 만든다
