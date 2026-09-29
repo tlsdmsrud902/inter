@@ -1,0 +1,312 @@
+@charset "utf-8";
+/* ==========================================================================
+   STUDIO9 — 브랜드 토큰 오버라이드 + 메인 신규 섹션
+   --------------------------------------------------------------------------
+   · 반드시 seraphin.css / st-sub.css 뒤에 불러온다 (layout.html 맨 끝).
+   · 기존 파일은 하나도 고치지 않는다. 되돌리려면 layout.html 의
+     이 파일 @css 한 줄만 지우면 원래 SERAPHIN 톤으로 완전히 돌아간다.
+
+   [적용 범위]
+   1. 팔레트  : 웜 아이보리 → 화이트 + 차콜 (Studio9 × Nutrio 토큰)
+   2. 라벨 폰트: Archivo → Jost  (한글 본문 Pretendard 는 그대로)
+   3. 신규 섹션: 메인 REVIEWS (.st-quote)
+   4. 카테고리 배너 4단 정리
+
+   [일부러 바꾸지 않은 것]
+   · --st-display (Anton) — 히어로·섹션 헤드라인의 크기 clamp 값이 Anton 의
+     좁은 폭에 맞춰 잡혀 있다. Jost(기하학적·넓은 폭)로 바꾸면 히어로 글자가
+     화면 밖으로 넘친다. 디스플레이까지 Jost 로 가려면 st-main.css 의
+     --st-fs-mega / --st-fs-xl 을 함께 다시 잡아야 한다.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. 브랜드 토큰 — Studio9 × Nutrio 디자인 시스템 값
+   -------------------------------------------------------------------------- */
+:root {
+	--st-bg:#FFFFFF;				/* background */
+	--st-bg-alt:#F5F5F8;			/* surface muted */
+	--st-ink:#262735;				/* text primary (순검정 대신 차콜) */
+	--st-ink-60:#666779;			/* text secondary */
+	--st-ink-35:#9a9bad;			/* text muted */
+	--st-ink-12:#E4E5EC;			/* border */
+	--st-red:#C94A4A;				/* sale */
+	--st-invert:#FFFFFF;
+
+	--st-label:'Jost', 'Archivo', 'Pretendard', sans-serif;
+
+	/* Studio9 보조 색 — 캠페인·배지에만 아껴 쓴다 */
+	--s9-navy:#0D297A;
+	--s9-brown:#9C4C21;
+	--s9-sage:#7FA877;
+	--s9-mint:#ABDECE;
+	--s9-warm:#F7EFE6;
+	--s9-radius:2px;
+}
+
+/* --------------------------------------------------------------------------
+   2. 메인 REVIEWS — 후기 풀쿼트 1 + 목록 3
+   -------------------------------------------------------------------------- */
+#contents .st-quote .st-quote__grid {
+	display:grid;
+	grid-template-columns:minmax(0, 1.05fr) minmax(0, .95fr);
+	gap:clamp(32px, 5vw, 72px);
+	align-items:start;
+	padding:0 var(--st-gutter);
+}
+
+#contents .st-quote .st-quote__lead { margin:0; }
+
+#contents .st-quote .st-quote__stars {
+	margin:0 0 18px;
+	font-family:var(--st-label);
+	font-size:15px;
+	letter-spacing:.24em;
+	color:var(--st-ink);
+}
+
+#contents .st-quote .st-quote__leadText {
+	margin:0 0 20px;
+	font-family:var(--st-body);
+	font-size:clamp(19px, 2.1vw, 30px);
+	font-weight:500;
+	line-height:1.55;
+	letter-spacing:-.02em;
+	color:var(--st-ink);
+	word-break:keep-all;
+}
+
+#contents .st-quote .st-quote__leadMeta {
+	font-family:var(--st-body);
+	font-size:14px;
+	line-height:1.6;
+	color:var(--st-ink-60);
+}
+
+#contents .st-quote .st-quote__list {
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+
+#contents .st-quote .st-quote__item { border-top:1px solid var(--st-ink-12); }
+#contents .st-quote .st-quote__item:last-child { border-bottom:1px solid var(--st-ink-12); }
+
+#contents .st-quote .st-quote__item > a {
+	display:flex;
+	align-items:center;
+	gap:16px;
+	padding:18px 0;
+	color:inherit;
+	text-decoration:none;
+}
+
+#contents .st-quote .st-quote__thumb {
+	flex:none;
+	width:56px;
+	height:68px;
+	overflow:hidden;
+	border-radius:var(--s9-radius);
+	background:var(--st-bg-alt);
+}
+#contents .st-quote .st-quote__thumb img {
+	width:100%;
+	height:100%;
+	object-fit:cover;
+	display:block;
+}
+
+#contents .st-quote .st-quote__body { flex:1 1 auto; min-width:0; }
+
+#contents .st-quote .st-quote__text {
+	display:block;
+	margin-bottom:5px;
+	font-family:var(--st-body);
+	font-size:14px;
+	line-height:1.55;
+	color:var(--st-ink);
+	word-break:keep-all;
+}
+
+#contents .st-quote .st-quote__meta {
+	display:block;
+	font-family:var(--st-body);
+	font-size:12px;
+	color:var(--st-ink-60);
+}
+
+#contents .st-quote .st-quote__price {
+	flex:none;
+	font-family:var(--st-label);
+	font-size:14px;
+	font-weight:700;
+	color:var(--st-red);
+	white-space:nowrap;
+}
+#contents .st-quote .st-quote__price:empty { display:none; }
+
+@media (max-width:1024px) {
+	#contents .st-quote .st-quote__grid {
+		grid-template-columns:minmax(0, 1fr);
+		gap:28px;
+	}
+	#contents .st-quote .st-quote__thumb { width:48px; height:58px; }
+	#contents .st-quote .st-quote__item > a { padding:15px 0; gap:13px; }
+}
+
+/* --------------------------------------------------------------------------
+   3. 카테고리 배너 — 4단, 2·4번째를 내려 엇갈리게 (데스크톱만)
+   -------------------------------------------------------------------------- */
+#contents .main_image_text_gallery .ez-column-4 > li .main_banner_txt01 {
+	font-family:var(--st-body);
+	font-weight:700;
+	letter-spacing:-.01em;
+	color:var(--st-ink);
+}
+#contents .main_image_text_gallery .ez-column-4 > li .main_banner_more {
+	font-family:var(--st-body);
+	color:var(--st-ink-60);
+}
+
+@media (min-width:1025px) {
+	#contents .main_image_text_gallery .ez-column-4 > li:nth-child(2n) {
+		margin-top:clamp(40px, 6vw, 100px);
+	}
+}
+
+/* --------------------------------------------------------------------------
+   4. 라벨류 — Jost 로 바뀐 뒤 자간 미세 조정
+   -------------------------------------------------------------------------- */
+#contents .st-bracket,
+#contents .st-paren,
+#contents .st-striphead {
+	font-family:var(--st-label);
+}
+
+#header .st-logo,
+#footer .st-logo--footer { image-rendering:auto; }
+
+/* ==========================================================================
+   5. HERO — 정적 캠페인 사진 (원래 디자인 캔버스). 영상·스크럽 없음.
+   -------------------------------------------------------------------------- */
+.st-hero-s9 { position:relative; width:100%; height:clamp(520px, 62vw, 860px); overflow:hidden; background:#222; }
+.st-hero-s9__media { position:absolute; inset:0; }
+.st-hero-s9__media img { width:100%; height:100%; object-fit:cover; object-position:50% 42%; display:block; }
+.st-hero-s9__scrim {
+	position:absolute; left:0; right:0; bottom:0; height:68%;
+	background:linear-gradient(to top, rgba(0,0,0,.78), rgba(0,0,0,.30) 46%, rgba(0,0,0,0));
+}
+.st-hero-s9__inner {
+	position:absolute; left:var(--st-gutter); right:var(--st-gutter); bottom:clamp(32px, 5vw, 76px);
+	max-width:700px; color:#fff;
+}
+.st-hero-s9__tag {
+	margin:0 0 18px; font-family:var(--st-label); font-size:11px; font-weight:600;
+	letter-spacing:.24em; color:var(--s9-mint); text-decoration:none; display:inline-block;
+}
+.st-hero-s9__title {
+	margin:0 0 14px; font-family:var(--st-display); font-size:clamp(40px, 7vw, 88px);
+	line-height:.98; letter-spacing:-.02em; color:#fff; font-weight:400;
+}
+.st-hero-s9__sub { margin:0 0 30px; font-family:var(--st-body); font-size:clamp(15px, 1.6vw, 22px); font-weight:500; color:rgba(255,255,255,.88); }
+.st-hero-s9__cta {
+	display:inline-block; background:#fff; color:var(--st-ink); font-family:var(--st-body);
+	font-size:14px; font-weight:700; padding:16px 36px; border-radius:var(--s9-radius); text-decoration:none;
+}
+.st-hero-s9__cta:hover { color:var(--st-ink); opacity:.9; }
+@media (max-width:1024px) {
+	.st-hero-s9 { height:clamp(440px, 90vw, 620px); }
+	.st-hero-s9__inner { max-width:none; right:var(--st-gutter); }
+}
+
+/* --------------------------------------------------------------------------
+   6. 혜택 바
+   -------------------------------------------------------------------------- */
+.st-benefit-s9 { border-top:1px solid var(--st-ink-12); border-bottom:1px solid var(--st-ink-12); }
+.st-benefit-s9__list {
+	list-style:none; margin:0; padding:0; display:flex; align-items:center; justify-content:center;
+	gap:clamp(28px, 6vw, 96px); height:clamp(64px, 6vw, 96px); flex-wrap:wrap;
+}
+.st-benefit-s9__list li { display:flex; align-items:center; gap:10px; font-family:var(--st-body); font-size:13px; font-weight:600; color:var(--st-ink); }
+.st-benefit-s9__list svg { flex:none; color:var(--st-ink); }
+
+/* --------------------------------------------------------------------------
+   7. FABRIC — 좌우 분할(사진 + 잉크 패널)
+   -------------------------------------------------------------------------- */
+.st-fabric-s9 { display:flex; width:100%; margin-top:var(--st-section-gap); flex-wrap:wrap; }
+.st-fabric-s9__media { flex:1 1 54%; min-width:320px; aspect-ratio:744/600; overflow:hidden; }
+.st-fabric-s9__media img { width:100%; height:100%; object-fit:cover; display:block; }
+.st-fabric-s9__panel {
+	flex:1 1 40%; min-width:320px; background:var(--st-ink); color:#fff; box-sizing:border-box;
+	display:flex; flex-direction:column; justify-content:center; padding:clamp(40px, 5vw, 76px);
+}
+.st-fabric-s9__eyebrow { margin:0 0 20px; font-family:var(--st-label); font-size:11px; font-weight:600; letter-spacing:.24em; color:var(--s9-mint); }
+.st-fabric-s9__title { margin:0 0 20px; font-family:var(--st-display); font-size:clamp(30px, 3.2vw, 46px); line-height:1.2; letter-spacing:-.02em; font-weight:400; }
+.st-fabric-s9__desc { margin:0 0 36px; font-family:var(--st-body); font-size:15px; line-height:1.8; color:rgba(255,255,255,.75); max-width:46ch; }
+.st-fabric-s9__cta {
+	align-self:flex-start; color:#fff; font-family:var(--st-body); font-size:14px; font-weight:600;
+	border:1px solid rgba(255,255,255,.45); padding:15px 30px; border-radius:var(--s9-radius); text-decoration:none;
+}
+.st-fabric-s9__cta:hover { color:#fff; border-color:#fff; }
+
+/* --------------------------------------------------------------------------
+   8. JOURNAL — 3카드 그리드
+   -------------------------------------------------------------------------- */
+.st-journal-s9__grid {
+	list-style:none; margin:0; padding:0 var(--st-gutter); display:grid;
+	grid-template-columns:repeat(3, minmax(0, 1fr)); gap:24px;
+}
+.st-journal-s9__grid a { color:inherit; text-decoration:none; display:block; }
+.st-journal-s9__grid img { width:100%; height:240px; object-fit:cover; border-radius:var(--s9-radius); display:block; }
+.st-journal-s9__cat { margin:18px 0 8px; font-family:var(--st-label); font-size:11px; font-weight:600; letter-spacing:.18em; color:var(--s9-brown); }
+.st-journal-s9__grid h3 { margin:0 0 8px; font-family:var(--st-body); font-size:19px; font-weight:700; line-height:1.4; letter-spacing:-.01em; color:var(--st-ink); }
+.st-journal-s9__meta { margin:0; font-family:var(--st-body); font-size:13px; color:var(--st-ink-60); }
+@media (max-width:1024px) {
+	.st-journal-s9__grid { grid-template-columns:minmax(0, 1fr); gap:32px; }
+}
+
+/* --------------------------------------------------------------------------
+   9. NEWSLETTER
+   -------------------------------------------------------------------------- */
+.st-news-s9 {
+	margin:var(--st-section-gap) var(--st-gutter) 0; background:var(--s9-navy); border-radius:var(--s9-radius);
+	padding:clamp(32px, 4vw, 56px); display:flex; align-items:center; gap:48px; flex-wrap:wrap;
+}
+.st-news-s9__copy { flex:1 1 320px; }
+.st-news-s9__copy h2 { margin:0 0 10px; font-family:var(--st-display); font-size:clamp(24px, 2.6vw, 34px); font-weight:400; color:#fff; letter-spacing:-.02em; }
+.st-news-s9__copy p { margin:0; font-family:var(--st-body); font-size:15px; line-height:1.6; color:rgba(255,255,255,.82); }
+.st-news-s9__form { flex:1 1 400px; display:flex; gap:8px; max-width:480px; }
+.st-news-s9__form input {
+	flex:1 1 auto; height:54px; box-sizing:border-box; border:0; border-radius:var(--s9-radius);
+	padding:0 16px; font-family:var(--st-body); font-size:14px; color:var(--st-ink);
+}
+.st-news-s9__form button {
+	height:54px; background:var(--st-ink); color:#fff; border:0; border-radius:var(--s9-radius);
+	padding:0 30px; font-family:var(--st-body); font-size:14px; font-weight:700; cursor:pointer;
+}
+@media (max-width:600px) { .st-news-s9__form { flex-direction:column; } .st-news-s9__form input,.st-news-s9__form button { width:100%; } }
+
+/* --------------------------------------------------------------------------
+   10. 링크 색 우선순위 보정
+   st-sub.css 의 `#contents a { color:inherit }` (id 셀렉터) 가 위의 .클래스 규칙보다 세서,
+   히어로 버튼 글자가 부모의 흰색을 물려받아 흰 배경 위에서 안 보였다.
+   같은 id 셀렉터로 맞춰 준다.
+   -------------------------------------------------------------------------- */
+#contents a.st-hero-s9__cta,
+#contents a.st-hero-s9__cta:hover { color:var(--st-ink); }
+#contents a.st-fabric-s9__cta,
+#contents a.st-fabric-s9__cta:hover { color:#fff; }
+#contents a.st-hero-s9__tag { color:var(--s9-mint); }
+
+/* --------------------------------------------------------------------------
+   11. CATEGORY 호버 이미지 기본값
+   st-main.css 는 --st-hover-N 이 비어 있으면 옛 SERAPHIN 사진(edit_0Nb.jpg)을 fallback 으로 쓴다.
+   store-content.js 가 값을 채우기 *전에* 브라우저가 그 fallback 을 먼저 내려받기 때문에,
+   처음부터 STUDIO9 사진을 기본값으로 깔아 둔다. (store-content.js 의 onStore.hoverImages 가 있으면 그 값이 이긴다)
+   -------------------------------------------------------------------------- */
+:root {
+	--st-hover-1:url(/SkinImg/img/studio9/prod-leggings.jpg);
+	--st-hover-2:url(/SkinImg/img/studio9/prod-top.jpg);
+	--st-hover-3:url(/SkinImg/img/studio9/prod-outer.jpg);
+	--st-hover-4:url(/SkinImg/img/studio9/prod-mat.jpg);
+}
+

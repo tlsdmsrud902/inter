@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="390" viewBox="0 0 900 390" role="img" aria-labelledby="title desc">
+  <title id="title">inter 랜덤 쿠폰 뽑기 안내</title>
+  <desc id="desc">5%, 20%, 최대 50% 쿠폰 카드 중 하나를 뽑는 이벤트 안내 화면 예시</desc>
+  <rect width="900" height="390" rx="24" fill="#fff1c7"/>
+  <text x="450" y="54" text-anchor="middle" fill="#a85f48" font-family="Arial,sans-serif" font-size="15" font-weight="700" letter-spacing="5">RANDOM COUPON</text>
+  <text x="450" y="105" text-anchor="middle" fill="#302821" font-family="Arial,sans-serif" font-size="34" font-weight="700">최대 50% 쿠폰 뽑기</text>
+  <text x="450" y="137" text-anchor="middle" fill="#786e63" font-family="Arial,sans-serif" font-size="17">5%부터 50%까지, 어떤 혜택이 나올까요?</text>
+  <g font-family="Arial,sans-serif" text-anchor="middle">
+    <rect x="95" y="178" width="210" height="142" rx="18" fill="#fffdf9" stroke="#e3d5b8" stroke-width="2"/>
+    <text x="200" y="215" fill="#a85f48" font-size="14" font-weight="700" letter-spacing="2">LUCKY COUPON</text>
+    <text x="200" y="274" fill="#302821" font-size="48" font-weight="700">5%</text>
+    <text x="200" y="302" fill="#786e63" font-size="13">쿠폰 카드 선택</text>
+    <rect x="345" y="178" width="210" height="142" rx="18" fill="#fffdf9" stroke="#e3d5b8" stroke-width="2"/>
+    <text x="450" y="215" fill="#a85f48" font-size="14" font-weight="700" letter-spacing="2">LUCKY COUPON</text>
+    <text x="450" y="274" fill="#302821" font-size="48" font-weight="700">20%</text>
+    <text x="450" y="302" fill="#786e63" font-size="13">쿠폰 카드 선택</text>
+    <rect x="595" y="178" width="210" height="142" rx="18" fill="#332b27"/>
+    <text x="700" y="215" fill="#f0c99f" font-size="14" font-weight="700" letter-spacing="2">LUCKY COUPON</text>
+    <text x="700" y="274" fill="#ffffff" font-size="48" font-weight="700">50%</text>
+    <text x="700" y="302" fill="#e9ded4" font-size="13">최대 할인 예시</text>
+  </g>
+  <text x="450" y="360" text-anchor="middle" fill="#786e63" font-family="Arial,sans-serif" font-size="13">회원 로그인 후 참여 · 발급 쿠폰은 마이쿠폰에서 확인</text>
+</svg>

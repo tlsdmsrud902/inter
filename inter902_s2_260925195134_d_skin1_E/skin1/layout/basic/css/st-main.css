@@ -1,0 +1,914 @@
+@charset "utf-8";
+/* ==========================================================================
+   DO NOT EDIT - DESIGN SYSTEM
+   구매자는 이 파일을 수정하지 않는다. 문구·이미지·링크는 /layout/basic/js/store-content.js 에서 바꾼다.
+   ========================================================================== */
+/* ==========================================================================
+   SERAPHIN — 메인 페이지 섹션 스타일
+   --------------------------------------------------------------------------
+   스킨 원본 main.css 는 건드리지 않고, 그 뒤에 로드되어 덮어씁니다.
+
+   특이도 주의
+   기존 ec-base-product.css 의 `.ec-base-product ul.grid4 > li` 는 (0,2,2) 다.
+   `.st-arrivals .prdList > li` (0,2,1) 로는 이길 수 없어 카드 폭이 밀린다.
+   그래서 상품 관련 규칙은 전부 `#contents .ec-base-product ul.prdList` 로 쓴다.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   전폭 레이아웃
+   원본 add_layout.css 의 `@media(min-width:1024px) #contents > .section`
+   이 모든 섹션을 width:92% / max-width:1230px 로 가운데 가둔다.
+   그래서 히어로 영상이 레터박스처럼 보이고 제목도 안쪽으로 밀렸다.
+   레퍼런스는 화면 끝까지 쓰는 레이아웃이라 이 제한을 푼다.
+   (#container 를 앞에 붙여 특이도를 확실히 올린다 — 로드 순서에 의존하지 않도록)
+   -------------------------------------------------------------------------- */
+#container #contents > .section {
+	width:auto;
+	max-width:none;
+	margin-left:0;
+	margin-right:0;
+}
+
+/* --------------------------------------------------------------------------
+   섹션 공통 여백
+   -------------------------------------------------------------------------- */
+#contents .main_image_text_gallery,
+#contents .main_product_category,
+#contents .main_video,
+#contents .main_product_slide,
+#contents .main_product_list,
+#contents .main_text,
+#contents .main_map {
+	margin:0 auto var(--st-section-gap);
+	width:auto;
+	max-width:none;
+	padding:0 var(--st-gutter);
+	box-sizing:border-box;
+}
+
+
+/* --------------------------------------------------------------------------
+   섹션 헤더
+   번호는 .st-num 이 붙은 섹션에서만 증가한다.
+   (관리자 스마트배너처럼 제목이 없는 섹션까지 세면 번호가 어긋난다)
+   -------------------------------------------------------------------------- */
+body { counter-reset:st-section; }
+#contents .st-num { counter-increment:st-section; }
+
+#contents .main_title,
+#contents .main_title.ez-align-center {
+	display:flex;
+	align-items:baseline;
+	flex-wrap:wrap;
+	gap:4px 14px;
+	width:100%;
+	box-sizing:border-box;
+	text-align:left;
+	margin:0 0 clamp(18px, 2.4vw, 38px);
+	padding:0;
+	/* 원본 .ez-align-center 가 justify-content:center 를 걸어 제목이 화면 가운데로
+	   몰린다. 새 디자인은 좌측 정렬이므로 명시적으로 되돌린다. */
+	justify-content:flex-start;
+}
+#contents .main_title .main_title_txt01 {
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	font-weight:600;
+	letter-spacing:.12em;
+	text-transform:uppercase;
+	color:var(--st-red);
+	line-height:1;
+	margin:0;
+}
+#contents .st-num .main_title .main_title_txt01::before {
+	content:counter(st-section, decimal-leading-zero) '. ';
+}
+#contents .main_title .main_title_txt02 {
+	font-family:var(--st-body) !important;
+	font-size:12px;
+	font-weight:400;
+	letter-spacing:0;
+	color:var(--st-ink-35);
+	line-height:1.3;
+	margin:0;
+}
+#contents .main_title .st-title-link { margin-left:auto; flex-shrink:0; }
+
+/* --------------------------------------------------------------------------
+   상품 카드 — 전 그리드 공통
+   -------------------------------------------------------------------------- */
+#contents .ec-base-product ul.prdList > li {
+	margin:0 0 clamp(28px, 3vw, 48px);
+	box-sizing:border-box;
+	vertical-align:top;
+}
+#contents .ec-base-product ul.prdList > li .thumbnail { margin:0; }
+#contents .ec-base-product ul.prdList > li .thumbnail > a {
+	display:block;
+	position:relative;
+	overflow:hidden;
+	aspect-ratio:3/4;
+	background:var(--st-bg-alt);
+}
+#contents .ec-base-product ul.prdList > li .thumbnail > a > img {
+	position:absolute;
+	inset:0;
+	width:100%;
+	height:100%;
+	object-fit:cover;
+	transition:opacity .75s var(--st-ease), transform 1.2s var(--st-ease);
+}
+#contents .ec-base-product ul.prdList > li:hover .thumbnail > a > img { transform:scale(1.04); }
+
+#contents .ec-base-product ul.prdList > li .description { padding:12px 0 0; text-align:left; }
+#contents .ec-base-product ul.prdList > li .description .name a {
+	font-family:var(--st-label) !important;
+	font-size:12px;
+	font-weight:600;
+	letter-spacing:.07em;
+	text-transform:uppercase;
+	color:var(--st-ink);
+	line-height:1.35;
+	text-decoration:none;
+}
+#contents .ec-base-product ul.prdList > li .description .name a:hover { color:var(--st-red); }
+#contents .ec-base-product ul.prdList > li .description .spec {
+	margin-top:5px;
+	font-family:var(--st-label) !important;
+	font-size:12px;
+	letter-spacing:.04em;
+	color:var(--st-ink-60);
+}
+#contents .ec-base-product ul.prdList > li .description .spec li { margin:0; }
+#contents .ec-base-product ul.prdList > li .description .spec .title { display:none; }
+#contents .ec-base-product ul.prdList > li .description .icon { margin-top:7px; line-height:1; }
+
+#contents .st-tag {
+	display:inline-block;
+	font-family:var(--st-label) !important;
+	font-size:9px;
+	font-weight:700;
+	letter-spacing:.14em;
+	text-transform:uppercase;
+	color:var(--st-ink-60);
+}
+#contents .st-tag--best { color:var(--st-red); }
+
+/* 상품 더보기 */
+#contents .more { text-align:center; margin-top:clamp(20px, 2.5vw, 40px); }
+#contents .more .btnMore {
+	display:inline-flex;
+	align-items:center;
+	gap:8px;
+	padding:14px 30px;
+	border:1px solid var(--st-ink);
+	border-radius:0;
+	background:transparent;
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	font-weight:600;
+	letter-spacing:.12em;
+	text-transform:uppercase;
+	color:var(--st-ink);
+	text-decoration:none;
+}
+#contents .more .btnMore:hover { background:var(--st-ink); color:var(--st-invert); }
+#contents .more .btnMore > div { font-size:inherit; }
+
+/* --------------------------------------------------------------------------
+   NEW ARRIVALS — 가로 스크롤
+   기본은 네이티브 가로 스크롤. GSAP 이 실제로 붙었을 때만 핀+스크럽으로 전환.
+   -------------------------------------------------------------------------- */
+/* 위쪽 여백은 GSAP 이 붙기 전(st-heavy 없음)에도 같은 값을 쓴다. 나중에 생기면 섹션이 그만큼 밀린다. */
+#contents .st-arrivals { padding:clamp(24px, 4vw, 60px) 0 0; }
+#contents .st-arrivals .main_title { padding:0 var(--st-gutter); }
+#contents .st-arrivals [data-ez-holder] {
+	overflow-x:auto;
+	overflow-y:hidden;
+	-webkit-overflow-scrolling:touch;
+	scrollbar-width:none;
+}
+#contents .st-arrivals [data-ez-holder]::-webkit-scrollbar { display:none; }
+#contents .st-arrivals .ec-base-product ul.prdList {
+	display:flex;
+	flex-wrap:nowrap;
+	gap:clamp(10px, 1.4vw, 24px);
+	width:max-content;
+	padding:0 var(--st-gutter);
+	margin:0;
+}
+#contents .st-arrivals .ec-base-product ul.prdList > li {
+	flex:0 0 auto;
+	width:clamp(200px, 20vw, 300px);
+	margin:0;
+}
+#contents .st-arrivals .more { display:none; }
+
+/* 핀 스크럽이 켜져도 섹션 높이를 100svh 로 잡지 않는다.
+   그러면 콘텐츠가 세로 중앙에 놓이면서 위아래로 큰 빈 공간이 생긴다.
+   섹션은 내용 높이 그대로 두고, 핀이 화면 상단에 붙잡아 준다. */
+html.st-heavy #contents .st-arrivals [data-ez-holder] { overflow:visible; }
+
+/* --------------------------------------------------------------------------
+   에디토리얼 3단 배너 (원본 main_image_text_gallery)
+   -------------------------------------------------------------------------- */
+/* 섹션에 걸린 좌우 여백(--st-gutter)만큼 되밀어, 격자는 화면 끝까지 닿게 한다.
+   제목(ON STORE!)은 여백 안에 그대로 두고 이미지 판만 꽉 채운다. */
+#contents .main_image_text_gallery .main_3dan_banner {
+	margin-left:calc(var(--st-gutter) * -1);
+	margin-right:calc(var(--st-gutter) * -1);
+}
+/* flex 로 두면 배너 수가 늘 때 한 줄에 다 밀어넣고 마지막만 남아
+   전체 폭을 먹는다(6개일 때 5 + 1). 열 수를 못 박는 grid 로 바꾼다. */
+#contents .main_image_text_gallery .main_3dan_banner ul {
+	display:grid;
+	grid-template-columns:repeat(3, minmax(0, 1fr));
+	gap:0;
+	margin:0;
+	padding:0;
+}
+#contents .main_image_text_gallery .main_3dan_banner ul > li {
+	min-width:0;
+	/* 원본 main.css 가 li 에 max-width:416px 를 걸어둬서, 화면이 넓어져도
+	   배너가 416px 에서 멈추고 오른쪽에 큰 빈 공간이 생긴다(왼쪽 쏠림의 원인). */
+	max-width:none;
+	/* 태블릿 폭에서 원본 main.css 의 슬라이드 규칙(li{width:88%})이 살아 있어
+	   칸마다 오른쪽에 12% 씩 빈 띠가 생겼다. 격자 칸을 그대로 채우게 한다. */
+	width:auto;
+	margin:0;
+	padding:0;
+}
+#contents .main_image_text_gallery .main_3dan_banner ul > li > a { display:block; text-decoration:none; }
+#contents .main_image_text_gallery .main_3dan_banner ul > li picture {
+	display:block;
+	position:relative;
+	overflow:hidden;
+	aspect-ratio:4/5;
+	background:var(--st-bg-alt);
+	border-radius:0 !important;
+}
+#contents .main_image_text_gallery .main_3dan_banner ul > li picture img {
+	position:absolute;
+	inset:0;
+	width:100%;
+	height:100%;
+	object-fit:cover;
+	transition:transform 1.4s var(--st-ease), filter .6s linear;
+	filter:saturate(1.05);
+}
+/* 문구는 감추지 않고 사진 위에 얹는다 — 아래 '문구를 사진 위에' 블록 참고 */
+/* 먹 레이어 — 영상 섹션과 같은 톤으로 맞춘다.
+   위아래로 눌러주고 전체에 옅은 먹을 한 겹 깔면 스튜디오 배경의
+   밝은 회색이 가라앉아 페이지 전체가 한 덩어리로 읽힌다.
+   이미지에 굽지 않고 CSS 로 얹어, 원본은 그대로 두고 값만 조절한다. */
+#contents .main_image_text_gallery .main_3dan_banner ul > li picture::after {
+	content:'';
+	position:absolute;
+	inset:0;
+	z-index:2;
+	pointer-events:none;
+	background:
+		linear-gradient(to bottom,
+			rgba(0,0,0,.46) 0%,
+			rgba(0,0,0,.14) 22%,
+			rgba(0,0,0,0)   50%,
+			rgba(0,0,0,.30) 76%,
+			rgba(0,0,0,.72) 100%),
+		linear-gradient(90deg, rgba(0,0,0,.30) 0%, rgba(0,0,0,0) 58%),
+		rgba(0,0,0,.12);
+	transition:opacity .75s var(--st-ease);
+}
+/* 마우스를 올리면 살짝 걷어 사진을 보여준다 */
+#contents .main_image_text_gallery .main_3dan_banner ul > li:hover picture::after { opacity:.72; }
+
+/* 마우스를 올리면 같은 옷의 다른 포즈로 넘어간다
+   --------------------------------------------------------------------------
+   추가 <img> 를 넣지 않고 picture::before 의 배경으로 깐다.
+   이 3단 배너는 EZ 이미지 갤러리 모듈이라 <picture> 안쪽 구조를
+   편집기가 관리한다 — 마크업을 건드리면 관리자 편집이 깨질 수 있다.
+   쌓임 순서: img(0) < 호버컷(1) < 먹 레이어(2).
+   @media (hover:hover) 로 감싸서 터치 기기는 내려받지도 않게 한다. */
+@media (hover:hover) {
+	#contents .main_image_text_gallery .main_3dan_banner ul > li picture::before {
+		content:'';
+		position:absolute;
+		inset:0;
+		z-index:1;
+		background-position:center;
+		background-size:cover;
+		background-repeat:no-repeat;
+		opacity:0;
+		transition:opacity .55s var(--st-ease), transform .7s var(--st-ease);
+		transform:scale(1.04);
+	}
+	#contents .main_image_text_gallery .main_3dan_banner ul > li:hover picture::before {
+		opacity:1;
+		transform:scale(1);
+	}
+	/* --st-hover-N 은 store-content.js 의 onStore.hoverImages 가 채운다. 값이 없으면 기본 사진(edit_0Nb.jpg). */
+	#contents .main_image_text_gallery .main_3dan_banner ul > li:nth-child(1) picture::before { background-image:var(--st-hover-1, url(/SkinImg/img/st/edit_01b.jpg)); }
+	/* 2번 배너만 기본 컷과 오버 컷을 맞바꿨다 — 기본은 edit_02b, 오버가 edit_02 */
+	#contents .main_image_text_gallery .main_3dan_banner ul > li:nth-child(2) picture::before { background-image:var(--st-hover-2, url(/SkinImg/img/st/edit_02.jpg)); }
+	#contents .main_image_text_gallery .main_3dan_banner ul > li:nth-child(3) picture::before { background-image:var(--st-hover-3, url(/SkinImg/img/st/edit_03b.jpg)); }
+	#contents .main_image_text_gallery .main_3dan_banner ul > li:nth-child(4) picture::before { background-image:var(--st-hover-4, url(/SkinImg/img/st/edit_04b.jpg)); }
+	#contents .main_image_text_gallery .main_3dan_banner ul > li:nth-child(5) picture::before { background-image:var(--st-hover-5, url(/SkinImg/img/st/edit_05b.jpg)); }
+	#contents .main_image_text_gallery .main_3dan_banner ul > li:nth-child(6) picture::before { background-image:var(--st-hover-6, url(/SkinImg/img/st/edit_06b.jpg)); }
+}
+
+#contents .main_image_text_gallery .main_3dan_banner ul > li:hover picture img {
+	transform:scale(1.05);
+	filter:saturate(1.2);
+}
+/* 문구를 사진 위에 얹는다 — SALE 페이지의 카테고리 타일과 같은 방식.
+   원본 스킨이 .main_banner_txt 배경에 원형 화살표 SVG 를 깔고 텍스트 폭을
+   calc(100% - 40px) 로 줄여둔다. 둘 다 걷어내고 사진 왼쪽 아래에 앉힌다.
+   사진에는 이미 아래쪽이 진해지는 먹(picture::after)이 깔려 있어 흰 글씨가 읽힌다. */
+#contents .main_image_text_gallery .main_3dan_banner ul > li > a { position:relative; }
+#contents .main_image_text_gallery .main_3dan_banner ul li a .main_banner_txt {
+	display:block;
+	position:absolute;
+	left:0;
+	right:0;
+	bottom:0;
+	z-index:3;
+	background:none;
+	min-height:0;
+	margin:0;
+	padding:clamp(20px, 2.4vw, 44px);
+	box-sizing:border-box;
+	text-align:left;
+	pointer-events:none;			/* 타일 전체가 링크로 눌리게 둔다 */
+}
+#contents .main_image_text_gallery .main_3dan_banner ul li a .main_banner_txt .main_banner_txt01,
+#contents .main_image_text_gallery .main_3dan_banner ul li a .main_banner_txt .main_banner_more {
+	width:100%;
+	margin-top:0;
+}
+#contents .main_image_text_gallery .main_banner_txt01 {
+	font-family:var(--st-display) !important;
+	font-size:clamp(26px, 2.8vw, 52px);
+	line-height:1;
+	letter-spacing:.03em;
+	text-transform:uppercase;
+	color:#fff !important;
+	margin:0;
+}
+#contents .main_image_text_gallery .main_banner_more {
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	font-weight:600;
+	letter-spacing:.16em;
+	text-transform:uppercase;
+	color:rgba(255,255,255,.88) !important;
+	margin:clamp(8px, 1vw, 14px) 0 0;
+}
+#contents .main_image_text_gallery_more { text-align:center; margin-top:28px; }
+#contents .main_image_text_gallery_more_btn {
+	display:inline-block;
+	padding:13px 28px;
+	border:1px solid var(--st-ink);
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	font-weight:600;
+	letter-spacing:.12em;
+	text-transform:uppercase;
+	color:var(--st-ink);
+	text-decoration:none;
+}
+
+/* --------------------------------------------------------------------------
+   FILM (원본 main_video)
+   -------------------------------------------------------------------------- */
+#contents .main_video { text-align:left; }
+#contents .main_video .main_video_box {
+	position:relative;
+	overflow:hidden;
+	aspect-ratio:16/9;
+	background:var(--st-ink);
+	margin:0;
+	width:100%;
+}
+#contents .main_video .main_video_box iframe,
+#contents .main_video .main_video_box video {
+	position:absolute;
+	inset:0;
+	width:100%;
+	height:100%;
+	border:0;
+	object-fit:cover;
+}
+
+/* --------------------------------------------------------------------------
+   BEST SELLER 탭 (원본 main_product_category)
+   -------------------------------------------------------------------------- */
+#contents .main_product_category .main_product_inner { padding:0; }
+#contents .main_product_category .main_product_tab {
+	display:flex;
+	flex-wrap:wrap;
+	gap:8px 10px;
+	justify-content:flex-start;
+	margin:0 0 clamp(18px, 2.4vw, 34px);
+	padding:0;
+	border:0;
+}
+#contents .main_product_category .main_product_tab li { margin:0; padding:0; border:0; }
+#contents .main_product_category .main_product_tab li button {
+	padding:9px 16px;
+	border:1px solid var(--st-ink-12);
+	border-radius:999px;
+	background:transparent;
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	font-weight:600;
+	letter-spacing:.1em;
+	text-transform:uppercase;
+	color:var(--st-ink-60);
+	line-height:1;
+}
+#contents .main_product_category .main_product_tab li button.active {
+	background:var(--st-ink);
+	border-color:var(--st-ink);
+	color:var(--st-invert);
+}
+#contents .main_product_category .content_list .tabcontent { display:none; }
+#contents .main_product_category .content_list .tabcontent.active { display:block; }
+#contents .main_product_category .ec-base-product ul.prdList {
+	display:grid;
+	grid-template-columns:repeat(5, 1fr);
+	gap:clamp(12px, 1.6vw, 28px) clamp(10px, 1.2vw, 20px);
+	margin:0;
+	padding:0;
+}
+#contents .main_product_category .ec-base-product ul.prdList > li { width:auto; margin:0; }
+
+/* --------------------------------------------------------------------------
+   일반 상품 그리드 (SALE 등)
+   -------------------------------------------------------------------------- */
+#contents .main_product_list:not(.st-arrivals) .ec-base-product ul.prdList {
+	display:grid;
+	gap:clamp(14px, 2vw, 34px) clamp(10px, 1.4vw, 24px);
+	margin:0;
+	padding:0;
+}
+#contents .main_product_list:not(.st-arrivals) .ec-base-product ul.prdList.grid3 { grid-template-columns:repeat(3, 1fr); }
+#contents .main_product_list:not(.st-arrivals) .ec-base-product ul.prdList.grid4 { grid-template-columns:repeat(4, 1fr); }
+#contents .main_product_list:not(.st-arrivals) .ec-base-product ul.prdList.grid5 { grid-template-columns:repeat(5, 1fr); }
+#contents .main_product_list:not(.st-arrivals) .ec-base-product ul.prdList > li { width:auto; margin:0; }
+
+/* --------------------------------------------------------------------------
+   대형 텍스트 섹션 (원본 main_text)
+   -------------------------------------------------------------------------- */
+#contents .main_text {
+	display:block;
+	text-align:left;
+	background:transparent !important;
+	padding:clamp(40px, 6vw, 110px) var(--st-gutter);
+	border-top:1px solid var(--st-ink-12);
+	border-bottom:1px solid var(--st-ink-12);
+}
+#contents .main_text .main_text_title {
+	font-family:var(--st-display) !important;
+	font-size:var(--st-fs-xl);
+	line-height:.9;
+	letter-spacing:-.02em;
+	text-transform:uppercase;
+	color:var(--st-ink) !important;
+	margin:0 0 clamp(14px, 1.8vw, 26px);
+}
+#contents .main_text .main_text_txt {
+	font-family:var(--st-body) !important;
+	font-size:var(--st-fs-md);
+	line-height:1.6;
+	color:var(--st-ink-60) !important;
+	max-width:46ch;
+	margin:0 0 clamp(18px, 2.2vw, 32px);
+}
+#contents .main_text .main_text_txt p { margin:0; }
+#contents .main_text .main_text_link a {
+	display:inline-flex;
+	align-items:center;
+	gap:.5em;
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	font-weight:600;
+	letter-spacing:.12em;
+	text-transform:uppercase;
+	color:var(--st-ink);
+	text-decoration:none;
+}
+#contents .main_text .main_text_link a::before { content:'['; }
+#contents .main_text .main_text_link a::after { content:']'; }
+#contents .main_text .main_text_link a:hover { color:var(--st-red); }
+
+/* --------------------------------------------------------------------------
+   스토어 (원본 main_map)
+   -------------------------------------------------------------------------- */
+#contents .main_map { background:transparent !important; }
+#contents .main_map .main_map_banner {
+	display:grid;
+	grid-template-columns:1fr 1fr;
+	gap:clamp(20px, 3vw, 56px);
+	align-items:center;
+	margin:0;
+	padding:0;
+}
+#contents .main_map .main_map_banner_txt_box { padding:0; }
+#contents .main_map .main_map_banner_txt01 {
+	font-family:var(--st-display) !important;
+	font-size:var(--st-fs-lg);
+	line-height:1;
+	letter-spacing:-.01em;
+	text-transform:uppercase;
+	color:var(--st-ink) !important;
+	margin:0 0 16px;
+}
+#contents .main_map .main_map_banner_txt02 {
+	font-family:var(--st-body) !important;
+	font-size:14px;
+	line-height:1.8;
+	color:var(--st-ink-60) !important;
+}
+#contents .main_map .main_map_banner_txt02 p { margin:0; }
+#contents .main_map .main_long_banner_link { margin-top:22px; }
+/* VIEW MORE — 버튼으로 만든다. 원본 main.css 의 회색 박스(#7a7a7a 테두리 ·
+   #f5f5f5 배경)를 그대로 두면 관리자 화면처럼 보이니, 상품 목록의 "더보기"
+   버튼(#contents .more .btnMore)과 같은 틀 — 먹색 테두리 + 투명 배경, 마우스
+   오버 시 먹색으로 꽉 채움 — 으로 다시 그린다. */
+#contents .main_map .main_long_banner_link a {
+	display:inline-flex;
+	align-items:center;
+	gap:10px;
+	padding:14px 28px;
+	border:1px solid var(--st-ink);
+	border-radius:0;
+	background:transparent;
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	font-weight:600;
+	letter-spacing:.12em;
+	text-transform:uppercase;
+	color:var(--st-ink);
+	text-decoration:none;
+	transition:background .25s var(--st-ease), color .25s var(--st-ease);
+}
+#contents .main_map .main_long_banner_link a:hover { background:var(--st-ink); color:var(--st-invert); }
+/* 원본 + 아이콘은 지우고, 화살표를 새로 그려 버튼임을 드러낸다 */
+#contents .main_map .main_long_banner_link a .icon { display:none; }
+#contents .main_map .main_long_banner_link a::after {
+	content:'→';
+	font-family:var(--st-label);
+	transition:transform .25s var(--st-ease);
+}
+#contents .main_map .main_long_banner_link a:hover::after { transform:translateX(4px); }
+#contents .main_map .main_map_banner picture {
+	display:block;
+	position:relative;
+	overflow:hidden;
+	aspect-ratio:4/5;
+	background:var(--st-bg-alt);
+}
+#contents .main_map .main_map_banner picture img {
+	position:absolute;
+	inset:0;
+	width:100%;
+	height:100%;
+	object-fit:cover;
+}
+
+/* --------------------------------------------------------------------------
+   반응형
+   -------------------------------------------------------------------------- */
+@media all and (max-width:1024px) {
+
+	#contents .main_product_category .ec-base-product ul.prdList { grid-template-columns:repeat(3, 1fr); }
+	#contents .main_product_list:not(.st-arrivals) .ec-base-product ul.prdList.grid3,
+	#contents .main_product_list:not(.st-arrivals) .ec-base-product ul.prdList.grid4 { grid-template-columns:repeat(2, 1fr); }
+	#contents .main_product_list:not(.st-arrivals) .ec-base-product ul.prdList.grid5 { grid-template-columns:repeat(3, 1fr); }
+
+	#contents .main_map .main_map_banner { grid-template-columns:1fr; }
+	#contents .main_map .main_map_banner picture { aspect-ratio:16/10; }
+	#contents .main_image_text_gallery .main_3dan_banner ul > li { min-width:calc(50% - 14px); }
+}
+
+@media all and (max-width:767px) {
+	#contents .st-arrivals .ec-base-product ul.prdList > li { width:clamp(150px, 46vw, 240px); }
+	#contents .main_product_category .ec-base-product ul.prdList { grid-template-columns:repeat(2, 1fr); }
+	#contents .main_product_list:not(.st-arrivals) .ec-base-product ul.prdList.grid5 { grid-template-columns:repeat(2, 1fr); }
+	#contents .main_image_text_gallery .main_3dan_banner ul > li { min-width:100%; }
+	#contents .main_title .st-title-link { margin-left:0; width:100%; }
+	#contents .main_video { padding:0; }
+	#contents .main_video .main_video_box { aspect-ratio:4/5; }
+}
+
+/* --------------------------------------------------------------------------
+   스킨 기본 모바일 UI 를 새 디자인에 맞춘다
+   .RTMB(뒤로가기) / .bottom-nav(하단 탭바) 는 1024px 이하에서 원래 노출되는
+   이 스킨의 기본 요소다. 숨기는 게 아니라 톤을 맞춘다.
+   -------------------------------------------------------------------------- */
+@media all and (max-width:1024px) {
+	/* 메인에서는 '뒤로가기' 가 의미 없으므로 숨긴다 */
+	body.st-main #contents > .RTMB { display:none !important; }
+	#contents > .RTMB a {
+		display:inline-flex;
+		align-items:center;
+		gap:6px;
+		padding:14px var(--st-gutter);
+		font-family:var(--st-label) !important;
+		font-size:var(--st-fs-xs);
+		font-weight:600;
+		letter-spacing:.12em;
+		text-transform:uppercase;
+		color:var(--st-ink);
+		text-decoration:none;
+	}
+
+	.bottom-nav__tabBar {
+		background:var(--st-bg) !important;
+		border-top:1px solid var(--st-ink-12);
+	}
+	.bottom-nav__tabBar li a,
+	.bottom-nav__tabBar li button {
+		font-size:0;
+		color:var(--st-ink);
+	}
+	.bottom-nav__tabBar .count {
+		font-family:var(--st-label) !important;
+		font-size:9px;
+		background:var(--st-red);
+		color:var(--st-invert);
+	}
+}
+
+/* --------------------------------------------------------------------------
+   상품 카드 호버 — 2번째 이미지로 전환
+   --------------------------------------------------------------------------
+   카페24 product_addimage 모듈이 상품의 추가 이미지를 넣어준다.
+   모듈이 해석되지 않는 환경에서는 안에 <img> 가 생기지 않으므로
+   :has(img) 로 걸러 아무 일도 일어나지 않게 한다 (안전장치).
+   -------------------------------------------------------------------------- */
+#contents .ec-base-product ul.prdList > li .thumbnail .prdList__hover { display:none; }
+
+#contents .ec-base-product ul.prdList > li .thumbnail .prdList__hover:has(img) {
+	display:block;
+	position:absolute;
+	inset:0;
+	z-index:1;
+	opacity:0;
+	transition:opacity .75s var(--st-ease);
+	pointer-events:none;
+}
+/* 추가 이미지가 여러 장이면 첫 장만 쓴다 */
+#contents .ec-base-product ul.prdList > li .thumbnail .prdList__hover img {
+	position:absolute;
+	inset:0;
+	width:100%;
+	height:100%;
+	object-fit:cover;
+	display:none;
+}
+#contents .ec-base-product ul.prdList > li .thumbnail .prdList__hover img:first-of-type { display:block; }
+
+#contents .ec-base-product ul.prdList > li:has(.prdList__hover img):hover .thumbnail > a > img,
+#contents .ec-base-product ul.prdList > li:has(.prdList__hover img):focus-within .thumbnail > a > img { opacity:0; }
+#contents .ec-base-product ul.prdList > li:not(:has(.prdList__hover img)):hover .thumbnail > a > img,
+#contents .ec-base-product ul.prdList > li:not(:has(.prdList__hover img)):focus-within .thumbnail > a > img { opacity:1 !important; }
+#contents .ec-base-product ul.prdList > li:hover .thumbnail .prdList__hover:has(img),
+#contents .ec-base-product ul.prdList > li:focus-within .thumbnail .prdList__hover:has(img) { opacity:1; }
+
+
+/* ==========================================================================
+   SPECIAL EVENT — 성수 팝업 스토어 (낮 / 밤)
+   --------------------------------------------------------------------------
+   원본 스킨의 지도 모듈(main_map)을 그대로 안고 간다. 주소와 지도 링크,
+   EZ 편집 역할이 거기 붙어 있어서 새로 만들면 편집 기능을 잃는다.
+   위아래로 사진 블록만 덧대고, 모듈 본문은 정보 카드로 다시 꾸민다.
+
+   낮은 높낮이를 엇갈린 배치, 밤은 먹 배경 한 줄.
+   마퀴(흐름)나 상품 격자와 겹치지 않는 세 번째 배치 방식이다.
+   ========================================================================== */
+#contents .st-event .main_title { margin-bottom:clamp(18px, 2.4vw, 34px); }
+
+.st-event__cut { margin:0; overflow:hidden; background:var(--st-bg-alt); }
+.st-event__cut img {
+	display:block; width:100%; height:100%;
+	object-fit:cover; aspect-ratio:4/5;
+	transition:transform .7s var(--st-ease);
+}
+.st-event__cut:hover img { transform:scale(1.04); }
+
+/* 낮 — 4컷을 엇갈리게 */
+.st-event__day {
+	display:grid;
+	grid-template-columns:repeat(4, 1fr);
+	gap:clamp(10px, 1.2vw, 20px);
+	align-items:start;
+}
+.st-event__cut--d2 { margin-top:clamp(24px, 4vw, 64px); }
+.st-event__cut--d3 { margin-top:clamp(12px, 2vw, 32px); }
+.st-event__cut--d4 { margin-top:clamp(36px, 6vw, 96px); }
+
+/* 정보 카드 — 지도 모듈 본문 */
+#contents .st-event .main_map_banner {
+	display:grid;
+	grid-template-columns:minmax(280px, 0.8fr) 1.2fr;
+	gap:clamp(20px, 3vw, 54px);
+	align-items:center;
+	margin-top:clamp(44px, 6vw, 104px);
+}
+#contents .st-event .main_map_banner picture { display:block; overflow:hidden; }
+#contents .st-event .main_map_banner picture img {
+	display:block; width:100%; height:100%;
+	object-fit:cover; aspect-ratio:4/3;
+}
+#contents .st-event .main_map_banner_txt01 {
+	font-family:var(--st-display) !important;
+	font-size:clamp(24px, 3vw, 46px) !important;
+	line-height:1.02;
+	letter-spacing:-.01em;
+	text-transform:uppercase;
+	color:var(--st-ink) !important;
+	margin-bottom:clamp(12px, 1.6vw, 22px);
+}
+#contents .st-event .main_map_banner_txt02 { font-size:var(--st-fs-sm); line-height:1.7; }
+#contents .st-event .main_long_banner_link { margin-top:clamp(16px, 2vw, 28px); }
+
+/* 밤 — 먹 배경 한 줄 */
+.st-event__night {
+	margin-top:clamp(44px, 6vw, 104px);
+	padding:clamp(28px, 4vw, 64px) var(--st-gutter) clamp(32px, 4.5vw, 72px);
+	background:var(--st-ink);
+	margin-left:calc(var(--st-gutter) * -1);
+	margin-right:calc(var(--st-gutter) * -1);
+}
+.st-event__night .st-striphead { margin-left:0; margin-right:0; color:rgba(255,255,255,.66); }
+.st-event__row {
+	display:grid;
+	grid-template-columns:repeat(5, 1fr);
+	gap:clamp(8px, 1vw, 16px);
+}
+
+@media all and (max-width:1024px) {
+	.st-event__day { grid-template-columns:repeat(2, 1fr); }
+	.st-event__cut--d3 { margin-top:0; }
+	#contents .st-event .main_map_banner { grid-template-columns:1fr; }
+	.st-event__row { grid-template-columns:repeat(3, 1fr); }
+	.st-event__row .st-event__cut:nth-child(n+4) { display:none; }
+}
+@media all and (max-width:767px) {
+	.st-event__cut--d2, .st-event__cut--d4 { margin-top:clamp(16px, 5vw, 34px); }
+	.st-event__row { grid-template-columns:repeat(2, 1fr); }
+	.st-event__row .st-event__cut:nth-child(n+3) { display:none; }
+}
+
+/* 글자 마스크(SPECIAL EVENT 시작)와 팝업 내용은 한 이야기라 붙여 둔다.
+   팝업 섹션이 제목을 갖고 있지 않아, 섹션 간격을 그대로 두면
+   빈 띠만 남고 흐름이 끊긴다. */
+#container #contents > .st-type:has(+ .st-event) {
+	/* 영상 아래가 바로 파티 먹 띠다. 아이보리 띠가 한 줄이라도 끼면
+	   화면이 끊겨 보인다. 이 조합만 간격을 없앤다. */
+	margin-bottom:0;
+}
+
+
+/* 밤 팝업 — 대표컷 없이 4장을 같은 크기와 간격으로 정렬한다. */
+.st-event__night .st-event__row {
+	grid-template-columns:repeat(4, minmax(0, 1fr));
+	gap:clamp(10px, 1vw, 16px);
+}
+.st-event__night .st-event__row .st-event__cut img { aspect-ratio:4/3; }
+
+@media all and (max-width:1024px) {
+	.st-event__night .st-event__row { grid-template-columns:repeat(2, 1fr); }
+	.st-event__night .st-event__row .st-event__cut:nth-child(n+4) { display:block; }
+}
+@media all and (max-width:767px) {
+	.st-event__night .st-event__row { grid-template-columns:repeat(2, 1fr); }
+	.st-event__night .st-event__row .st-event__cut:nth-child(n+3) { display:block; }
+}
+
+/* 파티 블록이 맨 앞(영상 바로 아래)으로 올라오면서 위 여백이 필요 없어졌다.
+   대신 그 뒤에 오는 행사 머리글이 먹 띠에 붙지 않도록 숨을 준다. */
+.st-event > .st-event__night:first-of-type { margin-top:0; }
+.st-event__night + .st-striphead { margin-top:clamp(40px, 5vw, 84px); }
+.st-event > .st-striphead { margin-left:0; margin-right:0; }
+
+
+/* 3단 배너 반응형 — 열 수만 바꾼다 */
+@media all and (max-width:1024px) {
+	#contents .main_image_text_gallery .main_3dan_banner ul { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+}
+@media all and (max-width:559px) {
+	#contents .main_image_text_gallery .main_3dan_banner ul { grid-template-columns:minmax(0, 1fr); }
+}
+
+
+/* 플래시 점등 — 파티 사진이 카메라 플래시처럼 한 장씩 터지며 드러난다.
+   --------------------------------------------------------------------------
+   꺼진 상태: 먹에 잠겨 거의 안 보인다.
+   켜지는 순간: 흰 판이 한 번 번쩍이고(::after), 사진은 과노출에서
+   제 밝기로 내려앉는다(brightness/contrast 가 함께 풀린다).
+   is-lit 은 한 번 붙으면 유지된다 — 오르내릴 때마다 번쩍이면 눈이 피로하다. */
+html.st-motion .st-event__night [data-st-flash-item] {
+	position:relative;
+	opacity:.06;
+	transform:scale(1.04);
+	filter:brightness(2.2) contrast(.5);
+	transition:
+		opacity .62s cubic-bezier(.16,1,.3,1),
+		transform .9s cubic-bezier(.16,1,.3,1),
+		filter .72s cubic-bezier(.16,1,.3,1);
+}
+html.st-motion .st-event__night [data-st-flash-item].is-lit {
+	opacity:1;
+	transform:none;
+	filter:none;
+}
+
+/* 번쩍임 — 켜지는 순간에만 흰 판이 한 번 지나간다 */
+html.st-motion .st-event__night [data-st-flash-item]::after {
+	content:'';
+	position:absolute;
+	inset:0;
+	z-index:2;
+	background:#fff;
+	opacity:0;
+	pointer-events:none;
+}
+html.st-motion .st-event__night [data-st-flash-item].is-lit::after {
+	animation:st-flash .62s ease-out 1;
+}
+@keyframes st-flash {
+	0%   { opacity:.96; }
+	20%  { opacity:.7; }
+	100% { opacity:0; }
+}
+
+/* 대표컷은 조금 늦고 길게 — 터진 뒤 여운이 남는다 */
+html.st-motion .st-event__night .st-event__hero {
+	transition-duration:.72s, 1.2s, 1s;
+}
+
+@media (prefers-reduced-motion:reduce) {
+	html.st-motion .st-event__night [data-st-flash-item] {
+		opacity:1; transform:none; filter:none; transition:none;
+	}
+	html.st-motion .st-event__night [data-st-flash-item].is-lit::after { animation:none; }
+}
+
+/* ON STORE 배너 — 스크롤에 맞춰 순서대로 떠오른다.
+   사이트 전체가 쓰는 .st-reveal 을 그대로 쓰되,
+   여섯 칸이 한꺼번에 뜨면 덩어리로 보이므로 칸마다 조금씩 늦춘다.
+   지연은 .is-in 이 붙은 뒤의 transition 에만 걸리므로, 꺼진 상태에는 영향이 없다. */
+html.st-motion #contents .main_image_text_gallery .main_3dan_banner ul > li.st-reveal {
+	transform:translate3d(0, 34px, 0);
+}
+html.st-motion #contents .main_image_text_gallery .main_3dan_banner ul > li.st-reveal.is-in {
+	/* 위에서 특이도를 올려 34px 을 박아 뒀으므로, 여기서 같은 수준으로 되돌려야
+	   올라오는 동작이 생긴다. 안 그러면 투명도만 켜지고 34px 내려간 채로 굳는다. */
+	transform:none;
+	transition:
+		opacity .8s var(--st-ease),
+		transform .9s var(--st-ease);
+}
+html.st-motion #contents .main_3dan_banner ul > li.st-reveal:nth-child(1).is-in { transition-delay:0s, 0s; }
+html.st-motion #contents .main_3dan_banner ul > li.st-reveal:nth-child(2).is-in { transition-delay:.09s, .09s; }
+html.st-motion #contents .main_3dan_banner ul > li.st-reveal:nth-child(3).is-in { transition-delay:.18s, .18s; }
+html.st-motion #contents .main_3dan_banner ul > li.st-reveal:nth-child(4).is-in { transition-delay:0s, 0s; }
+html.st-motion #contents .main_3dan_banner ul > li.st-reveal:nth-child(5).is-in { transition-delay:.09s, .09s; }
+html.st-motion #contents .main_3dan_banner ul > li.st-reveal:nth-child(6).is-in { transition-delay:.18s, .18s; }
+
+/* ──────────────────────────────────────────────────────────────
+   밤 블록의 아이보리 틈 — .st-event__cut 의 기본 배경이 아이보리라,
+   사진 아래 가장자리에 1~2px 흰 줄이 새어 나온다. 먹 위에서는 먹으로.
+   ────────────────────────────────────────────────────────────── */
+.st-event__night .st-event__cut { background:var(--st-ink); }
+.st-event__night .st-event__cut img { display:block; }
+
+/* ──────────────────────────────────────────────────────────────
+   ON STORE 6칸 — 바깥 네 귀퉁이만 둥글게. 낱장 카드 여섯이 아니라
+   한 덩어리 판으로 읽히게 한다. 안쪽 모서리는 각지게 두어야
+   격자의 선이 살아 있다.
+   picture 에 이미 overflow:hidden 이 있어 이미지·호버컷·먹 레이어가
+   같이 깎인다.
+   ────────────────────────────────────────────────────────────── */
+:root { --st-tile-r:clamp(16px, 2vw, 34px); }
+
+/* 3열 (기본) — 1 좌상 · 3 우상 · 4 좌하 · 6 우하 */
+@media all and (min-width:1025px) {
+	#contents .main_image_text_gallery .main_3dan_banner ul > li:nth-child(1) picture { border-top-left-radius:var(--st-tile-r); }
+	#contents .main_image_text_gallery .main_3dan_banner ul > li:nth-child(3) picture { border-top-right-radius:var(--st-tile-r); }
+	#contents .main_image_text_gallery .main_3dan_banner ul > li:nth-child(4) picture { border-bottom-left-radius:var(--st-tile-r); }
+	#contents .main_image_text_gallery .main_3dan_banner ul > li:nth-child(6) picture { border-bottom-right-radius:var(--st-tile-r); }
+}
+/* 2열 — 1 좌상 · 2 우상 · 5 좌하 · 6 우하 */
+@media all and (min-width:768px) and (max-width:1024px) {
+	#contents .main_image_text_gallery .main_3dan_banner ul > li:nth-child(1) picture { border-top-left-radius:var(--st-tile-r); }
+	#contents .main_image_text_gallery .main_3dan_banner ul > li:nth-child(2) picture { border-top-right-radius:var(--st-tile-r); }
+	#contents .main_image_text_gallery .main_3dan_banner ul > li:nth-child(5) picture { border-bottom-left-radius:var(--st-tile-r); }
+	#contents .main_image_text_gallery .main_3dan_banner ul > li:nth-child(6) picture { border-bottom-right-radius:var(--st-tile-r); }
+}
+/* 1열 — 맨 위 두 귀퉁이, 맨 아래 두 귀퉁이 */
+@media all and (max-width:767px) {
+	#contents .main_image_text_gallery .main_3dan_banner ul > li:first-child picture { border-radius:var(--st-tile-r) var(--st-tile-r) 0 0; }
+	#contents .main_image_text_gallery .main_3dan_banner ul > li:last-child picture { border-radius:0 0 var(--st-tile-r) var(--st-tile-r); }
+}

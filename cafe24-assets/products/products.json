@@ -1,0 +1,298 @@
+[
+ {
+  "code": "p01",
+  "product_no_temp": 12,
+  "group": "rec",
+  "cates": [
+   24
+  ],
+  "name": "오크 2단 오픈 책장",
+  "price": 389000,
+  "retail": null,
+  "img": "p01.jpg"
+ },
+ {
+  "code": "p02",
+  "product_no_temp": 13,
+  "group": "new",
+  "cates": [
+   24,
+   27
+  ],
+  "name": "부클 오크 라운지 체어",
+  "price": 329000,
+  "retail": 389000,
+  "img": "p02.jpg"
+ },
+ {
+  "code": "p03",
+  "product_no_temp": 14,
+  "group": "best",
+  "cates": [
+   26
+  ],
+  "name": "오크 원형 식탁 1000",
+  "price": 459000,
+  "retail": null,
+  "img": "p03.jpg"
+ },
+ {
+  "code": "p04",
+  "product_no_temp": 15,
+  "group": "rec",
+  "cates": [
+   26,
+   27
+  ],
+  "name": "페이퍼코드 다이닝 체어",
+  "price": 219000,
+  "retail": 259000,
+  "img": "p04.jpg"
+ },
+ {
+  "code": "p05",
+  "product_no_temp": 16,
+  "group": "new",
+  "cates": [
+   24
+  ],
+  "name": "오크 벽 선반 900",
+  "price": 129000,
+  "retail": null,
+  "img": "p05.jpg"
+ },
+ {
+  "code": "p06",
+  "product_no_temp": 17,
+  "group": "best",
+  "cates": [
+   25
+  ],
+  "name": "오크 퀸 침대 프레임",
+  "price": 890000,
+  "retail": null,
+  "img": "p06.jpg"
+ },
+ {
+  "code": "p07",
+  "product_no_temp": 18,
+  "group": "rec",
+  "cates": [
+   25,
+   27
+  ],
+  "name": "원형 오크 사이드 테이블",
+  "price": 119000,
+  "retail": 139000,
+  "img": "p07.jpg"
+ },
+ {
+  "code": "p08",
+  "product_no_temp": 19,
+  "group": "new",
+  "cates": [
+   24
+  ],
+  "name": "오크 수납 박스",
+  "price": 39000,
+  "retail": null,
+  "img": "p08.jpg"
+ },
+ {
+  "code": "p09",
+  "product_no_temp": 20,
+  "group": "best",
+  "cates": [
+   25,
+   27
+  ],
+  "name": "워시드 리넨 베개 커버",
+  "price": 29000,
+  "retail": 36000,
+  "img": "p09.jpg"
+ },
+ {
+  "code": "p10",
+  "product_no_temp": 21,
+  "group": "rec",
+  "cates": [
+   25
+  ],
+  "name": "워시드 리넨 이불 커버",
+  "price": 119000,
+  "retail": null,
+  "img": "p10.jpg"
+ },
+ {
+  "code": "p11",
+  "product_no_temp": 22,
+  "group": "new",
+  "cates": [
+   26
+  ],
+  "name": "리넨 테이블 냅킨 4장",
+  "price": 24000,
+  "retail": null,
+  "img": "p11.jpg"
+ },
+ {
+  "code": "p12",
+  "product_no_temp": 23,
+  "group": "best",
+  "cates": [
+   25,
+   27
+  ],
+  "name": "리넨 커튼 내추럴",
+  "price": 89000,
+  "retail": 109000,
+  "img": "p12.jpg"
+ },
+ {
+  "code": "p13",
+  "product_no_temp": 24,
+  "group": "rec",
+  "cates": [
+   25
+  ],
+  "name": "리넨 커튼 오트밀",
+  "price": 89000,
+  "retail": null,
+  "img": "p13.jpg"
+ },
+ {
+  "code": "p14",
+  "product_no_temp": 25,
+  "group": "new",
+  "cates": [
+   24
+  ],
+  "name": "부클 쿠션 커버",
+  "price": 32000,
+  "retail": null,
+  "img": "p14.jpg"
+ },
+ {
+  "code": "p15",
+  "product_no_temp": 26,
+  "group": "best",
+  "cates": [
+   24,
+   27
+  ],
+  "name": "세라믹 화병 3종",
+  "price": 48000,
+  "retail": 59000,
+  "img": "p15.jpg"
+ },
+ {
+  "code": "p16",
+  "product_no_temp": 27,
+  "group": "rec",
+  "cates": [
+   24
+  ],
+  "name": "필레아 화분 · 테라코타",
+  "price": 26000,
+  "retail": null,
+  "img": "p16.jpg"
+ },
+ {
+  "code": "p17",
+  "product_no_temp": 28,
+  "group": "new",
+  "cates": [
+   26
+  ],
+  "name": "스톤웨어 서빙 볼",
+  "price": 32000,
+  "retail": null,
+  "img": "p17.jpg"
+ },
+ {
+  "code": "p18",
+  "product_no_temp": 29,
+  "group": "best",
+  "cates": [
+   26,
+   27
+  ],
+  "name": "매트 스톤웨어 접시",
+  "price": 18000,
+  "retail": 23000,
+  "img": "p18.jpg"
+ },
+ {
+  "code": "p19",
+  "product_no_temp": 30,
+  "group": "rec",
+  "cates": [
+   26
+  ],
+  "name": "글라스 텀블러 2P",
+  "price": 16000,
+  "retail": null,
+  "img": "p19.jpg"
+ },
+ {
+  "code": "p20",
+  "product_no_temp": 31,
+  "group": "new",
+  "cates": [
+   25
+  ],
+  "name": "오크 캔들 홀더",
+  "price": 24000,
+  "retail": null,
+  "img": "p20.jpg"
+ },
+ {
+  "code": "p21",
+  "product_no_temp": 32,
+  "group": "best",
+  "cates": [
+   24,
+   27
+  ],
+  "name": "추상 아트 프레임",
+  "price": 59000,
+  "retail": 72000,
+  "img": "p21.jpg"
+ },
+ {
+  "code": "p22",
+  "product_no_temp": 33,
+  "group": "rec",
+  "cates": [
+   24
+  ],
+  "name": "대리석 북엔드 2P",
+  "price": 38000,
+  "retail": null,
+  "img": "p22.jpg"
+ },
+ {
+  "code": "p23",
+  "product_no_temp": 34,
+  "group": "new",
+  "cates": [
+   24
+  ],
+  "name": "스톤 버드 화병",
+  "price": 36000,
+  "retail": null,
+  "img": "p23.jpg"
+ },
+ {
+  "code": "p24",
+  "product_no_temp": 35,
+  "group": "best",
+  "cates": [
+   25
+  ],
+  "name": "몬스테라 대형 화분",
+  "price": 68000,
+  "retail": null,
+  "img": "p24.jpg"
+ }
+]

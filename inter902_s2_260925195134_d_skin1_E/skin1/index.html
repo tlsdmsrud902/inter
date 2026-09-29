@@ -1,0 +1,463 @@
+<!--@layout(/layout/basic/layout.html)-->
+<!--@css(/layout/basic/css/inter-editorial.css)-->
+<!--@css(/layout/basic/css/inter-modern.css)-->
+<!--@css(/layout/basic/css/inter-cozy-home.css)-->
+<!--@js(/layout/basic/js/inter-cozy-home.js)-->
+<!-- inter 북유럽풍 인테리어 메인. 기존 스킨 레이아웃 · 기능을 그대로 쓰고 사진 · 문구만 바꿨다. -->
+<main id="lw-home" class="inter-cozy" data-cms-sortable="섹션 순서">
+  <svg class="cz-sprite" aria-hidden="true" focusable="false">
+    <symbol id="cz-spark" viewBox="0 0 24 24"><path d="M12 2.5c.7 4.6 2.9 6.8 7.5 7.5-4.6.7-6.8 2.9-7.5 7.5-.7-4.6-2.9-6.8-7.5-7.5 4.6-.7 6.8-2.9 7.5-7.5z"/><path d="M19 15.5c.3 1.8 1.2 2.7 3 3-1.8.3-2.7 1.2-3 3-.3-1.8-1.2-2.7-3-3 1.8-.3 2.7-1.2 3-3z"/></symbol>
+    <symbol id="cz-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    <symbol id="cz-truck" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7.5h10.5v8.5H3zM13.5 10.5h4l3 3v2.5h-7z"/><circle cx="7" cy="17.5" r="1.7"/><circle cx="17" cy="17.5" r="1.7"/></g></symbol>
+    <symbol id="cz-return" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12a7.5 7.5 0 0 1 13-5.1M19.5 12a7.5 7.5 0 0 1-13 5.1"/><path d="M17.8 3.6v3.6h-3.6M6.2 20.4v-3.6h3.6"/></g></symbol>
+    <symbol id="cz-heart" viewBox="0 0 24 24"><path d="M12 19.5s-7.5-4.4-7.5-9.7A4.2 4.2 0 0 1 12 7.4a4.2 4.2 0 0 1 7.5 2.4c0 5.3-7.5 9.7-7.5 9.7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+    <symbol id="cz-chat" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 5.5h15v10.5h-9.5l-5.5 4z"/><path d="M8.5 9.5h7M8.5 12.5h4.5"/></g></symbol>
+  </svg>
+
+  <!-- 1. HERO : 스크롤 히어로 (영상 또는 사진 + 3장면) -->
+  <div class="pe-hero-track" data-scroll-hero data-cms="첫 화면" data-cms-help="스크롤하면 1번→2번→3번 장면이 차례로 나와요. 1번은 영상 주소가 있으면 영상, 비어 있으면 사진이 나와요. [사진 바꾸기]로 사진을 올리면 영상 주소는 알아서 비워져요.">
+  <section class="pe-hero" aria-labelledby="pe-title">
+    <div class="pe-hero__copy pe-world-copy" data-world-copy="0" data-cms-item="copy">
+      <p class="pe-eyebrow" data-cms-text="작은 글"><span class="pe-live-dot"></span> NORDIC LIVING, EVERY DAY</p>
+      <p class="pe-display" aria-hidden="true" data-cms-text="영문 큰 글">Live simply.<br><em>Feel at home.</em></p>
+      <h1 id="pe-title" data-cms-text="제목">비워 둔 자리에,<br>오래 머물 가구 하나.</h1>
+      <p class="pe-description" data-cms-text="설명">밝은 오크와 부드러운 리넨, 담백한 선.<br>매일 머무는 집을 위한 북유럽 인테리어, inter.</p>
+      <a class="pe-button" href="#cz-rooms" data-cms-text="버튼" data-cms-href="버튼 링크">우리 집 공간 고르기 <span aria-hidden="true">↗</span></a>
+    </div>
+    <div class="pe-hero__visual">
+      <video class="pe-world-image pe-world-video" data-world-image="0" data-cms-item="media" data-cms-src="사진" data-cms-video="영상 주소" data-cms-poster="/SkinImg/inter/scene-bookshelf.webp" data-cms-size="1920x1080" poster="/SkinImg/inter/scene-bookshelf.webp" muted loop autoplay playsinline preload="auto" disablepictureinpicture aria-label="오크 오픈 책장에 책과 화병을 정리한 밝은 거실"></video>
+      <img class="pe-world-image" data-world-image="1" data-cms-item="media" data-cms-src="사진" src="/SkinImg/inter/scene-table.webp" alt="원형 오크 식탁과 페이퍼코드 체어를 위에서 본 다이닝" width="1672" height="941" loading="lazy">
+      <img class="pe-world-image" data-world-image="2" data-cms-item="media" data-cms-src="사진" src="/SkinImg/inter/scene-bed.webp" alt="오크 침대 프레임과 흰 리넨 침구가 놓인 침실" width="1672" height="941" loading="lazy">
+      <span class="pe-image-label" data-cms-text="사진 위 작은 글">inter HOME / 01</span>
+    </div>
+    <div class="pe-hero__copy pe-world-copy" data-world-copy="1" aria-hidden="true" inert data-cms-item="copy"><p class="pe-eyebrow" data-cms-text="작은 글">02 / AROUND THE TABLE</p><p class="pe-display" aria-hidden="true" data-cms-text="영문 큰 글">Gather slowly.<br><em>Eat together.</em></p><h2 data-cms-text="제목">둥근 식탁에 둘러앉는,<br>느긋한 저녁.</h2><p class="pe-description" data-cms-text="설명">원목 식탁과 손으로 엮은 체어,<br>매일의 식사를 위한 다이닝 컬렉션.</p><a class="pe-button" href="/product/list.html?cate_no=26" data-cms-text="버튼" data-cms-href="버튼 링크">다이닝 둘러보기 <span>↗</span></a></div>
+    <div class="pe-hero__copy pe-world-copy" data-world-copy="2" aria-hidden="true" inert data-cms-item="copy"><p class="pe-eyebrow" data-cms-text="작은 글">03 / REST WELL</p><p class="pe-display" aria-hidden="true" data-cms-text="영문 큰 글">Soft linen.<br><em>Slow mornings.</em></p><h2 data-cms-text="제목">하루의 끝은,<br>가장 편안한 자리에서.</h2><p class="pe-description" data-cms-text="설명">단단한 오크 프레임과 바스락한 리넨 침구.<br>푹 쉬어 가는 침실을 만들어 보세요.</p><a class="pe-button" href="/product/list.html?cate_no=25" data-cms-text="버튼" data-cms-href="버튼 링크">침실 둘러보기 <span>↗</span></a></div>
+    <nav class="pe-world-route" aria-label="히어로 장면 선택"><button type="button" data-world-jump="0" aria-pressed="true" data-cms-item="route">01 <span data-cms-text="아래 메뉴 이름">밝은 거실</span></button><button type="button" data-world-jump="1" aria-pressed="false" data-cms-item="route">02 <span data-cms-text="아래 메뉴 이름">함께하는 식탁</span></button><button type="button" data-world-jump="2" aria-pressed="false" data-cms-item="route">03 <span data-cms-text="아래 메뉴 이름">편안한 침실</span></button></nav>
+    <a class="pe-hero-discover" href="#cz-picks" data-cms-href="오른쪽 아래 링크"><span data-cms-text="오른쪽 아래 작은 글">THIS MONTH’S EDIT</span><strong data-cms-text="오른쪽 아래 제목">이달의 오크 셀렉션</strong><span aria-hidden="true">↗</span></a>
+    <div class="pe-hero-scroll"><span>SCROLL TO EXPLORE</span><i></i><span>↓</span></div>
+  </section>
+  </div>
+
+  <!-- 2. 이용 안내 -->
+  <section class="cz-perks cz-wrap" aria-label="inter 이용 안내" data-cms="이용 안내" data-cms-grow>
+    <a href="/shopinfo/guide.html" class="cz-perk cz-perk--butter" data-cms-item data-cms-href="링크"><i><svg><use href="#cz-truck"/></svg></i><span><strong data-cms-text="제목">배송 안내</strong><small data-cms-text="설명"><b data-free-over>5만원 이상 무료배송 · </b>가구 배송 · 설치 일정을 확인하세요</small></span></a>
+    <a href="/shopinfo/guide.html" class="cz-perk cz-perk--peach" data-cms-item data-cms-href="링크"><i><svg><use href="#cz-return"/></svg></i><span><strong data-cms-text="제목">교환 · 반품</strong><small data-cms-text="설명">접수 방법과 반품 배송비를 살펴보세요</small></span></a>
+    <a href="/board/product/list.html?board_no=4" class="cz-perk cz-perk--mint" data-cms-item data-cms-href="링크"><i><svg><use href="#cz-heart"/></svg></i><span><strong data-cms-text="제목">공간 리뷰</strong><small data-cms-text="설명">우리 집에 놓아 본 이야기를 읽어보세요</small></span></a>
+    <a href="/board/product/list.html?board_no=6" class="cz-perk cz-perk--sky" data-cms-item data-cms-href="링크"><i><svg><use href="#cz-chat"/></svg></i><span><strong data-cms-text="제목">무엇이든 물어보세요</strong><small data-cms-text="설명">사이즈 · 소재 · 배송 문의</small></span></a>
+  </section>
+
+
+  <!-- 3. 어떤 공간을 꾸미세요 (거실 · 침실) -->
+  <section class="cz-sec cz-wrap" id="cz-rooms" aria-labelledby="cz-rooms-title" data-cms="공간 고르기">
+    <header class="cz-head"><div><p class="cz-kicker" data-cms-text="작은 제목">Which room?</p><h2 id="cz-rooms-title" data-cms-text="제목">어떤 공간을 꾸미세요?</h2></div><p data-cms-text="설명">머무는 공간에 꼭 맞는 것부터 골라보세요.</p></header>
+    <div class="cz-rooms">
+      <article class="cz-inter cz-inter--living" data-cms-item>
+        <div class="cz-inter__copy">
+          <p class="cz-inter__en" data-cms-text="영문">For Living</p>
+          <h3 data-cms-text="제목">밝은 거실을 위해</h3>
+          <p data-cms-text="설명">책과 소품을 가볍게 정리하고,<br> 좋아하는 의자에 기대는 거실.</p>
+          <ul class="cz-chips" data-cms-links="바로가기">
+            <li><a href="/product/search.html?keyword=책장">책장</a></li>
+            <li><a href="/product/search.html?keyword=선반">선반</a></li>
+            <li><a href="/product/search.html?keyword=체어">체어</a></li>
+            <li><a href="/product/search.html?keyword=수납">수납</a></li>
+            <li><a href="/product/search.html?keyword=화병">화병</a></li>
+          </ul>
+          <a class="cz-btn" href="/product/list.html?cate_no=24" data-cms-text="버튼" data-cms-href="버튼 링크">거실 · 수납 전체 보기<span><svg><use href="#cz-arrow"/></svg></span></a>
+        </div>
+        <img class="cz-inter__photo" data-cms-src="사진" src="/SkinImg/inter/card-living.webp" alt="오크 오픈 책장이 놓인 밝은 거실" width="1086" height="1448" loading="lazy">
+      </article>
+      <article class="cz-inter cz-inter--bedroom" data-cms-item>
+        <div class="cz-inter__copy">
+          <p class="cz-inter__en" data-cms-text="영문">For Bedroom</p>
+          <h3 data-cms-text="제목">편안한 침실을 위해</h3>
+          <p data-cms-text="설명">단단한 원목 침대와 리넨 침구,<br> 푹 쉬어 가는 침실.</p>
+          <ul class="cz-chips" data-cms-links="바로가기">
+            <li><a href="/product/search.html?keyword=침대">침대</a></li>
+            <li><a href="/product/search.html?keyword=리넨">리넨 침구</a></li>
+            <li><a href="/product/search.html?keyword=사이드">사이드 테이블</a></li>
+            <li><a href="/product/search.html?keyword=커튼">커튼</a></li>
+            <li><a href="/product/search.html?keyword=캔들">캔들</a></li>
+          </ul>
+          <a class="cz-btn" href="/product/list.html?cate_no=25" data-cms-text="버튼" data-cms-href="버튼 링크">침실 · 패브릭 전체 보기<span><svg><use href="#cz-arrow"/></svg></span></a>
+        </div>
+        <img class="cz-inter__photo" data-cms-src="사진" src="/SkinImg/inter/card-bedroom.webp" alt="오크 침대와 흰 리넨 침구가 놓인 침실" width="1086" height="1448" loading="lazy">
+      </article>
+    </div>
+  </section>
+
+  <!-- 4. 카테고리 -->
+  <section class="cz-sec cz-wrap" aria-labelledby="cz-cats-title" data-cms="카테고리" data-cms-grow data-cms-help="동그라미에는 정사각형 사진이 가장 잘 맞아요.">
+    <header class="cz-head"><div><p class="cz-kicker" data-cms-text="작은 제목">Shop by category</p><h2 id="cz-cats-title" data-cms-text="제목">오늘은 무엇이 필요하세요?</h2></div><a class="cz-link" href="/product/list.html?cate_no=28" data-cms-text="전체 보기 글자" data-cms-href="전체 보기 링크">전체 상품 보기<svg aria-hidden="true"><use href="#cz-arrow"/></svg></a></header>
+    <ul class="cz-cats">
+      <li data-cms-item><a href="/product/search.html?keyword=책장" data-cms-href="링크"><span class="cz-cat__img" style="--bg:var(--cz-peach)"><img src="/SkinImg/inter/sq-bookshelf.webp" alt="" width="1254" height="1254" loading="lazy" style="--ox:50%;--oy:50%;--z:1" data-cms-src="사진" data-cms-reset data-cms-size="800x800"></span><strong data-cms-text="이름">책장 · 수납</strong></a></li>
+      <li data-cms-item><a href="/product/search.html?keyword=체어" data-cms-href="링크"><span class="cz-cat__img" style="--bg:var(--cz-butter)"><img src="/SkinImg/inter/sq-chair.webp" alt="" width="1254" height="1254" loading="lazy" style="--ox:50%;--oy:50%;--z:1" data-cms-src="사진" data-cms-reset data-cms-size="800x800"></span><strong data-cms-text="이름">체어</strong></a></li>
+      <li data-cms-item><a href="/product/search.html?keyword=식탁" data-cms-href="링크"><span class="cz-cat__img" style="--bg:var(--cz-mint)"><img src="/SkinImg/inter/sq-table.webp" alt="" width="1254" height="1254" loading="lazy" style="--ox:50%;--oy:50%;--z:1" data-cms-src="사진" data-cms-reset data-cms-size="800x800"></span><strong data-cms-text="이름">테이블</strong></a></li>
+      <li data-cms-item><a href="/product/search.html?keyword=침대" data-cms-href="링크"><span class="cz-cat__img" style="--bg:var(--cz-sky)"><img src="/SkinImg/inter/sq-bed.webp" alt="" width="1254" height="1254" loading="lazy" style="--ox:50%;--oy:50%;--z:1" data-cms-src="사진" data-cms-reset data-cms-size="800x800"></span><strong data-cms-text="이름">침대</strong></a></li>
+      <li data-cms-item><a href="/product/search.html?keyword=선반" data-cms-href="링크"><span class="cz-cat__img" style="--bg:var(--cz-peach)"><img src="/SkinImg/inter/sq-wallshelf.webp" alt="" width="1254" height="1254" loading="lazy" style="--ox:50%;--oy:50%;--z:1" data-cms-src="사진" data-cms-reset data-cms-size="800x800"></span><strong data-cms-text="이름">벽 선반</strong></a></li>
+      <li data-cms-item><a href="/product/search.html?keyword=리넨" data-cms-href="링크"><span class="cz-cat__img" style="--bg:var(--cz-lilac)"><img src="/SkinImg/inter/sq-pillow.webp" alt="" width="1254" height="1254" loading="lazy" style="--ox:50%;--oy:50%;--z:1" data-cms-src="사진" data-cms-reset data-cms-size="800x800"></span><strong data-cms-text="이름">리넨 · 패브릭</strong></a></li>
+      <li data-cms-item><a href="/product/search.html?keyword=화병" data-cms-href="링크"><span class="cz-cat__img" style="--bg:var(--cz-butter)"><img src="/SkinImg/inter/sq-vases.webp" alt="" width="1254" height="1254" loading="lazy" style="--ox:50%;--oy:50%;--z:1" data-cms-src="사진" data-cms-reset data-cms-size="800x800"></span><strong data-cms-text="이름">화병 · 오브제</strong></a></li>
+      <li data-cms-item><a href="/product/search.html?keyword=캔들" data-cms-href="링크"><span class="cz-cat__img" style="--bg:var(--cz-lilac)"><img src="/SkinImg/inter/sq-candle.webp" alt="" width="1254" height="1254" loading="lazy" style="--ox:50%;--oy:50%;--z:1" data-cms-src="사진" data-cms-reset data-cms-size="800x800"></span><strong data-cms-text="이름">캔들 · 조명</strong></a></li>
+    </ul>
+  </section>
+
+  <!-- 5. 추천 상품 -->
+  <section id="cz-picks" class="cz-sec cz-wrap cz-products" aria-labelledby="cz-picks-title" data-cms="추천 상품 제목" data-cms-help="상품은 관리자 › 상품 › 메인 진열(추천상품)에서 골라요. 여기서는 제목만 바꿔요.">
+    <header class="cz-head"><div><p class="cz-kicker" data-cms-text="작은 제목">Curated for you</p><h2 id="cz-picks-title" data-cms-text="제목">이번 주, 곁에 두고 싶은 것들</h2></div><a class="cz-link" href="/product/list.html?cate_no=28" data-cms-text="전체 보기 글자" data-cms-href="전체 보기 링크">추천 상품 더 보기<svg aria-hidden="true"><use href="#cz-arrow"/></svg></a></header>
+    <div module="product_listmain_1" class="ec-base-product">
+      <!--
+      $count = 10
+      $basket_result = /product/add_basket.html
+      $basket_option = /product/basket_option.html
+      $cache = yes
+      -->
+      <ul class="prdList grid4"><!--@import(/product/list_product.html)--></ul>
+    </div>
+    <div class="cz-placeholder" data-cz-placeholder hidden></div>
+  </section>
+
+
+  <!-- 6. 공간 찾기 -->
+  <section class="cz-finder cz-wrap" id="cz-finder" aria-labelledby="cz-finder-title" data-cms="공간 찾기" data-cms-help="1·2번은 공간(거실 · 침실), 3~5번은 필요한 순간 선택지 사진이에요. 선택지 이름과 추천 결과 문장은 코드에 연결되어 있어 사진과 안내 글자만 바꿔요.">
+    <div class="cz-finder__intro">
+      <p class="cz-kicker" data-cms-text="작은 제목">Find your favourites</p>
+      <h2 id="cz-finder-title" data-cms-text="제목">우리 집에 맞는<br>가구는 무엇일까요?</h2>
+      <p data-cms-text="설명">두 가지만 골라주세요.<br>어울리는 가구를 바로 찾아드려요.</p>
+      <svg class="cz-finder__paw" aria-hidden="true"><use href="#cz-spark"/></svg>
+    </div>
+    <form class="cz-finder__form" action="/product/search.html" method="get">
+      <fieldset class="cz-finder__rooms"><legend><span>1</span>어떤 공간인가요?</legend>
+        <label data-cms-item data-cms-item-label="거실"><input type="radio" name="inter" value="living" checked><span class="cz-opt"><img data-cms-src="사진" data-cms-size="1280x720" src="/SkinImg/inter/sq-bookshelf.webp" alt="" width="1254" height="1254" loading="lazy"><b>거실</b></span></label>
+        <label data-cms-item data-cms-item-label="침실"><input type="radio" name="inter" value="bedroom"><span class="cz-opt"><img data-cms-src="사진" data-cms-size="1280x720" src="/SkinImg/inter/sq-bed.webp" alt="" width="1254" height="1254" loading="lazy"><b>침실</b></span></label>
+      </fieldset>
+      <fieldset class="cz-finder__moments"><legend><span>2</span>지금 필요한 건?</legend>
+        <label data-cms-item data-cms-item-label="깔끔한 수납"><input type="radio" name="moment" value="storage" checked><span class="cz-opt"><img data-cms-src="사진" data-cms-size="1200x900" src="/SkinImg/inter/sq-box.webp" alt="" width="1254" height="1254" loading="lazy"><b>깔끔한 수납</b></span></label>
+        <label data-cms-item data-cms-item-label="편안한 휴식"><input type="radio" name="moment" value="rest"><span class="cz-opt"><img data-cms-src="사진" data-cms-size="1200x900" src="/SkinImg/inter/sq-chair.webp" alt="" width="1254" height="1254" loading="lazy"><b>편안한 휴식</b></span></label>
+        <label data-cms-item data-cms-item-label="따뜻한 분위기"><input type="radio" name="moment" value="mood"><span class="cz-opt"><img data-cms-src="사진" data-cms-size="1200x900" src="/SkinImg/inter/sq-candle.webp" alt="" width="1254" height="1254" loading="lazy"><b>따뜻한 분위기</b></span></label>
+      </fieldset>
+      <input type="hidden" name="keyword" value="책장">
+      <div class="cz-finder__result">
+        <p aria-live="polite" data-finder-result>거실에서 깔끔한 수납을 위한 <b>책장</b>을 추천해요.</p>
+        <button class="cz-btn" type="submit" data-cms-text="버튼">맞춤 가구 보기<span><svg><use href="#cz-arrow"/></svg></span></button>
+      </div>
+    </form>
+  </section>
+
+  <!-- 7. 신상품 (가로 스크롤) -->
+  <!-- 7. 신상품 : 스크롤하면 섹션이 멈추고 상품 줄이 가로로 이동한다 (inter-cozy-home.js initRailPin) -->
+  <section id="cz-new" class="cz-sec cz-wrap cz-products cz-products--rail cz-products--pin" aria-labelledby="cz-new-title" data-cms="신상품 제목" data-cms-help="상품은 관리자 › 상품 › 메인 진열(신상품)에서 골라요. 여기서는 제목만 바꿔요.">
+   <div class="cz-pin" data-rail-pin>
+   <div class="cz-pin__stage">
+    <header class="cz-head"><div><p class="cz-kicker" data-cms-text="작은 제목">Just arrived</p><h2 id="cz-new-title" data-cms-text="제목">새로 들어왔어요</h2></div>
+      <div class="cz-pin__meter" aria-hidden="true"><span class="cz-pin__count"><b data-rail-now>01</b> / <span data-rail-total>10</span></span><span class="cz-pin__bar"><i></i></span></div>
+      <div class="cz-rail-nav"><button type="button" data-rail="-1" aria-label="이전 상품"><svg><use href="#cz-arrow"/></svg></button><button type="button" data-rail="1" aria-label="다음 상품"><svg><use href="#cz-arrow"/></svg></button></div>
+    </header>
+    <div module="product_listmain_2" class="ec-base-product">
+      <!--
+      $count = 10
+      $basket_result = /product/add_basket.html
+      $basket_option = /product/basket_option.html
+      $cache = yes
+      -->
+      <ul class="prdList grid4"><!--@import(/product/list_product.html)--></ul>
+    </div>
+    <div class="cz-placeholder" data-cz-placeholder hidden></div>
+   </div>
+   </div>
+  </section>
+
+
+  <!-- 8. 사이즈 가이드 : 1 가로 · 2 깊이 · 3 높이 (그림의 번호와 오른쪽 설명이 짝) -->
+  <section class="cz-size cz-wrap" aria-labelledby="cz-size-title" data-cms="사이즈 가이드" data-cms-help="1·2·3번은 그림 위 번호와 짝이라 3칸으로 정해져 있어요.">
+    <div class="cz-size__art">
+      <svg viewBox="74 40 308 250" class="cz-size__kit" aria-hidden="true">
+        <ellipse cx="228" cy="276" rx="138" ry="9" class="s-shadow"/>
+        <rect x="128" y="70" width="10" height="202" rx="4" class="s-body"/>
+        <rect x="318" y="70" width="10" height="202" rx="4" class="s-body"/>
+        <rect x="128" y="96" width="200" height="8" rx="3" class="s-body"/>
+        <rect x="128" y="148" width="200" height="8" rx="3" class="s-body"/>
+        <rect x="128" y="200" width="200" height="8" rx="3" class="s-body"/>
+        <rect x="128" y="250" width="200" height="8" rx="3" class="s-body"/>
+        <path class="s-cap" d="M156 96c-10 0-12-10-9-18 2-5 6-8 6-13h8c0 5 4 8 6 13 3 8 1 18-11 18z"/>
+        <rect x="180" y="116" width="10" height="32" rx="2" class="s-jar"/><rect x="192" y="112" width="10" height="36" rx="2" class="s-label"/><rect x="204" y="118" width="10" height="30" rx="2" class="s-jar"/>
+        <circle cx="290" cy="80" r="11" class="s-leaf"/><path class="s-cap" d="M280 96l3-10h14l3 10z"/>
+        <rect x="150" y="222" width="62" height="28" rx="3" class="s-jar"/><path class="s-line" d="M172 236h18"/>
+        <rect x="246" y="222" width="62" height="28" rx="3" class="s-jar"/><path class="s-line" d="M268 236h18"/>
+        <path class="s-measure" d="M128 56H328"/><path class="s-line" d="M128 50v12M328 50v12"/>
+        <path class="s-measure" d="M350 70V272"/><path class="s-line" d="M344 70h12M344 272h12"/>
+        <path class="s-measure" d="M328 272l22 12"/>
+        <g class="s-pin"><circle cx="228" cy="56" r="14"/><text x="228" y="61">1</text></g>
+        <g class="s-pin"><circle cx="352" cy="284" r="14"/><text x="352" y="289">2</text></g>
+        <g class="s-pin"><circle cx="350" cy="170" r="14"/><text x="350" y="175">3</text></g>
+      </svg>
+      <!-- 3D 보기 (inter-cozy-home.js initSize3D) : data-size-3d-model 에 GLB 주소를 넣으면 위 SVG 대신 보인다 -->
+      <div class="cz-size__3d" data-size-3d data-size-3d-model=""></div>
+      <span class="cz-size__pin" data-pin="1">1</span><span class="cz-size__pin" data-pin="2">2</span><span class="cz-size__pin" data-pin="3">3</span>
+      <p class="cz-size__hint">끌어서 돌려 보세요</p>
+    </div>
+    <div class="cz-size__copy">
+      <p class="cz-kicker" data-cms-text="작은 제목">Size, made easy</p>
+      <h2 id="cz-size-title" data-cms-text="제목">사이즈, 어렵지 않아요</h2>
+      <p class="cz-size__lead" data-cms-text="설명">가구는 사진보다 실제 치수가 더 정확해요.<br>줄자 하나로 세 군데만 재 주세요.</p>
+      <ol class="cz-size__steps">
+        <li data-cms-item><b>1</b><div><strong data-cms-text="이름">가로 (폭)</strong><p data-cms-text="재는 법">놓을 벽의 가로 길이를 재고, 양옆에 5cm 이상 여유를 두세요.</p></div></li>
+        <li data-cms-item><b>2</b><div><strong data-cms-text="이름">깊이</strong><p data-cms-text="재는 법">문 · 서랍이 열리는 자리와 지나다닐 통로(60cm 이상)를 함께 확인해요.</p></div></li>
+        <li data-cms-item><b>3</b><div><strong data-cms-text="이름">높이</strong><p data-cms-text="재는 법">창문 · 콘센트 · 스위치 높이와 겹치지 않는지 바닥부터 재요.</p></div></li>
+      </ol>
+      <div class="cz-size__actions"><a class="cz-btn cz-btn--soft" href="/inter/guide.html#living" data-cms-text="버튼" data-cms-href="버튼 링크">가구 고르는 법<span><svg><use href="#cz-arrow"/></svg></span></a><a class="cz-link" href="/board/product/list.html?board_no=6" data-cms-text="문의 글자" data-cms-href="문의 링크">사이즈 문의하기<svg aria-hidden="true"><use href="#cz-arrow"/></svg></a></div>
+    </div>
+  </section>
+
+  <!-- 9. 장면 속 상품 (Shop the look) : 스크롤하면 장면이 한 장씩 옆으로 넘어가고, 사진 속 + 를 누르면 상품 구매 레이어가 열린다 (inter-cozy-home.js initLooks)
+       + 위치(--x/--y)는 사진 원본 비율 기준 %, 상품 정보는 아래 cz-looks-data 에 있다.
+       data-prd 는 임시 번호(p01 = 12 … p30 = 41) : 카페24 에 상품을 등록한 뒤 실제 상품번호로 바꾼다 -->
+  <section class="cz-looks" id="cz-looks" aria-labelledby="cz-looks-title" data-cms="장면 속 상품" data-cms-help="상품 점은 한 줄에 하나씩 「상품번호 가로% 세로%」로 써요. 상품번호만 적으면 이름·가격·사진은 쇼핑몰 상품에서 자동으로 가져와요. 메인 편집 모드에서 사진을 누르면 그 자리의 가로·세로 %가 복사돼요.">
+   <div class="cz-looks__pin" data-looks-pin>
+    <div class="cz-looks__stage">
+     <header class="cz-head cz-wrap"><div><p class="cz-kicker" data-cms-text="작은 제목">Shop the look</p><h2 id="cz-looks-title" data-cms-text="제목">장면 속 그 상품</h2></div>
+      <p class="cz-looks__count" aria-hidden="true"><b data-looks-now>01</b> / <span>04</span></p></header>
+     <div class="cz-looks__track" data-looks-track>
+      <article class="cz-look" aria-label="01 거실" style="--ar:1.777" data-cms-item data-cms-spots="상품 점" data-cms-ar>
+       <div class="cz-look__info">
+        <p class="cz-look__no">01</p>
+        <h3 data-cms-text="제목">해 드는 거실,<br>책 한 권의 여유</h3>
+        <p class="cz-look__meta" data-cms-text="설명">오후 3시 · 거실 창가 · 정리 30분</p>
+        <ul class="cz-look__list">
+         <li><button type="button" data-prd="12"><span>오크 2단 오픈 책장</span><b>389,000원</b></button></li>
+         <li><button type="button" data-prd="26"><span>세라믹 화병 3종</span><b>48,000원</b></button></li>
+         <li><button type="button" data-prd="19"><span>오크 수납 박스</span><b>39,000원</b></button></li>
+        </ul>
+        <a class="cz-btn cz-btn--soft" href="/product/list.html?cate_no=24" data-cms-text="버튼" data-cms-href="버튼 링크">거실 · 수납 더 보기<span><svg><use href="#cz-arrow"/></svg></span></a>
+       </div>
+       <figure class="cz-look__media">
+        <img data-cms-src="사진" src="/SkinImg/inter/scene-bookshelf.webp" alt="오크 오픈 책장에 책과 화병, 수납 박스를 정리한 거실" width="1672" height="941" loading="lazy">
+        <button class="cz-look__spot" type="button" data-prd="12" style="--x:52%;--y:55%" aria-label="오크 2단 오픈 책장 보기"></button>
+        <button class="cz-look__spot" type="button" data-prd="26" style="--x:42%;--y:26%" aria-label="세라믹 화병 3종 보기"></button>
+        <button class="cz-look__spot" type="button" data-prd="19" style="--x:62%;--y:89%" aria-label="오크 수납 박스 보기"></button>
+       </figure>
+      </article>
+      <article class="cz-look" aria-label="02 다이닝" style="--ar:1.777" data-cms-item data-cms-spots="상품 점" data-cms-ar>
+       <div class="cz-look__info">
+        <p class="cz-look__no">02</p>
+        <h3 data-cms-text="제목">둥근 식탁에<br>둘러앉는 저녁</h3>
+        <p class="cz-look__meta" data-cms-text="설명">저녁 7시 · 다이닝 · 넷이서</p>
+        <ul class="cz-look__list">
+         <li><button type="button" data-prd="14"><span>오크 원형 식탁 1000</span><b>459,000원</b></button></li>
+         <li><button type="button" data-prd="15"><span>페이퍼코드 다이닝 체어</span><b>219,000원</b></button></li>
+         <li><button type="button" data-prd="28"><span>스톤웨어 서빙 볼</span><b>32,000원</b></button></li>
+         <li><button type="button" data-prd="29"><span>매트 스톤웨어 접시</span><b>18,000원</b></button></li>
+        </ul>
+        <a class="cz-btn cz-btn--soft" href="/product/list.html?cate_no=26" data-cms-text="버튼" data-cms-href="버튼 링크">다이닝 더 보기<span><svg><use href="#cz-arrow"/></svg></span></a>
+       </div>
+       <figure class="cz-look__media">
+        <img data-cms-src="사진" src="/SkinImg/inter/scene-table.webp" alt="원형 오크 식탁과 페이퍼코드 체어를 위에서 본 모습" width="1672" height="941" loading="lazy">
+        <button class="cz-look__spot" type="button" data-prd="14" style="--x:51%;--y:71%" aria-label="오크 원형 식탁 1000 보기"></button>
+        <button class="cz-look__spot" type="button" data-prd="15" style="--x:25%;--y:55%" aria-label="페이퍼코드 다이닝 체어 보기"></button>
+        <button class="cz-look__spot" type="button" data-prd="28" style="--x:45%;--y:49%" aria-label="스톤웨어 서빙 볼 보기"></button>
+        <button class="cz-look__spot" type="button" data-prd="29" style="--x:67%;--y:55%" aria-label="매트 스톤웨어 접시 보기"></button>
+       </figure>
+      </article>
+      <article class="cz-look" aria-label="03 벽 선반" style="--ar:1.777" data-cms-item data-cms-spots="상품 점" data-cms-ar>
+       <div class="cz-look__info">
+        <p class="cz-look__no">03</p>
+        <h3 data-cms-text="제목">벽 한 칸에<br>좋아하는 것만</h3>
+        <p class="cz-look__meta" data-cms-text="설명">주말 오전 · 현관 벽 · 10분</p>
+        <ul class="cz-look__list">
+         <li><button type="button" data-prd="16"><span>오크 벽 선반 900</span><b>129,000원</b></button></li>
+         <li><button type="button" data-prd="34"><span>스톤 버드 화병</span><b>36,000원</b></button></li>
+         <li><button type="button" data-prd="31"><span>오크 캔들 홀더</span><b>24,000원</b></button></li>
+        </ul>
+        <a class="cz-btn cz-btn--soft" href="/product/search.html?keyword=선반" data-cms-text="버튼" data-cms-href="버튼 링크">벽 선반 · 오브제 더 보기<span><svg><use href="#cz-arrow"/></svg></span></a>
+       </div>
+       <figure class="cz-look__media">
+        <img data-cms-src="사진" src="/SkinImg/inter/scene-wallshelf.webp" alt="오크 벽 선반 위의 화병, 책, 캔들 홀더" width="1672" height="941" loading="lazy">
+        <button class="cz-look__spot" type="button" data-prd="16" style="--x:82%;--y:63%" aria-label="오크 벽 선반 900 보기"></button>
+        <button class="cz-look__spot" type="button" data-prd="34" style="--x:44%;--y:53%" aria-label="스톤 버드 화병 보기"></button>
+        <button class="cz-look__spot" type="button" data-prd="31" style="--x:69%;--y:59%" aria-label="오크 캔들 홀더 보기"></button>
+       </figure>
+      </article>
+      <article class="cz-look" aria-label="04 침실" style="--ar:1.777" data-cms-item data-cms-spots="상품 점" data-cms-ar>
+       <div class="cz-look__info">
+        <p class="cz-look__no">04</p>
+        <h3 data-cms-text="제목">하루의 끝은<br>리넨 침구 속에서</h3>
+        <p class="cz-look__meta" data-cms-text="설명">밤 11시 · 침실 · 푹 자기</p>
+        <ul class="cz-look__list">
+         <li><button type="button" data-prd="17"><span>오크 퀸 침대 프레임</span><b>890,000원</b></button></li>
+         <li><button type="button" data-prd="20"><span>워시드 리넨 베개 커버</span><b>29,000원</b></button></li>
+         <li><button type="button" data-prd="18"><span>원형 오크 사이드 테이블</span><b>119,000원</b></button></li>
+        </ul>
+        <a class="cz-btn cz-btn--soft" href="/product/list.html?cate_no=25" data-cms-text="버튼" data-cms-href="버튼 링크">침실 · 패브릭 더 보기<span><svg><use href="#cz-arrow"/></svg></span></a>
+       </div>
+       <figure class="cz-look__media">
+        <img data-cms-src="사진" src="/SkinImg/inter/scene-bed.webp" alt="오크 침대 프레임과 흰 리넨 침구, 원형 사이드 테이블" width="1672" height="941" loading="lazy">
+        <button class="cz-look__spot" type="button" data-prd="17" style="--x:54%;--y:68%" aria-label="오크 퀸 침대 프레임 보기"></button>
+        <button class="cz-look__spot" type="button" data-prd="20" style="--x:72%;--y:43%" aria-label="워시드 리넨 베개 커버 보기"></button>
+        <button class="cz-look__spot" type="button" data-prd="18" style="--x:41%;--y:44%" aria-label="원형 오크 사이드 테이블 보기"></button>
+       </figure>
+      </article>
+     </div>
+    </div>
+   </div>
+   <!-- 상품 구매 레이어 -->
+   <div class="cz-qv" id="cz-qv" hidden>
+    <div class="cz-qv__box" role="dialog" aria-modal="true" aria-labelledby="cz-qv-name">
+     <button class="cz-qv__close" type="button" data-qv-close aria-label="닫기"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18" stroke-linecap="round"/></svg></button>
+     <figure class="cz-qv__img"><img src="" alt=""></figure>
+     <div class="cz-qv__body">
+      <p class="cz-qv__cat"></p>
+      <h3 id="cz-qv-name"></h3>
+      <p class="cz-qv__review" hidden></p>
+      <p class="cz-qv__price"></p>
+      <p class="cz-qv__desc"></p>
+      <div class="cz-qv__actions"><a class="cz-btn" data-qv-buy href="#">구매하러 가기<span><svg><use href="#cz-arrow"/></svg></span></a><a class="cz-qv__more" data-qv-more href="#">상품 상세 보기</a></div>
+     </div>
+    </div>
+   </div>
+   <script type="application/json" id="cz-looks-data">{
+    "12":{"name":"오크 2단 오픈 책장","cat":"LIVING · 수납","img":"p01","price":389000,"desc":"밝은 오크 원목으로 짠 2단 오픈 책장. 기둥이 둥글어 어느 벽에 두어도 가볍게 보여요."},
+    "26":{"name":"세라믹 화병 3종","cat":"DECOR · 화병","img":"p15","price":48000,"retail":59000,"desc":"무광 세라믹 화병 3종. 꽃 없이 두어도 선반 위가 차분해져요."},
+    "19":{"name":"오크 수납 박스","cat":"LIVING · 수납","img":"p08","price":39000,"desc":"오크 무늬목 수납 박스. 선반 아래 칸에 넣으면 자잘한 물건이 깔끔하게 정리돼요."},
+    "14":{"name":"오크 원형 식탁 1000","cat":"DINING · 테이블","img":"p03","price":459000,"desc":"지름 1000mm 오크 원형 식탁. 모서리가 없어 넷이 둘러앉기 편해요."},
+    "15":{"name":"페이퍼코드 다이닝 체어","cat":"DINING · 체어","img":"p04","price":219000,"retail":259000,"desc":"손으로 엮은 페이퍼코드 좌판의 다이닝 체어. 오래 앉아도 편안해요."},
+    "28":{"name":"스톤웨어 서빙 볼","cat":"DINING · 테이블웨어","img":"p17","price":32000,"desc":"가장자리가 살짝 말린 스톤웨어 볼. 샐러드나 과일을 담아 식탁 가운데 두세요."},
+    "29":{"name":"매트 스톤웨어 접시","cat":"DINING · 테이블웨어","img":"p18","price":18000,"desc":"매트한 유약의 스톤웨어 접시. 오븐 · 식기세척기에 써도 괜찮아요."},
+    "16":{"name":"오크 벽 선반 900","cat":"LIVING · 선반","img":"p05","price":129000,"desc":"짜맞춤 방식의 오크 벽 선반. 책 몇 권과 화병 하나로 벽이 달라져요."},
+    "34":{"name":"스톤 버드 화병","cat":"DECOR · 화병","img":"p23","price":36000,"desc":"돌처럼 거친 질감의 작은 화병. 마른 가지 하나만 꽂아도 충분해요."},
+    "31":{"name":"오크 캔들 홀더","cat":"DECOR · 캔들","img":"p20","price":24000,"desc":"오크 원목을 깎아 만든 캔들 홀더. 테이퍼 캔들을 꽂아 쓰세요."},
+    "17":{"name":"오크 퀸 침대 프레임","cat":"BEDROOM · 침대","img":"p06","price":890000,"desc":"단단한 오크 원목 퀸 침대 프레임. 헤드보드가 낮아 방이 넓어 보여요."},
+    "20":{"name":"워시드 리넨 베개 커버","cat":"BEDROOM · 리넨","img":"p09","price":29000,"retail":36000,"desc":"여러 번 빨아 부드러운 워시드 리넨 베개 커버. 2장 1세트예요."},
+    "18":{"name":"원형 오크 사이드 테이블","cat":"BEDROOM · 사이드 테이블","img":"p07","price":119000,"desc":"지름 450mm 원형 오크 사이드 테이블. 침대 옆 · 소파 옆 어디에나 어울려요."}
+   }</script>
+  </section>
+
+  <!-- 10. 인기 상품 -->
+  <section id="cz-best" class="cz-sec cz-wrap cz-products cz-products--best" aria-labelledby="cz-best-title" data-cms="인기 상품 제목" data-cms-help="상품은 관리자 › 상품 › 메인 진열(인기상품)에서 골라요. 여기서는 제목만 바꿔요.">
+    <header class="cz-head"><div><p class="cz-kicker" data-cms-text="작은 제목">Everyday favourites</p><h2 id="cz-best-title" data-cms-text="제목">오래 곁에 두는 인기 가구</h2></div><a class="cz-link" href="/product/list.html?cate_no=28" data-cms-text="전체 보기 글자" data-cms-href="전체 보기 링크">인기 상품 더 보기<svg aria-hidden="true"><use href="#cz-arrow"/></svg></a></header>
+    <div module="product_listmain_3" class="ec-base-product">
+      <!--
+      $count = 10
+      $basket_result = /product/add_basket.html
+      $basket_option = /product/basket_option.html
+      $cache = yes
+      -->
+      <ul class="prdList grid4"><!--@import(/product/list_product.html)--></ul>
+    </div>
+    <div class="cz-placeholder" data-cz-placeholder hidden></div>
+  </section>
+
+
+  <!-- 11. 기획전 -->
+  <section class="cz-duo cz-wrap" aria-label="이달의 기획전" data-cms="기획전">
+    <a class="cz-duo__card cz-duo__card--lilac" href="/product/search.html?keyword=오브제" data-cms-item data-cms-href="링크">
+      <div><p class="cz-kicker" data-cms-text="작은 제목">Small objects</p><h2 data-cms-text="제목">작은 오브제로,<br> 집에 온기를</h2><p data-cms-text="설명">화병 하나, 캔들 하나.<br> 선물하기 좋은 홈데코.</p><span class="cz-btn cz-btn--soft" data-cms-text="버튼">오브제 컬렉션<span><svg><use href="#cz-arrow"/></svg></span></span></div>
+      <img data-cms-src="사진" src="/SkinImg/inter/scene-wallshelf.webp" alt="오크 벽 선반 위의 화병과 캔들 홀더" width="1672" height="941" loading="lazy">
+    </a>
+    <a class="cz-duo__card cz-duo__card--sage" href="/product/list.html?cate_no=27" data-cms-item data-cms-href="링크">
+      <div><p class="cz-kicker" data-cms-text="작은 제목">The good finds</p><h2 data-cms-text="제목">좋은 발견,<br> 반가운 가격</h2><p data-cms-text="설명">지금 만나볼 수 있는<br> 가구 세일 컬렉션.</p><span class="cz-btn cz-btn--soft" data-cms-text="버튼">세일 보러 가기<span><svg><use href="#cz-arrow"/></svg></span></span></div>
+      <img data-cms-src="사진" src="/SkinImg/inter/scene-chair.webp" alt="부클 원단의 오크 라운지 체어" width="1672" height="941" loading="lazy">
+    </a>
+  </section>
+
+  <!-- 12. 이사 준비 체크리스트 -->
+  <section class="cz-starter cz-wrap" id="cz-starter" aria-labelledby="cz-starter-title" data-cms="체크리스트" data-cms-help="준비물은 한 줄에 하나씩 써요. 준비물마다 붙는 [보러 가기]는 그 이름으로 상품을 검색해요.">
+    <div class="cz-starter__photo"><img data-cms-src="사진" src="/SkinImg/inter/portrait-shelf.webp" alt="책과 화병이 정돈된 오크 책장" width="1122" height="1402" loading="lazy"><span class="cz-starter__sticker" data-cms-text="사진 위 스티커">Hello,<br><em>home!</em></span></div>
+    <div class="cz-starter__card">
+      <p class="cz-kicker" data-cms-text="작은 제목">Your first home</p>
+      <h2 id="cz-starter-title" data-cms-text="제목">새 집으로 이사하는 날,<br>하나씩 채워요</h2>
+      <p data-cms-text="설명">꼭 필요한 것부터 천천히. 준비한 가구를 체크해 나만의 목록을 만들어보세요.</p>
+      <div class="cz-toggle" role="group" aria-label="공간"><button type="button" data-starter-inter="living" aria-pressed="true">거실</button><button type="button" data-starter-inter="bedroom" aria-pressed="false">침실</button></div>
+      <div class="cz-progress" aria-hidden="true"><i data-starter-bar></i></div>
+      <div class="cz-checklist" data-starter-list></div>
+      <span hidden data-starter-items="living" data-cms-lines="거실 목록">소파 또는 라운지 체어
+책장 · 수납장
+러그
+사이드 테이블
+조명
+커튼</span>
+      <span hidden data-starter-items="bedroom" data-cms-lines="침실 목록">침대 프레임
+매트리스
+리넨 침구
+베개 · 베개 커버
+협탁
+암막 커튼</span>
+      <noscript><p><a href="/inter/guide.html#first-day">이사 준비 가이드 보기</a></p></noscript>
+      <div class="cz-checklist__foot"><span data-starter-status aria-live="polite">준비한 가구를 체크해주세요.</span><button type="button" data-starter-reset>다시 시작</button></div>
+      <a class="cz-link" href="/inter/guide.html#first-day" data-cms-text="아래 링크 글자" data-cms-href="아래 링크">이사 준비 가이드 읽기<svg aria-hidden="true"><use href="#cz-arrow"/></svg></a>
+    </div>
+  </section>
+
+  <!-- 13-1. 최신 포토리뷰 8개 : 상품 사용후기(board_no=4)의 최신 사진 후기를 inter-reviews.js 가 채운다 -->
+  <section class="cz-sec cz-wrap cz-live" aria-labelledby="cz-live-title" data-cms="포토리뷰 제목" data-cms-help="리뷰 카드는 상품 사용후기 게시판의 사진 후기가 자동으로 나와요. 여기서는 제목과 버튼 글자만 바꿔요.">
+    <header class="cz-head"><div><p class="cz-kicker" data-cms-text="작은 제목">Photo reviews</p><h2 id="cz-live-title" data-cms-text="제목">우리 집 포토리뷰</h2></div>
+      <div class="cz-head__links"><a class="cz-link" href="/board/product/list.html?board_no=4">리뷰 전체 보기<svg aria-hidden="true"><use href="#cz-arrow"/></svg></a><a class="cz-btn cz-btn--soft" href="/board/product/list.html?board_no=4" data-cms-text="버튼">포토리뷰 쓰고 3,000P<span><svg><use href="#cz-arrow"/></svg></span></a></div>
+    </header>
+    <div class="pr-grid" data-inter-photoreviews></div>
+    <p class="pr-empty" data-cms-text="후기가 없을 때 글">아직 등록된 포토리뷰가 없어요. 첫 포토리뷰를 남겨 주세요.</p>
+  </section>
+
+  <!-- 14. 가이드 -->
+  <section class="cz-sec cz-wrap" aria-labelledby="cz-journal-title" data-cms="인테리어 노트" data-cms-grow>
+    <header class="cz-head"><div><p class="cz-kicker" data-cms-text="작은 제목">Home notes</p><h2 id="cz-journal-title" data-cms-text="제목">집이 편해지는 작은 습관</h2></div><p data-cms-text="설명">공간이 한결 정돈되는 작은 메모.</p></header>
+    <div class="cz-journal">
+      <a class="cz-note cz-note--peach" href="/inter/guide.html#living" data-cms-item data-cms-href="링크"><figure><img data-cms-src="사진" src="/SkinImg/inter/scene-bed.webp" alt="오크 침대와 흰 리넨 침구" width="1672" height="941" loading="lazy"></figure><span class="cz-tag" data-cms-text="태그">Bedroom</span><h3 data-cms-text="제목">잠이 잘 오는 침실 만들기</h3><p data-cms-text="설명">낮은 침대, 부드러운 리넨, 따뜻한 조명. 침실을 고를 때 볼 세 가지.</p></a>
+      <a class="cz-note cz-note--mint" href="/inter/guide.html#first-day" data-cms-item data-cms-href="링크"><figure><img data-cms-src="사진" src="/SkinImg/inter/scene-chair.webp" alt="부클 원단의 오크 라운지 체어" width="1672" height="941" loading="lazy"></figure><span class="cz-tag" data-cms-text="태그">Living</span><h3 data-cms-text="제목">거실에 의자 하나 들이기</h3><p data-cms-text="설명">앉는 높이 · 등받이 각도 · 원단. 오래 쓰는 의자를 고르는 법.</p></a>
+      <a class="cz-note cz-note--butter" href="/inter/guide.html#bedroom" data-cms-item data-cms-href="링크"><figure><img data-cms-src="사진" src="/SkinImg/inter/scene-wallshelf.webp" alt="오크 벽 선반 위의 화병과 책" width="1672" height="941" loading="lazy"></figure><span class="cz-tag" data-cms-text="태그">Decor</span><h3 data-cms-text="제목">선반은 비워 두는 게 반</h3><p data-cms-text="설명">좋아하는 물건 서너 개만. 선반을 정돈해 보이게 하는 법.</p></a>
+    </div>
+  </section>
+
+  <!-- 15. 회원 · 자주 묻는 질문 -->
+  <section class="cz-help cz-wrap" aria-labelledby="cz-help-title" data-cms-order="회원 안내 · 자주 묻는 질문">
+    <div class="cz-help__member" data-cms="회원 안내" data-cms-help="관심상품·주문·쿠폰 링크는 카페24 기본 주소라 글자만 바꿔요.">
+      <div class="cz-help__body">
+        <p class="cz-kicker" data-cms-text="작은 제목">Your home, in one place</p>
+        <h2 id="cz-help-title" data-cms-text="제목">다음 쇼핑도,<br>조금 더 편하게</h2>
+        <p data-cms-text="설명">관심상품부터 주문 내역, 보유 쿠폰까지 한곳에서 챙겨보세요.</p>
+        <ul class="cz-help__links">
+          <li data-cms-item><a href="/myshop/wish_list.html"><i><svg><use href="#cz-heart"/></svg></i><span><strong data-cms-text="제목">관심상품</strong><small data-cms-text="설명">마음에 담아둔 상품 모아보기</small></span><svg class="cz-help__go" aria-hidden="true"><use href="#cz-arrow"/></svg></a></li>
+          <li data-cms-item><a href="/myshop/order/list.html"><i><svg><use href="#cz-truck"/></svg></i><span><strong data-cms-text="제목">주문 · 배송</strong><small data-cms-text="설명">지난 주문과 배송 상태 확인</small></span><svg class="cz-help__go" aria-hidden="true"><use href="#cz-arrow"/></svg></a></li>
+          <li data-cms-item><a href="/myshop/coupon/coupon.html"><i><svg><use href="#cz-spark"/></svg></i><span><strong data-cms-text="제목">나의 쿠폰</strong><small data-cms-text="설명">사용할 수 있는 혜택 찾기</small></span><svg class="cz-help__go" aria-hidden="true"><use href="#cz-arrow"/></svg></a></li>
+        </ul>
+        <a class="cz-btn" href="/member/agreement.html" data-cms-text="버튼" data-cms-href="버튼 링크">inter 회원가입<span><svg><use href="#cz-arrow"/></svg></span></a>
+      </div>
+      <figure class="cz-help__photo"><img data-cms-src="사진" src="/SkinImg/inter/scene-bed.webp" alt="오크 침대와 흰 리넨 침구가 놓인 침실" width="1672" height="941" loading="lazy"></figure>
+    </div>
+    <div class="cz-help__faq" data-cms="자주 묻는 질문" data-cms-grow>
+      <p class="cz-kicker" data-cms-text="작은 제목">A little help</p>
+      <h3 data-cms-text="제목">자주 묻는 질문</h3>
+      <details data-cms-item><summary data-cms-text="질문">가구 배송 · 설치는 어떻게 되나요?</summary><p data-cms-text="답변">부피가 큰 가구는 설치 기사가 방문해 원하는 자리에 조립 · 설치해 드려요. 상품마다 배송 방법과 일정이 달라 상세페이지에서 확인해 주세요.</p></details>
+      <details data-cms-item><summary data-cms-text="질문">원목 가구는 어떻게 관리하나요?</summary><p data-cms-text="답변">마른 천으로 자주 닦고, 물기는 바로 닦아 주세요. 직사광선과 난방기 바로 옆은 피하는 게 좋아요. 1년에 한두 번 원목 오일을 발라 주면 오래 써요.</p></details>
+      <details data-cms-item><summary data-cms-text="질문">우리 집에 맞는 사이즈인지 모르겠어요.</summary><p data-cms-text="답변">놓을 자리의 가로 · 깊이 · 높이와 지나다닐 통로를 재서 상품 상세 치수와 비교해 주세요. 사진을 보내 주시면 함께 확인해 드려요. <a href="/board/product/list.html?board_no=6">사이즈 문의하기</a></p></details>
+      <details data-cms-item><summary data-cms-text="질문">설치 후에도 교환 · 반품되나요?</summary><p data-cms-text="답변">조립 · 설치가 끝난 가구는 단순 변심 교환 · 반품이 어려워요. 상품 불량은 사진과 함께 고객센터 게시판에 남겨 주세요. <a href="/board/product/list.html?board_no=6">고객센터 문의</a></p></details>
+    </div>
+  </section>
+
+
+  <!-- 16. 브랜드 각인 : inter 글자 이미지 -->
+  <section class="cz-brand" aria-label="inter" data-cms="맨 아래 브랜드">
+    <div class="cz-brand__top">
+      <div><p class="cz-brand__title" data-cms-text="제목">거실부터 침실까지,<br>오래 머물 집은 inter에서</p><p class="cz-brand__sub" data-cms-text="설명">밝은 오크와 리넨으로 만든 북유럽풍 가구 · 패브릭 · 소품을 한곳에 모았어요.</p></div>
+      <a class="cz-btn cz-btn--soft" href="/product/list.html?cate_no=28" data-cms-text="버튼" data-cms-href="버튼 링크">inter 둘러보기<span><svg><use href="#cz-arrow"/></svg></span></a>
+    </div>
+    <div class="cz-brand__stage">
+      <img data-cms-src="사진" src="/SkinImg/inter/wordmark-inter.webp" alt="inter" width="2146" height="724" loading="lazy">
+    </div>
+  </section>
+
+  <!-- 이벤트 레이어 팝업 : 2장이 4초마다 넘어간다. 오늘 하루 닫기는 그날 자정까지 다시 뜨지 않는다 -->
+  <div class="cz-pop" id="cz-pop" data-cms="이벤트 팝업" data-cms-adapter="popup" role="dialog" aria-modal="true" aria-label="inter 이벤트" hidden>
+    <div class="cz-pop__box">
+      <div class="cz-pop__track">
+        <a class="cz-pop__slide" href="/product/list.html?cate_no=27">
+          <div class="cz-pop__img"><img src="/SkinImg/inter/scene-chair.webp" alt="부클 원단의 오크 라운지 체어" width="1672" height="941" style="object-position:50% 60%"><span class="cz-pop__badge">SALE EVENT</span></div>
+          <div class="cz-pop__txt"><small>Lucky coupon</small><strong>최대 50% 쿠폰 뽑기</strong><p>세일 기간, 쿠폰을 뽑아 최대 50% 할인 혜택을 받아 보세요.</p><em>쿠폰 뽑으러 가기 →</em></div>
+        </a>
+        <a class="cz-pop__slide" href="/board/product/list.html?board_no=4">
+          <div class="cz-pop__img"><img src="/SkinImg/inter/scene-bookshelf.webp" alt="오크 침대와 흰 리넨 침구가 놓인 침실" width="1672" height="941" style="object-position:50% 50%"><span class="cz-pop__badge">REVIEW EVENT</span></div>
+          <div class="cz-pop__txt"><small>Share your home</small><strong>포토리뷰 쓰면 3,000P</strong><p>우리 집에 놓은 사진과 함께 후기를 남기면 적립금 3,000원을 드려요.</p><em>포토리뷰 쓰러 가기 →</em></div>
+        </a>
+      </div>
+      <div class="cz-pop__dots"><button type="button" aria-label="1번 이벤트" aria-current="true"></button><button type="button" aria-label="2번 이벤트" aria-current="false"></button></div>
+      <div class="cz-pop__bar"><button type="button" data-pop-today>오늘 하루 닫기</button><button type="button" data-pop-close>닫기</button></div>
+    </div>
+  </div>
+</main>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="220" viewBox="0 0 900 220" role="img" aria-labelledby="title desc">
+  <title id="title">장바구니 무료배송 진행바 예시</title>
+  <desc id="desc">무료배송 기준까지 남은 금액을 진행 막대로 안내하는 장바구니 화면 예시</desc>
+  <rect width="900" height="220" rx="22" fill="#ffffff" stroke="#e8dfd4" stroke-width="2"/>
+  <text x="46" y="55" fill="#786e63" font-family="Arial,sans-serif" font-size="14" font-weight="700" letter-spacing="2">CART · FREE SHIPPING</text>
+  <text x="46" y="99" fill="#302821" font-family="Arial,sans-serif" font-size="24" font-weight="700">5만원 이상 구매 시 무료배송</text>
+  <rect x="46" y="124" width="808" height="17" rx="9" fill="#eee6dd"/>
+  <rect x="46" y="124" width="566" height="17" rx="9" fill="#687057"/>
+  <text x="46" y="179" fill="#786e63" font-family="Arial,sans-serif" font-size="14">현재 주문 금액에 따라 무료배송까지 진행 상태를 장바구니에서 확인</text>
+</svg>

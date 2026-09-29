@@ -1,0 +1,259 @@
+/* --------------------------------------------------------------------------
+   상품 상세 후기 — REVIEW 영역 · 베스트 포토리뷰 띠 · 크게 보기
+   동작: js/st-review.js  /  마크업: product/detail.html
+   모든 선택자는 .st-rv · .st-bp · .st-rvm · .st-stars 로 시작한다(다른 페이지와 섞이지 않게).
+   ------------------------------------------------------------------------ */
+
+.st-rv, .st-bp, .st-rvm, .st-stars {
+	--rv-ink:#111;
+	--rv-mute:#8c8783;
+	--rv-line:rgba(0,0,0,.12);
+	--rv-fill:rgba(0,0,0,.045);
+	--rv-star:#f5b301;
+	--rv-star-off:#dcd7d4;
+	--rv-star-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23000' stroke='%23000' stroke-width='2' stroke-linejoin='round' d='M12 2.6l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.5l-5.9 3.1 1.2-6.5L2.5 9.5l6.6-.9z'/%3E%3C/svg%3E");
+}
+.st-rv, .st-bp, .st-rvm {
+	font-family:var(--st-body, 'Pretendard', 'Noto Sans KR', sans-serif);
+	color:var(--rv-ink);
+	font-size:14px;
+	line-height:1.5;
+	letter-spacing:0;
+}
+.st-rv *, .st-bp *, .st-rvm * { box-sizing:border-box; }
+.st-rv button, .st-bp button, .st-rvm button { font-family:inherit; color:inherit; background:none; border:0; padding:0; cursor:pointer; text-align:left; }
+.st-rv [hidden], .st-bp[hidden], .st-rvm[hidden] { display:none !important; }
+
+/* 별점 — 값(--v, 0~5)만큼 색이 찬다 */
+.st-stars {
+	--v:0; --s:16px;
+	display:inline-block;
+	width:calc(var(--s) * 5);
+	height:var(--s);
+	vertical-align:top;
+	background:linear-gradient(90deg, var(--rv-star) calc(var(--v) * 20%), var(--rv-star-off) 0);
+	-webkit-mask:var(--rv-star-mask) 0 0 / var(--s) var(--s) repeat-x;
+	mask:var(--rv-star-mask) 0 0 / var(--s) var(--s) repeat-x;
+}
+
+/* ==========================================================================
+   A. REVIEW 영역
+   ========================================================================== */
+.st-rv { padding:10px 0 0; }
+
+.st-rv__head { text-align:center; margin:0 0 44px; }
+.st-rv__head h2 { margin:0; font:700 26px/1 var(--st-label, 'Archivo', sans-serif); letter-spacing:.04em; }
+.st-rv__head p { margin:14px 0 0; color:var(--rv-mute); font-size:14px; }
+
+/* 요약 박스 — 박스는 위 탭·상세정보와 같은 폭(1440px) 그대로 두고, 안의 네 칸이
+   그 폭을 똑같이 나눠 갖는 기둥이 되게 한다. justify-content:space-between 은 칸
+   사이에만 여백을 밀어 넣어서, 칸 자체는 좁은 채로 왼쪽에 붙고 그 오른쪽으로 다음
+   칸까지 휑한 공백만 생겼다 — "구매 만족도" 글자는 왼쪽에 박혀 있고 정작 그 칸이라고
+   느껴지는 자리는 훨씬 오른쪽까지 비어 있던 이유다. 대신 네 칸 각자에 flex:1 을 줘서
+   칸 자체가 폭을 나눠 갖게 하고, 그 넓어진 칸 "안에서" 글자를 가운데로 앉힌다
+   (각 칸의 align-items:center 가 그 몫을 한다 — 지금까지 방향이 아니라 칸의
+   크기 자체가 문제였다). */
+.st-rv__summary {
+	display:flex; align-items:stretch;
+	padding:40px 24px;
+	border:1px solid var(--rv-line);
+	box-sizing:border-box;
+}
+.st-rv__stat, .st-rv__dist, .st-rv__cta {
+	flex:1 1 auto;
+	padding:0 clamp(24px, 4vw, 64px);
+	border-left:1px solid var(--rv-line);
+}
+.st-rv__stat:first-child { border-left:0; }
+.st-rv__stat { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; min-width:130px; }
+.st-rv__label { font-size:13px; }
+.st-rv__num { display:block; font:700 40px/1 var(--st-label, 'Archivo', sans-serif); }
+.st-rv__num em { font-style:normal; }
+.st-rv__num i { margin-left:8px; font-style:normal; font-weight:400; color:#c9c4c1; }
+.st-rv__stat--count .st-rv__num i { display:none; }
+.st-rv__bubble {
+	position:relative; width:24px; height:22px; border-radius:50%; background:#cfcac7;
+}
+.st-rv__bubble::before { content:""; position:absolute; left:2px; bottom:-3px; border:6px solid transparent; border-top-color:#cfcac7; border-right-color:#cfcac7; transform:rotate(8deg); }
+.st-rv__bubble::after { content:"···"; position:absolute; inset:0; color:#fff; font-size:13px; line-height:20px; text-align:center; letter-spacing:-1px; }
+
+/* align-items:center 를 더해 li 줄(라벨+막대)이 넓어진 칸 안에서도 가운데 놓이게 한다 */
+.st-rv__dist { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:9px; margin:0; list-style:none; }
+.st-rv__dist li { display:flex; align-items:center; gap:18px; margin:0; padding:0; font-size:13px; color:var(--rv-mute); }
+.st-rv__dist li > span { width:76px; flex:0 0 auto; }
+.st-rv__dist li > b { display:block; width:130px; height:8px; border-radius:4px; background:#e8e4e1; overflow:hidden; font-weight:400; }
+.st-rv__dist li > b > i { display:block; width:0; height:100%; border-radius:4px; background:var(--rv-ink); transition:width .6s cubic-bezier(.16,1,.3,1); }
+.st-rv__dist li.is-top > span { color:var(--rv-ink); }
+
+.st-rv__cta { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px; text-align:center; }
+.st-rv__cta p { margin:0; font-size:13px; }
+
+/* 평점을 쓰지 않는 게시판이면 점수·분포 칸을 뺀다 */
+.st-rv--nopoint .st-rv__stat--score,
+.st-rv--nopoint .st-rv__dist { display:none; }
+.st-rv--nopoint .st-rv__stat--count { border-left:0; }
+
+/* 버튼 */
+.st-rv__btn {
+	display:inline-flex; align-items:center; justify-content:center;
+	min-width:136px; height:48px; padding:0 22px;
+	border:1px solid var(--rv-ink); background:transparent;
+	color:var(--rv-ink) !important; font-size:14px; font-weight:600; text-decoration:none;
+	transition:background .2s, color .2s;
+}
+.st-rv__btn:hover { background:var(--rv-ink); color:#fff !important; }
+.st-rv__btn--fill { background:var(--rv-ink); color:#fff !important; }
+.st-rv__btn--fill:hover { background:transparent; color:var(--rv-ink) !important; }
+
+/* 보기 전환 */
+.st-rv__toolbar { display:flex; align-items:center; gap:0; height:78px; margin:30px 0 0; padding:0 28px; background:var(--rv-fill); }
+.st-rv__toolbar button { display:inline-flex; align-items:center; gap:8px; height:20px; padding:0 22px; border-left:1px solid var(--rv-line); color:var(--rv-mute); font-size:14px; }
+.st-rv__toolbar button:first-child { padding-left:0; border-left:0; }
+.st-rv__toolbar button.is-on { color:var(--rv-ink); font-weight:600; }
+.st-rv__toolbar svg { width:16px; height:16px; flex:0 0 auto; }
+
+/* 리스트 */
+.st-rv__list { margin:30px 0 0; border-top:1px solid var(--rv-line); }
+.st-rv__grid { display:none; margin:30px 0 0; }
+.st-rv--image .st-rv__list { display:none; }
+.st-rv--image .st-rv__grid { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:12px; }
+
+.st-rv-item { display:flex; gap:0; padding:30px 0; border-bottom:1px solid var(--rv-line); }
+.st-rv-item__main { flex:1 1 auto; min-width:0; padding-right:30px; }
+.st-rv-item__side { flex:0 0 190px; display:flex; flex-direction:column; align-items:flex-end; gap:4px; padding-left:30px; border-left:1px solid var(--rv-line); font-size:13px; color:var(--rv-mute); }
+.st-rv-item__side .st-stars { margin-bottom:8px; }
+.st-rv-item__thumb { display:block; width:68px; height:68px; margin:0 0 20px; overflow:hidden; border-radius:3px; background:#e8e4e1; }
+.st-rv-item__thumb img { display:block; width:100%; height:100%; object-fit:cover; }
+.st-rv-item__title { margin:0; font-size:14px; font-weight:700; line-height:1.5; word-break:break-all; }
+.st-rv-item__text { margin:10px 0 0; color:#7d7975; font-size:13px; line-height:1.7; word-break:break-all; }
+.st-rv-item__text.is-mute { color:#b5b0ad; }
+.st-rv-item__text.is-full { white-space:pre-line; color:#55514e; }
+.st-rv-item__more { display:inline; color:var(--rv-mute); font-size:13px; text-decoration:underline; text-underline-offset:3px; }
+.st-rv-item__gallery { display:flex; flex-wrap:wrap; gap:10px; margin:22px 0 0; }
+.st-rv-item__photo { display:block; width:min(100%, 220px); overflow:hidden; border-radius:3px; background:#e8e4e1; }
+.st-rv-item__photo img { display:block; width:100%; height:auto; }
+.st-rv-item__link { display:inline-block; margin:20px 0 0; color:var(--rv-ink); font-size:13px; text-decoration:underline; text-underline-offset:3px; }
+
+.st-rv__empty { padding:70px 0; text-align:center; border-bottom:1px solid var(--rv-line); }
+.st-rv__empty p { margin:0; font-size:15px; font-weight:600; }
+.st-rv__empty span { display:block; margin:8px 0 0; color:var(--rv-mute); font-size:13px; }
+.st-rv__empty--grid { grid-column:1 / -1; border:0; color:var(--rv-mute); font-weight:400; }
+
+/* 이미지뷰 타일 */
+.st-rv-tile { position:relative; display:block; aspect-ratio:1 / 1; overflow:hidden; background:#e8e4e1; }
+.st-rv-tile img { display:block; width:100%; height:100%; object-fit:cover; transition:transform .6s cubic-bezier(.16,1,.3,1); }
+.st-rv-tile:hover img { transform:scale(1.05); }
+.st-rv-tile__cap {
+	position:absolute; left:0; right:0; bottom:0; display:flex; flex-direction:column; gap:6px;
+	padding:36px 14px 14px; color:#fff;
+	background:linear-gradient(to top, rgba(0,0,0,.62), rgba(0,0,0,0));
+	opacity:0; transform:translateY(6px); transition:opacity .3s, transform .3s;
+}
+.st-rv-tile:hover .st-rv-tile__cap, .st-rv-tile:focus-visible .st-rv-tile__cap { opacity:1; transform:none; }
+.st-rv-tile__cap strong { font-size:13px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+/* 원래 후기 표(모듈)는 스크립트가 켜지면 숨긴다. 페이지 이동(페이징)과 권한 안내는 남긴다. */
+.st-rv-on .st-rv__src .xans-product-review > *:not(.noAccess):not(.minor):not(a),
+.st-rv-on .st-rv__src [module="product_review"] > *:not(.noAccess):not(.minor):not(a) { display:none !important; }
+/* 쪽수 이동은 스크립트가 "더 보기"로 대신한다(두 게시판을 합쳐 보여주기 때문) */
+.st-rv-on .st-rv__src .xans-product-reviewpaging,
+.st-rv-on .st-rv__src [module="product_reviewpaging"] { display:none !important; }
+.st-rv__more { display:flex; justify-content:center; margin:30px 0 0; }
+.st-rv__more:empty { display:none; }
+.st-rv__morebtn { min-width:200px; height:48px; padding:0 24px; border:1px solid var(--rv-line) !important; text-align:center !important; font-size:14px; transition:border-color .2s; }
+.st-rv__morebtn:hover { border-color:var(--rv-ink) !important; }
+.st-rv__src { margin:30px 0 0; }
+.st-rv__src .ec-base-paginate { margin:0; }
+
+.st-rv__foot { display:flex; justify-content:flex-end; gap:8px; margin:44px 0 0; }
+
+/* 태블릿 */
+@media all and (max-width:1024px) {
+	.st-rv__summary { flex-wrap:wrap; justify-content:center; row-gap:28px; padding:32px 16px; }
+	.st-rv__stat { flex:1 1 40%; }
+	.st-rv__dist { flex:1 1 100%; align-items:center; border-left:0; padding-top:28px; border-top:1px solid var(--rv-line); }
+	.st-rv__cta { flex:1 1 100%; border-left:0; padding-top:28px; border-top:1px solid var(--rv-line); }
+	.st-rv--nopoint .st-rv__stat--count { flex-basis:100%; }
+}
+/* 모바일 */
+@media all and (max-width:640px) {
+	.st-rv__head { margin-bottom:28px; }
+	.st-rv__head h2 { font-size:22px; }
+	.st-rv__stat { padding:0 12px; min-width:0; }
+	.st-rv__num { font-size:34px; }
+	.st-rv__toolbar { height:60px; padding:0 16px; }
+	.st-rv-item { flex-direction:column; padding:24px 0; }
+	.st-rv-item__main { padding-right:0; }
+	.st-rv-item__side { flex:none; flex-direction:row; flex-wrap:wrap; align-items:center; gap:4px 12px; margin:16px 0 0; padding:14px 0 0; border-left:0; border-top:1px dashed var(--rv-line); }
+	.st-rv-item__side .st-stars { margin:0; }
+	.st-rv__foot .st-rv__btn { flex:1 1 0; min-width:0; }
+	.st-rv-tile__cap { opacity:1; transform:none; padding-top:26px; }
+	.st-rv--image .st-rv__grid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px; }
+}
+
+/* ==========================================================================
+   B. 베스트 포토리뷰 띠 (상품 썸네일 아래)
+   ========================================================================== */
+.xans-product-detail .imgArea .st-bp { margin:40px 0 0; font-size:14px; line-height:1.4; }
+.st-bp__head { display:flex; align-items:center; justify-content:space-between; margin:0 0 14px; }
+.st-bp__head h3 { margin:0; font-size:15px; font-weight:700; }
+.st-bp__nav { display:flex; gap:2px; }
+.st-bp__nav button { width:28px; height:28px; display:flex !important; align-items:center; justify-content:center; color:#777; font-size:18px; line-height:1; }
+.st-bp__nav button:hover { color:var(--rv-ink); }
+.st-bp__track {
+	display:flex; gap:12px; overflow-x:auto; scroll-snap-type:x mandatory;
+	scrollbar-width:none; -ms-overflow-style:none;
+}
+.st-bp__track::-webkit-scrollbar { display:none; }
+.st-bp__card {
+	flex:0 0 calc(50% - 6px); scroll-snap-align:start;
+	display:flex; gap:14px; align-items:stretch; min-width:0;
+	padding:10px; border:1px solid var(--rv-line); border-radius:3px; background:rgba(255,255,255,.55);
+	transition:border-color .2s, background .2s;
+}
+.st-bp__card:hover { border-color:var(--rv-ink); background:#fff; }
+.st-bp__card img { flex:0 0 auto; display:block; width:80px; height:80px; object-fit:cover; border-radius:2px; background:#e8e4e1; }
+.st-bp__body { flex:1 1 auto; min-width:0; display:flex; flex-direction:column; justify-content:center; gap:4px; }
+.st-bp__title { display:block; font-size:13px; font-weight:700; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.st-bp__text { display:block; color:#8c8783; font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.st-bp__writer { display:block; color:#b0aaa6; font-size:11px; }
+.st-bp__card.is-text .st-bp__text { white-space:normal; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
+
+@media all and (max-width:1024px) {
+	.xans-product-detail .imgArea .st-bp { margin:28px 16px 0; }
+	.st-bp__card { flex-basis:calc(100% - 28px); }
+}
+
+/* ==========================================================================
+   C. 크게 보기
+   ========================================================================== */
+.st-rvm { position:fixed; inset:0; z-index:100000; display:flex; align-items:center; justify-content:center; padding:24px; }
+.st-rvm__dim { position:absolute; inset:0; background:rgba(0,0,0,.6); }
+.st-rvm__box {
+	position:relative; display:flex; width:min(920px, 100%); max-height:min(760px, 100%);
+	background:#fff; overflow:hidden;
+}
+.st-rvm__close { position:absolute; top:6px; right:10px; z-index:2; width:40px; height:40px; font-size:30px; line-height:40px; text-align:center !important; color:#111; }
+.st-rvm__fig { flex:1 1 55%; min-width:0; display:flex; flex-direction:column; background:#f3efec; }
+.st-rvm__big { display:block; width:100%; flex:1 1 auto; min-height:0; object-fit:contain; }
+.st-rvm__thumbs { display:flex; gap:6px; padding:8px; overflow-x:auto; }
+.st-rvm__thumb { flex:0 0 auto; width:54px; height:54px; opacity:.5; border:1px solid transparent; }
+.st-rvm__thumb.is-on { opacity:1; border-color:#111; }
+.st-rvm__thumb img { display:block; width:100%; height:100%; object-fit:cover; }
+.st-rvm__body { flex:1 1 45%; min-width:0; padding:44px 30px 30px; overflow-y:auto; }
+.st-rvm__title { margin:12px 0 0; font-size:17px; font-weight:700; line-height:1.4; word-break:break-all; }
+.st-rvm__meta { margin:8px 0 0; color:#8c8783; font-size:12px; }
+.st-rvm__text { margin:22px 0 0; font-size:14px; line-height:1.8; white-space:pre-line; word-break:break-all; color:#3c3835; }
+.st-rvm__link { display:inline-block; margin:26px 0 0; font-size:13px; color:#111; text-decoration:underline; text-underline-offset:3px; }
+html.st-rvm-lock, html.st-rvm-lock body { overflow:hidden !important; }
+
+@media all and (max-width:720px) {
+	.st-rvm { padding:0; align-items:flex-end; }
+	.st-rvm__box { flex-direction:column; width:100%; max-height:92vh; overflow-y:auto; }
+	.st-rvm__fig { flex:none; }
+	.st-rvm__big { max-height:52vh; }
+	.st-rvm__body { flex:none; overflow:visible; padding:22px 18px 28px; }
+}
+
+/* 평균 평점은 계산이 끝나(st-rv--ready) 보이게 한다 : 처음 "0 / 5" 가 보였다 바뀌는 깜빡임 방지 */
+#stReview:not(.st-rv--ready) [data-st-rv-avg],#stReview:not(.st-rv--ready) [data-st-rv-stars]{visibility:hidden}

@@ -1,0 +1,66 @@
+<aside id="aside" module="layout_slidePackage" data-ez="contents-10vyvnw-1">
+    <!--@css(/layout/basic/css/slideMenu.css)-->
+	<!--@js(/layout/basic/js/slide_menu.js)-->
+	<div class="navigation_member">
+		<div class="side_logo" module="Layout_LogoTop"><a href="/">{$mall_name}</a></div>
+
+		<div class="navigation_state" data-ez-group="top-util-menu" data-ez-role="list">
+			<a data-ez-item="join" module="Layout_statelogoff" href="/member/agreement.html">회원가입</a>
+			<a data-ez-item="login" module="Layout_statelogoff" href="/member/login.html">로그인</a>
+			<a data-ez-item="modify" module="Layout_stateLogon" href="/member/modify.html">내정보수정</a>
+			<a data-ez-item="logout" module="Layout_stateLogon" href="{$action_logout}">로그아웃</a>
+			<a data-ez-item="order" href="/myshop/order/list.html">주문조회</a>
+			<a data-ez-item="mypage" module="Layout_stateLogon" href="/myshop/index.html">마이페이지</a>
+			<a data-ez-item="recent" href="/product/recent_view_product.html">최근본상품</a>
+		</div><!-- //navigation_state -->
+	</div><!-- //navigation_member -->
+
+    <nav class="navigation-menu" role="navigation">
+		<div data-ez-module="menu-side/1"><div id="slideCateList" class="navigation-menu__category"><ul id="slide_add_category"></ul></div></div><!-- //menu-side/1 -->
+		<script>
+			(function () {
+				var target = document.getElementById('slide_add_category');
+				if (!target) return;
+				if ((window.STORE_CONTENT || {}).menu && window.STORE_CONTENT.menu.editorial) {
+					var desktop = document.querySelector('.st-category-menu--left > ul');
+					if (desktop) { target.innerHTML = desktop.innerHTML; target.querySelectorAll('a').forEach(function (a) { a.classList.add('view'); }); }
+					return;
+				}
+				fetch('/exec/front/Product/SubCategory').then(function (response) { return response.json(); }).then(function (categories) {
+					var config = window.SERAPHIN_CONFIG || {};
+					var parentNo = Number(config.menuParentCateNo || 1);
+					categories.filter(function (item) { return Number(item.parent_cate_no) === parentNo; }).slice(0, 6).forEach(function (item) {
+						var li = document.createElement('li');
+						var link = document.createElement('a');
+						link.className = 'view'; link.href = '/product/list.html' + (item.param || '?cate_no=' + item.cate_no); link.textContent = item.name;
+						li.appendChild(link); target.appendChild(li);
+					});
+				}).catch(function () {});
+			}());
+		</script>
+
+		<div class="cboth slide_line"></div>
+
+        <div module="Layout_BoardInfo" class="navigation-menu__board">
+			<div class="title">고객센터<button type="button" class="icoCategory">펼침</button></div>
+            <ul class="categoryList">
+                <li><a href="{$link_board_list}">{$board_name}</a> {$board_adult_icon}</li>
+                <li><a href="{$link_board_list}">{$board_name}</a> {$board_adult_icon}</li>
+            </ul>
+        </div><!-- //navigation-menu__board -->
+
+		<div module="Layout_multishopList">
+			<button type="button" class="toggle">{$current_language} <i aria-hidden="true" class="icon icoArrowBottom"></i></button>
+			<ul module="Layout_multishopListitem">
+				<li class="{$selected_class}">
+					<a href="//{$shop_domain}/">{$locale_language}</a>
+				</li>
+				<li class="{$selected_class}">
+					<a href="//{$shop_domain}/">{$locale_language}</a>
+				</li>
+			</ul>
+		</div>
+    </nav>
+    <button type="button" class="btnClose"><i aria-hidden="true" class="icon icoClose"></i>닫기</button>
+</aside>
+<!--#ez="1/2"-->

@@ -1,0 +1,98 @@
+/* Bright pastel edition: layout and commerce behaviour are unchanged. */
+:root{--inter-paper:#fffdfa;--inter-ink:#315b60;--inter-teal:#287568;--inter-mint:#dcf5e9;--inter-peach:#ffe4d7;--inter-lemon:#fff4cb;--inter-line:#dce9e4}
+body,body:not(:has(#lw-home)){background:var(--inter-paper)!important;color:var(--inter-ink)}
+.main_top_banner{background:#d3f1e2!important;color:#285f55!important}
+.main_top_banner a,.main_top_banner p,.main_top_banner span{color:#285f55!important}
+.main_top_banner .top_banner_box_inner .top_banner_text a{color:#285f55!important;-webkit-text-fill-color:#285f55!important}
+.main_top_banner .top_banner_box_inner .top_banner_close .icon::before,.main_top_banner .top_banner_box_inner .top_banner_close .icon::after{background-color:#48786b!important}
+.main_top_banner .btnClose{filter:brightness(.4)}
+#header{background:#fffefa!important}#header .inner .top_nav_box .top_category>ul>li>a{color:#315b60!important}
+#header .inner .top_nav_box .top_logo a::before,#footer .bt_logo a::before{content:'inter'!important;color:#328478!important}
+#header .inner .top_nav_box .top_logo a::after,#footer .bt_logo a::after{content:none!important;display:none!important}
+#header .inter-sale-menu{position:relative;overflow:visible!important}
+#header .inter-sale-menu::before,#header .inter-sale-menu::after{content:none!important}
+#header .inter-sale-menu .inter-sale-bubble{position:absolute;left:50%;top:3px;z-index:4;transform:translateX(-50%);min-width:30px;padding:4px 8px;border-radius:999px;background:#ff8f78;color:#fff;text-align:center;font:700 9px/1 Jost,sans-serif;letter-spacing:.04em;box-shadow:0 3px 10px rgba(255,143,120,.2);pointer-events:none}
+#header .inter-sale-menu .inter-sale-bubble::after{content:'';position:absolute;left:50%;bottom:-6px;transform:translateX(-50%);border:4px solid transparent;border-top-color:#ff8f78}
+#header .inter-sale-menu>a{transform:none}
+#footer{background:#f0faf5!important;border-color:#d8ece2!important}
+#aside{background:#fffefa!important}
+#lw-home.inter-editorial{--pe-ink:#315b60;--pe-muted:#667e80;--pe-line:#dce9e4;--pe-paper:#fffdfa;--pe-sage:#dcf5e9;background:#fffdfa!important;color:#315b60!important}
+#lw-home :is(.pe-display,.pe-story-display,.pe-heading h2,.pe-starter h2,.pe-community h2,.pe-member h2,.pe-guide h2,.pe-finder h2){color:#287568!important}
+#lw-home .pe-description{color:#536d71!important}
+#lw-home .pe-hero__visual::after{background:linear-gradient(90deg,#fffdf8 0%,rgba(255,253,248,.99) 18%,rgba(255,253,248,.95) 34%,rgba(255,253,248,.78) 48%,rgba(255,253,248,.45) 62%,rgba(255,253,248,.17) 76%,rgba(255,253,248,0) 91%)!important}
+#lw-home .pe-ticker{background:#dcf5e9!important;border-color:#ccebdc!important;color:#287568!important}
+#lw-home .pe-ticker i{color:#b97154!important}
+#lw-home .pe-story__copy{background:#e8f7ff!important}
+#lw-home .pe-finder h2 em{color:#a45e49!important}
+#lw-home .pe-sale-banner{background:#fff1c9!important;border-color:#f2dfab!important;color:#745b34!important}
+#lw-home .pe-community{background:#e0f6eb!important}
+#lw-home .pe-event__copy{background:#fff0f3!important}
+#lw-home .pe-button,#lw-home .pe-choice button[aria-pressed=true]{background:#d2efe1!important;border-color:#a9d8c4!important;color:#245c50!important}
+#lw-home .pe-button:hover{background:#bce6d2!important}
+#lw-home .pe-button--outline{background:#fff5ec!important;border-color:#e4bfae!important;color:#795545!important}
+#lw-home .pe-hero-discover{background:#fff9eced!important}
+#lw-home .pe-live-dot{background:#5bbd9e!important}
+#lw-home .pe-hero-scroll i::after{background:#56ab94!important}
+.inter-menu-hero.inter-page-hero{--menu-paper:#edfff5!important;background:var(--menu-paper)!important}
+.inter-menu-hero.inter-page-hero[data-collection=living]{--menu-paper:#fff0e4!important}
+.inter-menu-hero.inter-page-hero[data-collection=bedroom]{--menu-paper:#ecfaf2!important}
+.inter-menu-hero.inter-page-hero[data-collection=dining]{--menu-paper:#f5fadf!important}
+.inter-menu-hero.inter-page-hero[data-collection=review]{--menu-paper:#fff0f2!important}
+.inter-page-hero h1{color:#287568!important}.inter-page-hero p{color:#526b6b!important}.inter-page-hero small{color:#526e70!important}
+.inter-page-hero nav a{background:#ffffff85;border-color:#b9d7cc!important;color:#315b60!important}
+.inter-menu-hero nav a[aria-current=page]{background:#c9eedc!important;border-color:#a1d2bd!important;color:#245c50!important;-webkit-text-fill-color:#245c50!important}
+body:not(:has(#lw-home)) .titleArea h2,#contents>.titleArea h2,.inter-guide h1,.inter-guide h2{color:#287568!important}
+body:not(:has(#lw-home)) .ec-base-table th{background:#e8f7ef!important;color:#315b60!important;border-color:#dce9e4!important}
+body:not(:has(#lw-home)) :is(.btnSubmit,.btnSubmitFix,.btnStrong){background:#d2efe1!important;border-color:#add8c5!important;color:#245c50!important}
+body:not(:has(#lw-home)) .ec-base-tab li.selected a{background:#e0f4e9!important;color:#245c50!important}
+body:not(:has(#lw-home)) :is(.xans-myshop-main,.xans-order-empty){background:#f0faf5!important;border-color:#dcebe3!important}
+body:not(:has(#lw-home)) .xans-member-login{background:transparent!important;border-color:transparent!important}
+html.st-sale-on #contents :is(.sl-hero,.sl-strip,.sl-end){background-color:#e6f8ed!important;color:#287568!important}
+html.st-sale-on #contents .sl-hero__title{color:#287568!important}
+html.st-sale-on #contents .sl-coupon{background:#fff3e9!important;color:#315b60!important}
+html.st-sale-on #contents .sl-cp__btn{background:#d2efe1!important;color:#245c50!important;box-shadow:none!important}
+html.st-sale-on #contents .sl-cp__back{background:#d2efe1!important;color:#245c50!important}
+html.st-sale-on #contents .sl-cp__back :is(b,em,.sl-cp__pct,.sl-cp__nm){color:#245c50!important;-webkit-text-fill-color:#245c50!important}
+html.st-sale-on #contents .sl-cp__msg{color:#315b60!important}
+
+/* inter button system: rounded, tactile and consistent across Cafe24 modules. */
+:root{--inter-btn:#2d7d70;--inter-btn-hover:#22695f;--inter-btn-soft:#dff4ea;--inter-btn-line:#a9d7c5;--inter-btn-shadow:0 9px 22px rgba(45,125,112,.16)}
+#lw-home .pe-button{min-width:214px!important;min-height:52px!important;padding:6px 7px 6px 21px!important;justify-content:space-between!important;gap:18px!important;border:1px solid rgba(37,104,93,.18)!important;border-radius:999px!important;background:linear-gradient(135deg,#338779,#287568)!important;color:#fff!important;-webkit-text-fill-color:#fff!important;font-weight:600!important;letter-spacing:-.015em!important;box-shadow:var(--inter-btn-shadow)!important;transition:transform .25s ease,box-shadow .25s ease,background .25s ease!important}
+#lw-home .pe-button>span{display:grid;width:38px;height:38px;flex:0 0 38px;place-items:center;border-radius:50%;background:rgba(255,255,255,.18);font:500 15px/1 Jost,sans-serif;transition:transform .25s ease,background .25s ease}
+#lw-home .pe-button:hover{background:linear-gradient(135deg,#287568,#21665c)!important;transform:translateY(-2px);box-shadow:0 13px 28px rgba(45,125,112,.24)!important}
+#lw-home .pe-button:hover>span{transform:rotate(45deg);background:rgba(255,255,255,.27)}
+#lw-home .pe-button--outline{background:rgba(255,253,250,.82)!important;border-color:#e7bba7!important;color:#805545!important;-webkit-text-fill-color:#805545!important;box-shadow:0 9px 22px rgba(170,105,78,.11)!important}
+#lw-home .pe-button--outline>span{background:#ffe6d9;color:#805545}
+#lw-home .pe-button--outline:hover{background:#fff0e8!important;color:#714838!important;-webkit-text-fill-color:#714838!important;box-shadow:0 13px 28px rgba(170,105,78,.17)!important}
+body:not(:has(#lw-home)) :is(a,button).btnSubmit,body:not(:has(#lw-home)) :is(a,button).btnSubmitFix,body:not(:has(#lw-home)) :is(a,button).btnStrong{border:1px solid var(--inter-btn)!important;border-radius:999px!important;background:var(--inter-btn)!important;color:#fff!important;-webkit-text-fill-color:#fff!important;font-weight:600!important;letter-spacing:-.01em!important;box-shadow:0 7px 18px rgba(45,125,112,.14)!important;transition:transform .2s ease,box-shadow .2s ease,background .2s ease!important}
+body:not(:has(#lw-home)) :is(a,button).btnSubmit:hover,body:not(:has(#lw-home)) :is(a,button).btnSubmitFix:hover,body:not(:has(#lw-home)) :is(a,button).btnStrong:hover{background:var(--inter-btn-hover)!important;border-color:var(--inter-btn-hover)!important;transform:translateY(-1px);box-shadow:0 10px 22px rgba(45,125,112,.2)!important}
+body:not(:has(#lw-home)) :is(a,button).btnNormal,body:not(:has(#lw-home)) :is(a,button).btnNormalFix,body:not(:has(#lw-home)) :is(a,button).btnBasic{border:1px solid var(--inter-btn-line)!important;border-radius:999px!important;background:rgba(255,255,255,.72)!important;color:#315b60!important;-webkit-text-fill-color:#315b60!important;font-weight:550!important;box-shadow:0 4px 12px rgba(49,91,96,.06)!important;transition:transform .2s ease,background .2s ease,border-color .2s ease!important}
+body:not(:has(#lw-home)) :is(a,button).btnNormal:hover,body:not(:has(#lw-home)) :is(a,button).btnNormalFix:hover,body:not(:has(#lw-home)) :is(a,button).btnBasic:hover{background:var(--inter-btn-soft)!important;border-color:#7dbba4!important;transform:translateY(-1px)}
+body:not(:has(#lw-home)) :is(.btnSubmit,.btnSubmitFix,.btnStrong,.btnNormal,.btnNormalFix,.btnBasic).gFull{border-radius:14px!important}
+body:not(:has(#lw-home)) :is(button,a)[disabled]:not(.sl-cp__card),body:not(:has(#lw-home)) :is(button,a).disabled:not(.sl-cp__card){opacity:.45!important;box-shadow:none!important;transform:none!important}
+body:not(:has(#lw-home)) .xans-member-login .login__util div:nth-child(3){width:170px!important;height:48px!important;border:0!important}
+body:not(:has(#lw-home)) .xans-member-login .login__util div:nth-child(3)>a{display:flex!important;align-items:center!important;justify-content:center!important;height:48px!important;line-height:1!important;border:1px solid var(--inter-btn-line)!important;border-radius:999px!important;background:var(--inter-btn-soft)!important;color:#315b60!important;font-size:14px!important;font-weight:600!important;box-shadow:0 6px 16px rgba(49,91,96,.08)!important;transition:transform .2s ease,background .2s ease!important}
+body:not(:has(#lw-home)) .xans-member-login .login__util div:nth-child(3)>a:hover{background:#caecdc!important;transform:translateY(-1px)}
+body:not(:has(#lw-home)) .xans-member-login .login__sns .wrap_sns_log a{border-color:#d7e7df!important;border-radius:14px!important;background-color:rgba(255,255,255,.8)!important;box-shadow:0 4px 12px rgba(49,91,96,.05)!important;transition:transform .2s ease,border-color .2s ease!important}
+body:not(:has(#lw-home)) .xans-member-login .login__sns .wrap_sns_log a:hover{border-color:var(--inter-btn-line)!important;transform:translateY(-1px)}
+#lw-home .pe-choice button{border-color:#b5d5c7!important;background:rgba(255,255,255,.68)!important;box-shadow:0 3px 10px rgba(49,91,96,.05);font-weight:550;transition:transform .2s ease,background .2s ease,border-color .2s ease!important}
+#lw-home .pe-choice button:hover{background:#eef9f3!important;border-color:#84bda7!important;transform:translateY(-1px)}
+#lw-home .pe-choice button[aria-pressed=true]{background:var(--inter-btn)!important;border-color:var(--inter-btn)!important;color:#fff!important;box-shadow:0 6px 16px rgba(45,125,112,.14)!important}
+html.st-sale-on #contents .sl-cp__btn,html.st-sale-on #contents .sl-btn{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:13px!important;min-height:48px!important;padding:5px 8px 5px 20px!important;border:1px solid var(--inter-btn-line)!important;border-radius:999px!important;background:var(--inter-btn)!important;color:#fff!important;-webkit-text-fill-color:#fff!important;font-weight:600!important;letter-spacing:-.01em!important;box-shadow:var(--inter-btn-shadow)!important;transition:transform .22s ease,background .22s ease,box-shadow .22s ease!important}
+html.st-sale-on #contents :is(.sl-cp__btn,.sl-btn)::after{content:'→';display:grid;width:34px;height:34px;place-items:center;flex:0 0 34px;border-radius:50%;background:rgba(255,255,255,.18);font:500 14px/1 Jost,sans-serif;letter-spacing:0;transition:transform .22s ease}
+html.st-sale-on #contents :is(.sl-cp__btn,.sl-btn):hover{background:var(--inter-btn-hover)!important;color:#fff!important;-webkit-text-fill-color:#fff!important;transform:translateY(-2px);box-shadow:0 11px 24px rgba(45,125,112,.23)!important}
+html.st-sale-on #contents :is(.sl-cp__btn,.sl-btn):hover::after{transform:translateX(2px)}
+html.st-sale-on #contents .sl-cp__btn--ghost{background:rgba(255,255,255,.72)!important;color:#315b60!important;-webkit-text-fill-color:#315b60!important;box-shadow:0 4px 12px rgba(49,91,96,.07)!important}
+html.st-sale-on #contents .sl-cp__btn--ghost::after{background:var(--inter-btn-soft)}
+@media(max-width:767px){#lw-home .pe-hero__visual::after{background:linear-gradient(180deg,#fffdf8 0%,rgba(255,253,248,.98) 30%,rgba(255,253,248,.76) 48%,rgba(255,253,248,.28) 65%,rgba(255,253,248,0) 80%)!important}#lw-home .pe-button{min-width:200px!important;min-height:48px!important;padding-left:18px!important}#lw-home .pe-button>span{width:34px;height:34px;flex-basis:34px}}
+
+/* 01 영상 장면은 글자가 읽힐 만큼만 옅게(.55), 02~04 장면으로 넘어가면서 100%까지 (--hero-progress 0~1 = 장면 0~3) */
+#lw-home .pe-hero__visual::after{opacity:min(1,calc(.55 + var(--hero-progress,0)*1.35))}
+
+/* 서브 페이지 공통 가로폭 : 제목 · 본문 · 상품 목록 · 페이징을 상단 배너(.inter-page-hero, 최대 1440px)와 같은 폭·같은 좌우 선에 맞춘다.
+   폭 기준은 --st-gutter (1025px 이상 = 화면 좌우 여백, 배너 양끝과 일치). 되돌리려면 이 블록만 지운다. */
+body:not(:has(#lw-home)) #contents>:is(.section,.titleArea,.boardMain,.ec-base-paginate,.myshopArea,.inter-guide){width:calc(100% - var(--st-gutter)*2)!important;max-width:none!important;margin-left:auto!important;margin-right:auto!important;padding-left:0!important;padding-right:0!important;box-sizing:border-box!important}
+body:not(:has(#lw-home)) #contents>.myshopArea{padding-left:220px!important}
+body:not(:has(#lw-home)) #contents>:is(.section,.myshopArea) :is(.xans-board-function,.xans-board-search,.ec-base-tab.typeMenu){width:100%!important;max-width:none!important}
+@media(min-width:768px){body:not(:has(#lw-home)) #contents>.inter-page-hero{width:calc(100% - var(--st-gutter)*2);max-width:none}}
+body:not(:has(#lw-home)) #contents>.myshopArea>.xans-myshop-main{left:0!important}

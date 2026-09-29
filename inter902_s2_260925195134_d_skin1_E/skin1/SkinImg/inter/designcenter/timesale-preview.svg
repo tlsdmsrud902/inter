@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="310" viewBox="0 0 900 310" role="img" aria-labelledby="title desc">
+  <title id="title">inter 상품 타임세일 표시 예시</title>
+  <desc id="desc">린넨 스퀘어 쿠션 베드의 할인 전후 가격과 혜택 종료 카운트다운을 보여주는 화면 예시</desc>
+  <rect width="900" height="310" rx="24" fill="#fbf7f0"/>
+  <rect x="34" y="34" width="832" height="242" rx="18" fill="#ffffff" stroke="#e8dfd4" stroke-width="2"/>
+  <rect x="64" y="64" width="124" height="34" rx="17" fill="#a04437"/>
+  <text x="126" y="87" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="14" font-weight="700" letter-spacing="2">TIME SALE</text>
+  <text x="64" y="145" fill="#302821" font-family="Arial,sans-serif" font-size="25" font-weight="700">린넨 스퀘어 쿠션 베드</text>
+  <text x="64" y="190" fill="#9b9187" font-family="Arial,sans-serif" font-size="18" text-decoration="line-through">44,000원</text>
+  <text x="183" y="192" fill="#302821" font-family="Arial,sans-serif" font-size="30" font-weight="700">35,200원</text>
+  <text x="385" y="190" fill="#a85f48" font-family="Arial,sans-serif" font-size="19" font-weight="700">20% 할인</text>
+  <rect x="64" y="216" width="426" height="5" rx="3" fill="#eee6dd"/>
+  <rect x="64" y="216" width="288" height="5" rx="3" fill="#a85f48"/>
+  <rect x="530" y="64" width="302" height="158" rx="16" fill="#332b27"/>
+  <text x="681" y="105" text-anchor="middle" fill="#f0c99f" font-family="Arial,sans-serif" font-size="14" font-weight="700" letter-spacing="2">혜택 종료까지</text>
+  <text x="681" y="159" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="33" font-weight="700">00 : 08 : 24</text>
+  <text x="681" y="193" text-anchor="middle" fill="#d9cec4" font-family="Arial,sans-serif" font-size="13">카운트다운 표시 예시</text>
+  <text x="450" y="257" text-anchor="middle" fill="#786e63" font-family="Arial,sans-serif" font-size="13">실제 상품별 할인율과 종료 시각은 운영 설정에 따라 달라집니다.</text>
+</svg>

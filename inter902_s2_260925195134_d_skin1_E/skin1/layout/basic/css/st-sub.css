@@ -1,0 +1,1426 @@
+@charset "utf-8";
+/* ==========================================================================
+   DO NOT EDIT - DESIGN SYSTEM
+   구매자는 이 파일을 수정하지 않는다. 문구·이미지·링크는 /layout/basic/js/store-content.js 에서 바꾼다.
+   ========================================================================== */
+/* ==========================================================================
+   SERAPHIN — 서브 페이지 (상품목록 / 상품상세 / 장바구니 / 마이페이지 / 회원 / 게시판)
+   --------------------------------------------------------------------------
+   메인과 같은 톤앤매너를 서브 전 페이지에 적용한다.
+   레이아웃(layout.html)에서 로드되므로 모든 페이지에 걸린다.
+   메인 전용 규칙은 index.html 에서 st-main.css / st-world.css 가 뒤에 로드되어
+   여기 규칙을 덮는다. (로드 순서: st-sub → main.css → st-main → st-world)
+
+   원본 스킨 파일은 건드리지 않고 여기서만 덮어쓴다.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   섹션 좌우 여백
+   전폭 레이아웃으로 풀면서 원본의 width:92% 가 사라졌다.
+   서브 페이지 본문이 화면 끝에 붙지 않도록 공통 여백을 준다.
+   메인의 풀블리드 섹션(히어로/캠페인/FILM)은 자기 쪽에서 padding:0 으로 되돌린다.
+   -------------------------------------------------------------------------- */
+#container #contents > .section {
+	padding-left:var(--st-gutter);
+	padding-right:var(--st-gutter);
+	box-sizing:border-box;
+}
+
+/* 섹션 하단 간격을 하나로 통일한다.
+   원본 스킨은 .main_* 계열에만 간격이 있어, 나중에 추가한 섹션
+   (캠페인 / 카테고리 / FILM)은 간격이 0 이 되어 제각각으로 보였다.
+   여기서 전부 --st-section-gap 으로 맞춘다. */
+#container #contents > .section {
+	margin-bottom:var(--st-section-gap);
+}
+/* 마지막 섹션은 푸터가 자기 상단 여백을 갖고 있으므로 중복을 피한다 */
+#container #contents > .section:last-child { margin-bottom:0; }
+/* GSAP 이 가로 스크롤 섹션(NEW ARRIVALS)을 핀 고정하면서 .pin-spacer 로
+   감싼다. 그러면 그 섹션은 #contents 의 직계 자식이 아니게 되어 위의
+   간격 규칙에서 빠지고, 혼자만 아래 여백이 0 이 된다.
+   래퍼에 같은 간격을 걸어 맞춘다. */
+#container #contents > .pin-spacer { margin-bottom:var(--st-section-gap); }
+#container #contents > .pin-spacer:last-child { margin-bottom:0; }
+
+/* 메인의 화면 가득 채우는 섹션은 예외 — 여백 없이 끝까지 간다.
+   이 예외는 반드시 위 규칙과 같은 파일에 둔다: 레이아웃의 CSS 가 body 끝에서
+   로드돼 문서 순서상 가장 마지막이라, 다른 파일에서 같은 특이도로 되돌리면
+   이 규칙을 이기지 못한다. */
+#container #contents > .st-hero,
+#container #contents > .st-world,
+#container #contents > .st-film,
+#container #contents > .st-cats,
+#container #contents > .st-type,
+#container #contents > .st-reel,
+#container #contents > .st-tear,
+#container #contents > .st-arrivals {
+	padding-left:0;
+	padding-right:0;
+}
+
+/* --------------------------------------------------------------------------
+   링크 색
+   원본 스킨은 페이지마다 링크 색을 지정하지 않는 곳이 있어, 그런 링크가
+   브라우저 기본 파랑/보라로 뜬다(상품목록 상단 태그 영역에서 실제로 발생).
+   본문 안의 링크는 기본적으로 본문색을 따르게 한다.
+   -------------------------------------------------------------------------- */
+#contents a { color:inherit; }
+#contents a:visited { color:inherit; }
+#contents a:hover { color:var(--st-red); }
+/* 버튼처럼 쓰이는 링크는 자기 색을 유지해야 하므로 되돌린다 */
+#contents a[class^='btnSubmit']:hover { color:var(--st-invert); }
+
+/* --------------------------------------------------------------------------
+   가로 넘침 안전장치
+   상품 표·주문서 표는 열이 많아 좁은 화면에서 페이지 전체를 밀어낼 수 있다.
+   표 자신만 가로로 스크롤되게 해 페이지가 밀리지 않도록 한다.
+   -------------------------------------------------------------------------- */
+#contents .ec-base-table {
+	max-width:100%;
+	overflow-x:auto;
+	-webkit-overflow-scrolling:touch;
+}
+
+/* --------------------------------------------------------------------------
+   경로 (빵부스러기) — "홈 / 네크리스" 를 대문자 라벨로
+   -------------------------------------------------------------------------- */
+#contents .path {
+	margin:clamp(20px, 3vw, 44px) auto clamp(10px, 1.2vw, 18px);
+}
+#contents .path > span { display:none; }		/* "현재 위치" 숨김 */
+#contents .path ol {
+	display:flex;
+	flex-wrap:wrap;
+	align-items:center;
+	gap:6px 10px;
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+#contents .path ol li {
+	display:inline-flex;
+	align-items:center;
+	gap:10px;
+	margin:0;
+	padding:0;
+	background:none;
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	font-weight:600;
+	letter-spacing:.12em;
+	text-transform:uppercase;
+	color:var(--st-ink-35);
+}
+#contents .path ol li + li::before {
+	content:'/';
+	color:var(--st-ink-12);
+}
+#contents .path ol li a { color:inherit; text-decoration:none; }
+#contents .path ol li a:hover { color:var(--st-ink); }
+#contents .path ol li strong a { color:var(--st-red); }
+
+/* --------------------------------------------------------------------------
+   페이지 타이틀 — 메인 섹션 헤드라인과 같은 디스플레이 서체
+   -------------------------------------------------------------------------- */
+#contents .titleArea {
+	display:flex;
+	align-items:baseline;
+	flex-wrap:wrap;
+	gap:10px 16px;
+	margin:0 auto clamp(24px, 3.5vw, 52px);
+	padding:0;
+	border:0;
+	background:none;
+	text-align:left;
+}
+#contents .titleArea h2 {
+	font-family:var(--st-display) !important;
+	font-size:clamp(34px, 6vw, 92px);
+	line-height:.9;
+	letter-spacing:-.02em;
+	text-transform:uppercase;
+	color:var(--st-ink);
+	margin:0;
+	padding:0;
+	width:auto;
+}
+#contents .titleArea .likeButton { margin-left:auto; }
+
+/* 중간 제목 (마이페이지·회원가입 등) */
+#contents .titleArea--middle h2,
+#contents .titleArea--myshop h2 {
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	font-weight:600;
+	letter-spacing:.12em;
+	text-transform:uppercase;
+	color:var(--st-red);
+	line-height:1;
+}
+
+/* 게시판 제목 (공지사항·자주묻는질문·포토리뷰·상품문의) — 다른 서브 페이지보다 한 단계 작게 */
+#contents .titleArea--board h2 { font-size:clamp(22px, 3.2vw, 38px); }
+
+/* --------------------------------------------------------------------------
+   카테고리 탭 — 메인 BEST SELLER 탭과 같은 pill
+   -------------------------------------------------------------------------- */
+#contents .ec-base-tab.typeMenu { border:0; margin:0 0 clamp(20px, 3vw, 40px); }
+#contents .ec-base-tab.typeMenu .menuCategory {
+	display:flex;
+	flex-wrap:wrap;
+	gap:8px 10px;
+	margin:0;
+	padding:0;
+	border:0;
+}
+#contents .ec-base-tab.typeMenu .menuCategory > li {
+	margin:0;
+	padding:0;
+	border:0;
+	width:auto;
+}
+#contents .ec-base-tab.typeMenu .menuCategory > li > a.button,
+#contents .ec-base-tab.typeMenu .menuCategory > li > a {
+	display:inline-block;
+	padding:9px 16px;
+	border:1px solid var(--st-ink-12);
+	border-radius:999px;
+	background:transparent;
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	font-weight:600;
+	letter-spacing:.1em;
+	text-transform:uppercase;
+	color:var(--st-ink-60);
+	line-height:1;
+	text-decoration:none;
+}
+#contents .ec-base-tab.typeMenu .menuCategory > li.selected > a {
+	background:var(--st-ink);
+	border-color:var(--st-ink);
+	color:var(--st-invert);
+}
+#contents .ec-base-tab.typeMenu .menuCategory .count { opacity:.55; }
+
+/* --------------------------------------------------------------------------
+   상품목록 상단 상세검색(태그) 블록
+   원본은 제목·항목·버튼이 세로로 흩어져 정리가 안 된 인상을 준다.
+   -------------------------------------------------------------------------- */
+#contents .searchCondition {
+	margin:0 0 clamp(16px, 2vw, 26px);
+	padding:clamp(14px, 1.8vw, 22px) 0;
+	border-top:1px solid var(--st-ink);
+	border-bottom:1px solid var(--st-ink-12);
+}
+#contents .searchCondition .searchArea { display:flex; flex-wrap:wrap; gap:10px 24px; align-items:flex-start; }
+#contents .searchCondition .searchArea .title {
+	flex:0 0 auto;
+	min-width:96px;
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	font-weight:600;
+	letter-spacing:.12em;
+	text-transform:uppercase;
+	color:var(--st-ink-35);
+	line-height:1.9;
+}
+#contents .searchCondition .cell { flex:1 1 320px; min-width:0; }
+#contents .searchCondition ul.content {
+	display:flex;
+	flex-wrap:wrap;
+	gap:8px 10px;
+	margin:0;
+	padding:0;
+	list-style:none;
+}
+#contents .searchCondition ul.content > li { margin:0; padding:0; }
+#contents .searchCondition ul.content > li a {
+	display:inline-block;
+	padding:7px 13px;
+	border:1px solid var(--st-ink-12);
+	border-radius:999px;
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	letter-spacing:.06em;
+	color:var(--st-ink-60);
+	text-decoration:none;
+	line-height:1;
+}
+#contents .searchCondition ul.content > li a:hover {
+	border-color:var(--st-ink);
+	color:var(--st-ink);
+}
+#contents .searchCondition .withinInput,
+#contents .searchCondition .priceInput {
+	display:flex;
+	align-items:center;
+	flex-wrap:wrap;
+	gap:8px;
+	margin-top:10px;
+}
+#contents .searchCondition .btnResearch,
+#contents .searchCondition .btnPriceSearch { flex:0 0 auto; }
+
+/* 선택된 태그 목록 — "태그 / 전체해제 / [항목] 삭제" 를 한 줄로 */
+#contents .normalpackage_box .heading {
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	font-weight:600;
+	letter-spacing:.12em;
+	text-transform:uppercase;
+	color:var(--st-ink-35);
+	margin:0;
+}
+#contents .normalpackage_box ul.list {
+	display:flex;
+	flex-wrap:wrap;
+	align-items:center;
+	gap:8px 10px;
+	margin:8px 0 0;
+	padding:0;
+	list-style:none;
+}
+#contents .normalpackage_box ul.list > li {
+	display:inline-flex;
+	align-items:center;
+	gap:7px;
+	margin:0;
+	padding:6px 12px;
+	border:1px solid var(--st-ink-12);
+	border-radius:999px;
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	letter-spacing:.06em;
+	color:var(--st-ink-60);
+}
+#contents .normalpackage_box .btnSearchDelete,
+#contents .normalpackage_box .btnRefresh {
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	letter-spacing:.08em;
+	text-transform:uppercase;
+	color:var(--st-ink-35);
+	background:none;
+	border:0;
+	padding:0;
+	cursor:pointer;
+}
+#contents .normalpackage_box .btnSearchDelete:hover,
+#contents .normalpackage_box .btnRefresh:hover { color:var(--st-red); }
+
+/* --------------------------------------------------------------------------
+   상품목록 상단 툴바 — 개수 / 정렬 / 조건검색
+   원본은 개수·정렬·조건검색이 따로 떨어져 세로로 흩어진다. 한 줄로 묶는다.
+   -------------------------------------------------------------------------- */
+#contents .product_scrollx .function {
+	display:flex;
+	align-items:center;
+	flex-wrap:wrap;
+	gap:12px 20px;
+	margin:0 0 clamp(14px, 1.8vw, 24px);
+	padding:0 0 clamp(14px, 1.8vw, 22px);
+	border-bottom:0 !important;
+}
+/* 정렬 영역 바깥 박스(.xans-product-normalmenu)에 카페24 기본 CSS 가 아래 선을 하나 더 긋는다.
+   그 선과 위 .function 의 선, 상품 목록 위 가로선 2줄을 모두 지운다. */
+#contents .product_scrollx .xans-product-normalmenu { border-bottom:0 !important; }
+#contents .product_scrollx .function .prdCount {
+	margin:0;
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	font-weight:600;
+	letter-spacing:.12em;
+	text-transform:uppercase;
+	color:var(--st-ink-60);
+}
+#contents .product_scrollx .function .prdCount .txtEm {
+	color:var(--st-red);
+	font-weight:700;
+	padding:0 .35em;
+}
+#contents .product_scrollx .function .sort { margin:0 0 0 auto; }
+#contents .product_scrollx .function .sort select {
+	min-width:150px;
+	padding:10px 12px;
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	letter-spacing:.06em;
+	text-transform:uppercase;
+}
+
+/* 조건별 검색 */
+#contents .product_scrollx .condition {
+	margin:0 0 clamp(20px, 3vw, 36px);
+	padding:0;
+	border:0;
+	background:none;
+}
+#contents .product_scrollx .condition legend {
+	display:block;
+	position:static;
+	width:auto;
+	height:auto;
+	margin:0 0 10px;
+	overflow:visible;
+	clip:auto;
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	font-weight:600;
+	letter-spacing:.12em;
+	text-transform:uppercase;
+	color:var(--st-ink-35);
+}
+#contents .product_scrollx .condition p {
+	display:flex;
+	align-items:center;
+	flex-wrap:wrap;
+	gap:8px 10px;
+	margin:0;
+}
+#contents .product_scrollx .condition select { min-width:150px; }
+#contents .product_scrollx .condition input[type='text'] { min-width:180px; }
+#contents .product_scrollx .condition .btnSubmitFix { min-height:42px; padding:12px 24px; }
+
+/* 게시판 검색줄(일주일·제목 선택 + 검색어 + 찾기) — 요청으로 숨김 */
+#contents .boardSearch { display:none !important; }
+
+/* --------------------------------------------------------------------------
+   버튼 — 각지고 대문자 라벨. 원본 ec-base-button.css 를 덮는다.
+   -------------------------------------------------------------------------- */
+#contents [class^='btnSubmit'],
+#contents a[class^='btnSubmit'],
+#contents [class^='btnNormal'],
+#contents a[class^='btnNormal'],
+#contents .btnEm {
+	border-radius:0;
+	height:auto;
+	min-height:46px;
+	padding:15px 28px;
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	font-weight:600;
+	letter-spacing:.12em;
+	text-transform:uppercase;
+	line-height:1.2;
+	transition:background-color .25s linear, color .25s linear, border-color .25s linear;
+}
+#contents [class^='btnSubmit'],
+#contents a[class^='btnSubmit'] {
+	background-color:var(--st-ink);
+	border-color:var(--st-ink);
+	color:var(--st-invert);
+}
+#contents [class^='btnSubmit']:not(.disabled):hover,
+#contents a[class^='btnSubmit']:not(.disabled):hover {
+	background-color:var(--st-red);
+	border-color:var(--st-red);
+}
+#contents [class^='btnNormal'],
+#contents a[class^='btnNormal'] {
+	background-color:transparent;
+	border-color:var(--st-ink);
+	color:var(--st-ink);
+}
+#contents [class^='btnNormal']:not(.disabled):hover,
+#contents a[class^='btnNormal']:not(.disabled):hover {
+	background-color:var(--st-ink);
+	color:var(--st-invert);
+}
+
+/* --------------------------------------------------------------------------
+   입력 요소
+   -------------------------------------------------------------------------- */
+#contents input[type='text'],
+#contents input[type='password'],
+#contents input[type='tel'],
+#contents input[type='email'],
+#contents input[type='number'],
+#contents input[type='search'],
+#contents select,
+#contents textarea {
+	border:1px solid var(--st-ink-12);
+	border-radius:0;
+	padding:12px 14px;
+	font-size:14px;
+	color:var(--st-ink);
+	background:transparent;
+}
+#contents input[type='text']:focus,
+#contents input[type='password']:focus,
+#contents input[type='tel']:focus,
+#contents input[type='email']:focus,
+#contents select:focus,
+#contents textarea:focus {
+	border-color:var(--st-ink);
+	outline:none;
+}
+
+/* --------------------------------------------------------------------------
+   표 — 얇은 선 + 대문자 헤더
+   -------------------------------------------------------------------------- */
+#contents .ec-base-table table { border-top:1px solid var(--st-ink); }
+#contents .ec-base-table th {
+	border-bottom:1px solid var(--st-ink-12);
+	background:transparent;
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	font-weight:600;
+	letter-spacing:.1em;
+	text-transform:uppercase;
+	color:var(--st-ink-60);
+	padding:16px 10px;
+}
+#contents .ec-base-table td {
+	border-bottom:1px solid var(--st-ink-12);
+	padding:18px 10px;
+	font-size:14px;
+	color:var(--st-ink);
+}
+
+/* --------------------------------------------------------------------------
+   페이지네이션 — 글자만 가로 한 줄로(First/Prev/Next/Last 영문)
+   --------------------------------------------------------------------------
+   카페24 기본 CSS 가 링크를 40px 고정폭 상자로 만들어 "이전 페이지" 같은 한글이
+   상자 안에서 줄바꿈되어 깨진다("이전 페" / "이지"). 상자를 없애고 가로 한 줄
+   플렉스로 바꾼 뒤, 카페24가 넣는 한글 글자는 숨기고 영문 라벨을 ::before 로
+   그린다. 게시판(이전/다음 2개)과 상품목록·SALE(첫/이전/다음/끝 4개) 이 같은
+   .ec-base-paginate.typeList 를 쓰지만 구조가 달라서 :has() 로 나눠 받는다.
+   상품목록/SALE 페이지는 자기 파일 안에 더 구체적인 사본이 있어 그대로 쓰이고,
+   여기 규칙은 그 사본이 없는 게시판 등 나머지 페이지에 적용된다. */
+#contents .ec-base-paginate.typeList {
+	display:flex;
+	width:100% !important;
+	max-width:var(--st-sub-col, 1230px) !important;
+	margin:clamp(32px, 4vw, 60px) auto 0 !important;
+	align-items:center;
+	justify-content:center;
+	gap:4px;
+	padding:0;
+	font-family:var(--st-label);
+}
+#contents .ec-base-paginate.typeList ol { display:flex; align-items:center; gap:4px; margin:0; padding:0; list-style:none; }
+#contents .ec-base-paginate.typeList ol li { display:block; margin:0; padding:0; border:0; }
+#contents .ec-base-paginate.typeList > a,
+#contents .ec-base-paginate.typeList ol li a {
+	display:inline-flex;
+	align-items:center;
+	justify-content:center;
+	width:auto;
+	min-width:32px;
+	height:32px;
+	margin:0;
+	padding:0 10px;
+	box-sizing:border-box;
+	border:0;
+	background:none;
+	font-family:var(--st-label) !important;
+	font-size:12px;
+	font-weight:600;
+	letter-spacing:.02em;
+	line-height:1;
+	white-space:nowrap;
+	text-indent:0;
+	overflow:visible;
+	color:var(--st-ink-60);
+	text-decoration:none;
+}
+#contents .ec-base-paginate.typeList ol li a:hover { color:var(--st-ink); }
+#contents .ec-base-paginate.typeList ol li.selected a,
+#contents .ec-base-paginate.typeList ol li a.this,
+#contents .ec-base-paginate.typeList ol li a[class*='this'] { border-bottom:1px solid var(--st-ink); color:var(--st-ink); font-weight:700; }
+#contents .ec-base-paginate.typeList > a::before, #contents .ec-base-paginate.typeList > a::after { display:none; }
+
+/* '이전 페이지·다음 페이지'(게시판) 는 카페24가 넣는 한글이라 글자를 숨기고 영문으로 그린다.
+   상품목록/SALE(첫/이전/다음/끝 4개, a.first·a.last 있음)은 여기서 건드리지 않는다 — 자기 파일의 사본을 쓴다. */
+#contents .ec-base-paginate.typeList:not(:has(> a.first)) > a {
+	font-size:0 !important;
+	transform:none !important;
+	position:static !important;
+	top:auto !important; left:auto !important; right:auto !important;
+}
+#contents .ec-base-paginate.typeList:not(:has(> a.first)) > a::before {
+	display:inline !important;
+	position:static !important;
+	transform:none !important;
+	width:auto !important;
+	height:auto !important;
+	border:0 !important;
+	background:none !important;
+	font-family:var(--st-label);
+	font-size:11px;
+	font-weight:500;
+	letter-spacing:.2em;
+	text-transform:uppercase;
+	color:inherit;
+}
+#contents .ec-base-paginate.typeList:not(:has(> a.first)) > a:first-child::before { content:'Prev'; }
+#contents .ec-base-paginate.typeList:not(:has(> a.first)) > a:last-child::before { content:'Next'; }
+
+/* --------------------------------------------------------------------------
+   상품 상세 — 정보 영역
+   -------------------------------------------------------------------------- */
+#contents .ec-base-prdInfo .headingArea h2,
+#contents .detailArea .headingArea h2 {
+	font-family:var(--st-display) !important;
+	font-size:clamp(24px, 3vw, 44px);
+	line-height:1.02;
+	letter-spacing:-.01em;
+	text-transform:uppercase;
+	color:var(--st-ink);
+}
+#contents .ec-base-prdInfo .infoArea .price,
+#contents .detailArea .price {
+	font-family:var(--st-label) !important;
+	font-weight:600;
+	letter-spacing:.02em;
+}
+#contents .ec-base-prdInfo table th {
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	font-weight:600;
+	letter-spacing:.1em;
+	text-transform:uppercase;
+	color:var(--st-ink-35);
+}
+
+/* ==========================================================================
+   상품 상세 — 레이아웃 재구성
+   --------------------------------------------------------------------------
+   원본 /css/module/product/detail.css 는 사진칸과 정보칸에 픽셀 폭을 못 박아 둔다
+   (.imgArea{width:calc(100% - 650px)} / .infoArea{width:600px}). 그래서 화면이
+   넓어질수록 사진만 작아지고 오른쪽에 빈 공간이 남았다. 두 칸을 격자로 바꿔
+   화면 폭에 같이 늘어나게 하고, 어느 상품이든 같은 규격으로 보이게 한다.
+
+   세부 값은 seraphin.js 의 initProductDetail() 이 만드는 마크업과 짝이다.
+   ========================================================================== */
+#contents .xans-product-detail {
+	margin:0 auto clamp(56px, 7vw, 110px);
+	/* 안쪽 격자가 1440 이고 섹션에 좌우 --st-gutter(최대 66px)가 붙는다.
+	   1440 + 66×2 = 1572 — 여유를 두고 1600 으로 잡아 잘리지 않게 한다. */
+	max-width:1600px;
+	padding:0;
+}
+
+@media all and (min-width:1025px) {
+	/* 원본이 detailArea 의 font-size·line-height 를 0 으로 죽여 뒀다(인라인블록
+	   사이 공백 제거용). 격자로 바꾸면 필요 없으니 되살린다. */
+	/* 두 칸에 상한을 둔다. 화면이 아무리 넓어도 사진 720 · 간격 80 · 정보 640,
+	   합계 1440 으로 고정되어 어느 상품 페이지를 열어도 같은 자리에 놓인다. */
+	#contents .xans-product-detail .detailArea {
+		display:grid;
+		grid-template-columns:minmax(0, 720px) minmax(0, 640px);
+		justify-content:center;
+		gap:clamp(36px, 4.2vw, 80px);
+		align-items:start;
+		font-size:14px;
+		line-height:1.6;
+	}
+	#contents .xans-product-detail .imgArea,
+	#contents .xans-product-detail .infoArea {
+		display:block;
+		width:auto;
+		max-width:none;
+		margin:0;
+		top:auto;
+	}
+	/* 사진이 긴 상품은 정보칸이 먼저 끝난다. 따라 내려오게 붙여 둔다. */
+	#contents .xans-product-detail .infoArea {
+		position:sticky;
+		top:calc(var(--st-topbar-h, 76px) + 24px);
+	}
+}
+
+/* 상세 아래 영역 (탭 · 상세정보 · 후기 · 문의 · 배송안내)
+   원본은 이 영역을 max-width:1230px + 좌우 66px 여백으로 두어 안쪽 내용이
+   1098px 였다. 위 상품 블록(1440px)보다 342px 좁고 왼쪽 끝도 어긋났다.
+   위와 같은 1600px 틀 안에서 내용을 1440px 로 잡아 좌우 끝을 맞춘다. */
+#contents .xans-product-additional {
+	max-width:1600px;
+	margin-left:auto;
+	margin-right:auto;
+}
+#contents .xans-product-additional > * {
+	max-width:1440px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+/* ── 배송 / 교환 / 환불 안내 ────────────────────────────────────────────
+   원본은 네 블록을 flex-wrap 으로 흘려 놓고, 첫 블록만 빼고 margin-top:30px 를
+   준다. 그래서 두 칸으로 접힐 때 오른쪽 칸만 30px 아래로 내려가 제목 줄이
+   어긋났다. 또 .contents 에 흰 배경이 깔려 있어 아이보리 바탕 위에 흰 상자가
+   떠 보였다. 격자로 바꿔 칸을 맞추고 배경은 걷는다. */
+#contents .detail_guide {
+	display:grid;
+	grid-template-columns:repeat(2, minmax(0, 1fr));
+	gap:clamp(34px, 3.4vw, 60px) clamp(36px, 4vw, 72px);
+	align-items:start;
+	margin-top:clamp(20px, 2.4vw, 36px);
+}
+#contents .detail_guide .ec-base-fold {
+	width:auto;
+	margin:0;
+	padding:0;
+	border:0;
+	background:transparent;
+}
+#contents .detail_guide .ec-base-fold .title {
+	height:auto;
+	/* 원본의 좌우 16px 안여백 때문에 제목만 본문보다 오른쪽으로 밀려 있었다 */
+	margin:0 0 14px;
+	padding:0 0 12px;
+	border-top:0;
+	border-bottom:1px solid var(--st-ink-12);
+	background:transparent;
+}
+#contents .detail_guide .ec-base-fold .title h2 {
+	margin:0;
+	padding:0;					/* 원본의 위아래 25px — 제목이 혼자 붕 떠 보였다 */
+	font-family:var(--st-label) !important;
+	font-size:13px;
+	font-weight:600;
+	line-height:1.2;
+	letter-spacing:.12em;
+	text-transform:uppercase;
+	color:var(--st-ink);
+}
+#contents .detail_guide .ec-base-fold .contents {
+	background:transparent;
+	margin:0;
+	padding:0;
+	border:0;
+}
+#contents .detail_guide .ec-base-fold .info {
+	margin:0;
+	padding:0;
+	font-size:13px;
+	line-height:1.8;
+	color:var(--st-ink-60);
+}
+@media all and (max-width:767px) {
+	#contents .detail_guide { grid-template-columns:minmax(0, 1fr); }
+}
+
+/* ── 사진칸 ─────────────────────────────────────────────────────────────
+   상품마다 원본 비율이 제각각이라 그대로 두면 페이지마다 높이가 달라진다.
+   3:4 로 못 박아 어느 상품이든 같은 크기로 읽히게 한다. */
+#contents .xans-product-detail .imgArea .prdImg { width:100%; margin:0; }
+#contents .xans-product-detail .imgArea .prdImg .thumbnail {
+	display:block;
+	position:relative;
+	width:100%;
+	aspect-ratio:4/5;
+	overflow:hidden;
+	background:var(--st-bg-alt);
+}
+#contents .xans-product-detail .imgArea .prdImg .thumbnail > img,
+#contents .xans-product-detail .imgArea .prdImg img.BigImage {
+	width:100%;
+	height:100%;
+	object-fit:cover;
+	display:block;
+}
+/* 확대 안내 띠 — 사진 아래 가운데에 조용히 */
+#contents .xans-product-detail .imgArea .thumbnail .wish img {
+	top:14px !important;
+	left:14px !important;
+	width:26px !important;
+}
+
+/* 작은 사진 줄 — 가로로 눕히고 화살표 버튼은 감춘다 */
+#contents .xans-product-detail .imgArea .listImg {
+	position:static;
+	width:100%;
+	height:auto;
+	margin:10px 0 0;
+	padding:0;
+	overflow:visible;
+}
+#contents .xans-product-detail .imgArea .listImg .inner { height:auto; overflow:visible; }
+#contents .xans-product-detail .imgArea .listImg ul {
+	display:grid;
+	grid-template-columns:repeat(5, minmax(0, 1fr));
+	gap:10px;
+	margin:0;
+	padding:0;
+}
+#contents .xans-product-detail .imgArea .listImg li {
+	display:block;
+	width:auto;
+	margin:0;
+	aspect-ratio:4/5;
+	overflow:hidden;
+	background:var(--st-bg-alt);
+}
+#contents .xans-product-detail .imgArea .listImg li img {
+	width:100%;
+	height:100%;
+	object-fit:cover;
+	max-width:none;
+	display:block;
+	opacity:.62;
+	transition:opacity .3s var(--st-ease);
+}
+#contents .xans-product-detail .imgArea .listImg li:hover img { opacity:1; }
+#contents .xans-product-detail .imgArea .listImg button { display:none; }
+
+/* ── 정보칸 머리 ───────────────────────────────────────────────────────── */
+#contents .xans-product-detail .headingArea {
+	border-top:0;
+	padding:0;
+	margin:0;
+}
+#contents .xans-product-detail .headingArea h1 {
+	display:block;
+	font-family:var(--st-display) !important;
+	font-size:clamp(24px, 2.4vw, 34px);
+	font-weight:400;
+	line-height:1.1;
+	letter-spacing:-.01em;
+	text-transform:uppercase;
+	color:var(--st-ink);
+	text-wrap:balance;
+}
+#contents .xans-product-detail .headingArea .icon { margin:0 0 12px; }
+#contents .xans-product-detail .headingArea .icon:empty { display:none; }
+/* 원본의 검정 원형 할인 배지 — 가격줄에 빨강 %로 다시 쓰므로 여기선 숨긴다 */
+#contents .xans-product-detail .infoArea table .sale_box { display:none; }
+
+/* ── 가격 블록 (seraphin.js 가 조립) ───────────────────────────────────── */
+#contents .st-pd__price {
+	margin:18px 0 0;
+	padding:0 0 20px;
+	border-bottom:1px solid var(--st-ink-12);
+	display:grid;
+	gap:4px;
+}
+#contents .st-pd__was {
+	font-size:13px;
+	line-height:1.4;
+	color:var(--st-ink-35);
+}
+#contents .st-pd__was strike,
+#contents .st-pd__was s { text-decoration:line-through; }
+#contents .st-pd__now {
+	display:flex;
+	align-items:baseline;
+	gap:10px;
+	flex-wrap:wrap;
+}
+#contents .st-pd__rate {
+	font-family:var(--st-label) !important;
+	font-size:clamp(18px, 1.8vw, 24px);
+	font-weight:700;
+	line-height:1;
+	letter-spacing:.01em;
+	color:var(--st-red);
+	font-variant-numeric:tabular-nums;
+}
+#contents .st-pd__now #span_product_price_text,
+#contents .st-pd__now strong {
+	font-family:var(--st-label) !important;
+	font-size:clamp(20px, 2vw, 26px);
+	font-weight:700;
+	line-height:1;
+	letter-spacing:-.01em;
+	color:var(--st-ink);
+	font-variant-numeric:tabular-nums;
+}
+/* 옮겨온 값에 원본 인라인 style(12px·회색)이 남아 있다 — 덮는다 */
+#contents .st-pd__price span[style] { font-size:inherit !important; color:inherit !important; }
+
+/* ── 배송 등 안내 행 ───────────────────────────────────────────────────── */
+#contents .xans-product-detail .infoArea .xans-product-detaildesign table {
+	width:100%;
+	margin:18px 0 0;
+	border:0;
+	table-layout:fixed;
+	font-size:13px;
+	line-height:1.6;
+}
+#contents .xans-product-detail .infoArea .xans-product-detaildesign caption { display:none; }
+#contents .xans-product-detail .infoArea .xans-product-detaildesign th {
+	width:104px;
+	padding:5px 12px 5px 0;
+	text-align:left;
+	vertical-align:top;
+	font-weight:400;
+}
+#contents .xans-product-detail .infoArea .xans-product-detaildesign th span[style] {
+	font-family:var(--st-label) !important;
+	font-size:11px !important;
+	font-weight:600;
+	letter-spacing:.06em;
+	color:var(--st-ink-35) !important;
+}
+#contents .xans-product-detail .infoArea .xans-product-detaildesign td { padding:5px 0; vertical-align:top; }
+#contents .xans-product-detail .infoArea .xans-product-detaildesign td span[style] {
+	font-size:13px !important;
+	color:var(--st-ink) !important;
+}
+/* 가격 블록으로 옮긴 행과 제목 중복 행은 감춘다 */
+#contents .xans-product-detail .infoArea tr.st-pd-hide { display:none; }
+
+/* ── 옵션 ─────────────────────────────────────────────────────────────── */
+#contents .xans-product-detail .infoArea .xans-product-option {
+	width:100%;
+	margin:20px 0 0;
+	border-top:1px solid var(--st-ink-12);
+	padding-top:20px;
+}
+#contents .xans-product-detail .infoArea .xans-product-option caption { display:none; }
+#contents .xans-product-detail .infoArea .xans-product-option th {
+	display:block;
+	width:auto;
+	padding:12px 0 6px;
+	font-family:var(--st-label) !important;
+	font-size:11px;
+	font-weight:600;
+	letter-spacing:.1em;
+	text-transform:uppercase;
+	color:var(--st-ink-35);
+}
+#contents .xans-product-detail .infoArea .xans-product-option td { display:block; width:100%; padding:0; }
+#contents .xans-product-detail .infoArea select {
+	width:100%;
+	height:46px;
+	padding:0 14px;
+	border:1px solid var(--st-ink-12);
+	border-radius:0;
+	background:var(--st-invert);
+	font-family:var(--st-label);
+	font-size:13px;
+	color:var(--st-ink);
+	appearance:none;
+	background-image:linear-gradient(45deg, transparent 50%, var(--st-ink) 50%), linear-gradient(135deg, var(--st-ink) 50%, transparent 50%);
+	background-position:calc(100% - 19px) 21px, calc(100% - 14px) 21px;
+	background-size:5px 5px, 5px 5px;
+	background-repeat:no-repeat;
+}
+#contents .xans-product-detail .infoArea select:focus { border-color:var(--st-ink); outline:none; }
+
+/* ── 최소주문수량 안내 ─────────────────────────────────────────────────── */
+#contents .xans-product-detail .infoArea .guideArea {
+	margin:12px 0 0;
+	font-size:12px;
+	color:var(--st-ink-35);
+}
+
+/* ── 선택한 상품 / 수량 / 합계 ─────────────────────────────────────────── */
+#contents .xans-product-detail #totalProducts {
+	margin:20px 0 0;
+	padding:18px 0 0;
+	border-top:1px solid var(--st-ink-12);
+}
+#contents .xans-product-detail #totalProducts caption { display:none; }
+#contents .xans-product-detail #totalProducts table { width:100%; font-size:13px; }
+#contents .xans-product-detail #totalProducts td { padding:6px 0; vertical-align:middle; }
+#contents .xans-product-detail #totalPrice {
+	padding:18px 0 0;
+	margin:14px 0 0;
+	border-top:1px solid var(--st-ink-12);
+}
+#contents .xans-product-detail #totalPrice .total,
+#contents .xans-product-detail #totalPrice strong {
+	font-family:var(--st-label) !important;
+	letter-spacing:.02em;
+}
+
+/* ── 구매 버튼 ─────────────────────────────────────────────────────────── */
+#contents .xans-product-detail .action_button {
+	display:grid;
+	grid-template-columns:1fr 1fr;
+	gap:8px;
+	margin:20px 0 0;
+}
+#contents .xans-product-detail .action_button > a.btnSubmit { grid-column:1 / -1; }
+#contents .xans-product-detail .action_button > a,
+#contents .xans-product-detail .action_button > button {
+	width:100%;
+	min-height:54px;
+	margin:0;
+	border-radius:0;
+	font-family:var(--st-label) !important;
+	font-size:12px;
+	font-weight:600;
+	letter-spacing:.12em;
+	text-transform:uppercase;
+}
+/* 원본 detail.css 가 1024px 이하에서 WISH LIST 에 margin-left:12px !important 를
+   박아 뒀다 — CART · WISH 가 나란히 앉던 flex 레이아웃 시절, gap 대신 마진으로
+   틈을 벌리던 값이다. 지금은 세 버튼이 grid + gap 으로 나란히·세로로 놓이는데
+   이 마진만 남아 WISH LIST 만 오른쪽으로 밀려 삐뚤어져 보였다. */
+#contents .xans-product-detail .action_button > button.actionWish { margin-left:0 !important; }
+
+@media all and (max-width:1024px) {
+	#contents .xans-product-detail .detailArea { display:block; }
+	#contents .xans-product-detail .imgArea,
+	#contents .xans-product-detail .infoArea { width:auto; margin:0; }
+	#contents .xans-product-detail .infoArea { margin-top:24px; position:static; }
+	#contents .xans-product-detail .imgArea .listImg ul { grid-template-columns:repeat(4, minmax(0, 1fr)); }
+	#contents .st-pd__price { margin-top:14px; }
+}
+@media all and (max-width:767px) {
+	#contents .xans-product-detail .action_button { grid-template-columns:1fr; }
+	#contents .xans-product-detail .imgArea .listImg ul { grid-template-columns:repeat(4, minmax(0, 1fr)); gap:6px; }
+}
+
+/* --------------------------------------------------------------------------
+   상품 상세 — 모바일도 PC와 같은 모양으로: 상세정보 아래로 후기·문의·배송안내를
+   같은 화면에 이어 놓고, 위쪽 탭도 PC와 같은 밑줄 탭으로 보여준다
+   --------------------------------------------------------------------------
+   원본 detail.css 는 1024px 이하에서 #prdInfo·#prdQnA·#prdReview 를 display:none 으로
+   숨기고, 대신 회색 상자 탭(#tabProduct)을 눌러야 그 하나만 jQuery .show()/.hide() 로
+   켜고 끄게 했다 — 상세정보 다음에 바로 푸터가 나왔고, 탭 디자인도 PC(밑줄 텍스트 탭)와
+   모바일(회색 박스 탭)이 서로 달랐다.
+
+   넷 다 상시 표시해 PC 와 같은 이어 보기로 만들고, PC 에서만 보이던 밑줄 탭(.detail_tab)을
+   모바일에도 그대로 켠다. 회색 박스 탭(#tabProduct)은 같은 역할이 겹치므로 끈다 — 밑줄 탭의
+   href="#detail" 등 순수 앵커 링크가 그 구간으로 스크롤하는 역할을 그대로 대신한다.
+   (.hide()/.show() 는 인라인 style 로 덮어써서 나오므로 !important 로 막는다) */
+@media all and (max-width:1024px) {
+	#contents #prdInfo,
+	#contents #prdQnA,
+	#contents #prdReview { display:block !important; }
+	#contents .detail_tab { display:block !important; }
+	#contents #tabProduct { display:none !important; }
+}
+
+/* --------------------------------------------------------------------------
+   상품 상세 — 탭 (상세정보 / 상품후기 / 상품문의 / 배송·교환·환불)
+   --------------------------------------------------------------------------
+   원본 detail.css 는 탭을 칸칸이 테두리로 두른 상자(li 마다 좌·상 1px, 아래 검정 1px,
+   열린 탭은 사방 1px + 흰 바닥)로 그렸다. 선이 많아 페이지가 관공서 표처럼 읽힌다.
+   테두리를 모두 걷고, 글자만 남긴 뒤 마우스를 올리면 글자 폭만큼 언더바가 그어지게 한다.
+   열려 있는 탭은 언더바가 그어진 채로 유지된다.
+   -------------------------------------------------------------------------- */
+#contents .detail_tab {
+	height:auto;
+	margin:0 auto clamp(28px, 3.6vw, 52px);
+	border:0;
+}
+#contents .detail_tab li,
+#contents .detail_tab li:last-child,
+#contents .detail_tab li.tab_open {
+	border:0;
+	text-align:center;
+}
+#contents .detail_tab li a {
+	position:relative;
+	display:inline-block;
+	height:auto;
+	padding:14px 2px;
+	font-size:14px;
+	line-height:1.3;
+	color:var(--st-ink-35);
+	transition:color .28s var(--st-ease);
+}
+#contents .detail_tab li a span {
+	font-size:inherit;
+	line-height:inherit;
+	color:inherit;
+	opacity:.6;
+}
+/* 언더바 — 평소에는 접혀 있다가 마우스를 올리면 가운데에서 펼쳐진다 */
+#contents .detail_tab li a::after {
+	content:'';
+	position:absolute;
+	left:0;
+	right:0;
+	bottom:8px;
+	height:1px;
+	background:currentColor;
+	transform:scaleX(0);
+	transform-origin:center;
+	transition:transform .34s var(--st-ease);
+}
+#contents .detail_tab li a:hover,
+#contents .detail_tab li.tab_open a { color:var(--st-ink); }
+#contents .detail_tab li a:hover::after,
+#contents .detail_tab li.tab_open a::after { transform:scaleX(1); }
+
+/* --------------------------------------------------------------------------
+   상품 목록 할인율 — 취소선 소비자가 뒤의 빨강 숫자
+   --------------------------------------------------------------------------
+   seraphin.js 의 initDiscountRate() 가 .st-rate 를 꽂는다.
+   이 파일에 두는 이유: st-main.css 는 메인에서만 불러오는데, 이 배지는
+   메인·카테고리·검색 목록에 모두 나와야 해서 전 페이지에 실리는 여기에 둔다.
+   썸네일 오른쪽 위에 이미 검정 원형 할인 배지가 있어, 가격 옆까지 검정 칩으로
+   두면 같은 숫자가 검정 덩어리로 두 번 읽힌다. 여기는 배경·테두리 없이 글자만
+   붉게 써서 취소선 회색 옆에서 숫자만 눈에 들어오게 한다.
+   -------------------------------------------------------------------------- */
+#contents .description .st-rate {
+	display:inline-block;
+	margin-left:6px;
+	font-family:var(--st-label) !important;
+	font-size:12px;
+	font-weight:700;
+	line-height:1;
+	letter-spacing:.01em;
+	color:var(--st-red);
+	vertical-align:baseline;
+	font-variant-numeric:tabular-nums;
+	text-decoration:none;
+	white-space:nowrap;
+}
+
+/* --------------------------------------------------------------------------
+   안내 문구 / 빈 목록
+   -------------------------------------------------------------------------- */
+#contents .ec-base-help,
+#contents .ec-base-desc { color:var(--st-ink-60); font-size:13px; }
+#contents .ec-base-prdEmpty,
+#contents .ec-base-table .empty {
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	font-weight:600;
+	letter-spacing:.12em;
+	text-transform:uppercase;
+	color:var(--st-ink-35);
+	padding:clamp(50px, 8vw, 110px) 0;
+	text-align:center;
+}
+
+/* --------------------------------------------------------------------------
+   반응형
+   -------------------------------------------------------------------------- */
+@media all and (max-width:767px) {
+	#contents .titleArea h2 { font-size:clamp(28px, 10vw, 46px); }
+	#contents [class^='btnSubmit'],
+	#contents a[class^='btnSubmit'],
+	#contents [class^='btnNormal'],
+	#contents a[class^='btnNormal'] { padding:14px 20px; min-height:44px; }
+	#contents .ec-base-table td { padding:14px 8px; }
+}
+
+/* ==========================================================================
+   서브 페이지 상단 — 빈 공간과 제목 자리
+   --------------------------------------------------------------------------
+   원인: 위의 `#container #contents > .section` 간격 규칙은 메인의 큰 섹션용인데,
+   서브 페이지의 빵부스러기(.path) · 제목(.titleArea) · 주문 단계(.ec-base-step)도
+   class="section" 을 함께 갖고 있어 같은 간격(1440px 에서 173px)을 먹었다.
+   그래서 페이지가 빈 띠로 시작하고 제목이 허공에 떠 보였다.
+   특이도가 (2,1,0) 이라 `#contents .path` 로는 못 이긴다 — 클래스를 겹쳐 적는다.
+   ========================================================================== */
+
+/* 서브 페이지 전체를 한 단계 좁힌다. :has() 를 못 읽는 브라우저에서도
+   아래 개별 규칙이 최악은 막아 준다. */
+#container #contents:not(:has(.st-hero)) > .section {
+	margin-bottom:clamp(28px, 3.4vw, 56px);
+}
+
+#container #contents > .path.section {
+	margin-top:clamp(12px, 1.4vw, 22px);
+	margin-bottom:clamp(6px, .8vw, 12px);
+}
+#container #contents > .titleArea.section {
+	margin-bottom:clamp(18px, 2.2vw, 34px);
+}
+#container #contents > .ec-base-step.section {
+	margin-top:0;
+	margin-bottom:clamp(24px, 3vw, 48px);
+}
+#container #contents > .ec-base-tab.section,
+#container #contents > .ec-base-help.section {
+	margin-bottom:clamp(18px, 2.2vw, 34px);
+}
+
+/* 제목 크기 — 92px 은 메인 헤드라인 크기다. 장바구니·로그인 같은 페이지
+   제목에 그대로 쓰면 글자만 남고 페이지가 비어 보인다. 한 단계 내린다. */
+#contents .titleArea h2 { font-size:clamp(26px, 3.2vw, 48px); }
+@media all and (max-width:767px) {
+	#contents .titleArea h2 { font-size:clamp(24px, 7vw, 34px); }
+}
+
+/* ==========================================================================
+   서브 페이지 가로 정렬 — 칼럼을 하나로
+   --------------------------------------------------------------------------
+   측정해 보니 서브 페이지에 칼럼 체계가 두 개 섞여 있었다 (1440px 기준).
+
+     일반 섹션(.section)   박스 105~1335   글자 시작 148
+     .myshopArea           박스 215~1225   사이드바 215 · 본문 435
+     상품상세 .titleArea    박스 0~1425     글자 시작 0    ← .section 이 없다
+
+   그래서 페이지마다 제목과 좌측 메뉴가 제각각 위치였다.
+   폭을 한 값으로 묶고, 글자가 시작하는 선을 148 로 통일한다.
+   ========================================================================== */
+:root { --st-sub-col:1230px; }	/* 서브 페이지 본문 칼럼 폭 — 원본 .section 과 같은 값 */
+
+/* 상품상세의 제목은 class="section" 이 없어 좌우 여백 규칙에서 빠졌다.
+   #contents 의 직계 .titleArea 는 .section 유무와 무관하게 같은 박스를 쓴다. */
+#container #contents > .titleArea {
+	width:100%;
+	max-width:var(--st-sub-col);
+	margin-left:auto;
+	margin-right:auto;
+	padding-left:var(--st-gutter);
+	padding-right:var(--st-gutter);
+	box-sizing:border-box;
+}
+
+/* "상품상세 정보" 제목 — 원래는 태블릿·모바일 전용으로 카페24가 넣어 둔
+   중복 라벨이다. PC 에서는 내 `.titleArea { display:flex }` 가 덮어써서 상품명
+   바로 위에 한 번 더 나왔었고, 모바일에서는 사진 위에 그대로 남아 있었다.
+   상품명이 사진 아래 이미 크게 있어 어느 화면에서도 필요 없다 — 폭 상관없이 끈다. */
+#container #contents .titleArea.display_tablet_only { display:none !important; }
+
+/* 마이페이지 2단 — 페이지마다 좌측 메뉴가 105 / 215 로 오갔다.
+   .myshopArea 가 width:1010px · margin:0 215px 로 자기만의 칼럼을 쓰기 때문.
+   래퍼가 페이지마다 다르므로(직계일 때도 form 안일 때도 있다) 자손으로 잡는다. */
+/* width:1010px · max-width:1010px · padding-left:220px 가 어떤 스타일시트에도
+   없는다 — 카페24가 브들 안에서 넣는 값이라 선택자로 못 이긴다. !important 로 눌렀다. */
+#container #contents .myshopArea {
+	width:100% !important;
+	max-width:var(--st-sub-col) !important;
+	margin-left:auto !important;
+	margin-right:auto !important;
+	padding-left:calc(var(--st-gutter) + 220px) !important;	/* 사이드바 자리 */
+	padding-right:var(--st-gutter) !important;
+	box-sizing:border-box;
+}
+/* 사이드바는 .myshopArea 기준 absolute 다. 칼럼 여백만큼 밀어
+   빵부스러기·제목과 같은 선(148)에 세운다. */
+#container #contents .myshopArea > .xans-myshop-main {
+	left:var(--st-gutter) !important;
+}
+
+/* 태블릿 이하 — 2단을 풀고 위아래로 쌓는다.
+   위 규칙이 !important 라 여기서도 !important 로 되돌려야 한다. */
+@media all and (max-width:1024px) {
+	#container #contents .myshopArea { padding-left:var(--st-gutter) !important; }
+	#container #contents .myshopArea > .xans-myshop-main {
+		position:static;
+		width:auto;
+		left:auto !important;
+		margin-bottom:clamp(20px, 3vw, 36px);
+	}
+}
+
+/* ==========================================================================
+   서브 페이지 제목 색·서체 통일
+   --------------------------------------------------------------------------
+   마이페이지 계열만 `.titleArea--myshop` 으로 잡혀 빨강 + 라벨 서체였다.
+   (장바구니·로그인·회사소개는 검정 + 디스플레이 서체)
+   같은 서브 페이지 제목인데 페이지마다 색과 서체가 달라 보였다.
+
+   주의: 위쪽 `.titleArea--myshop h2` 블록은 font-family 에 !important 가 걸려
+   있어, 여기서도 !important 로 되돌려야 이긴다.
+   한글은 Anton 에 글리프가 없어 Pretendard 로 떨어지므로 굵기가 눈에 띈다 —
+   다른 제목과 같은 700 으로 맞춘다.
+   ========================================================================== */
+#container #contents .titleArea--myshop h2,
+#container #contents .titleArea--middle h2 {
+	color:var(--st-ink);
+}
+#container #contents .titleArea--myshop h2 {
+	font-family:var(--st-display) !important;
+	font-size:clamp(26px, 3.2vw, 48px);
+	font-weight:700;
+	letter-spacing:-.02em;
+	line-height:.9;
+	text-transform:none;
+}
+
+/* ===========================================================================
+   상품 카테고리 목록 — 전폭 제목 / 중앙 하위분류
+   ========================================================================== */
+#container #contents:has(.normalpackage_box) > .path.section,
+#container #contents:has(.normalpackage_box) > .titleArea.section,
+#container #contents:has(.normalpackage_box) > .ec-base-tab.typeMenu.section,
+#container #contents:has(.normalpackage_box) > .product_top_image.section,
+#container #contents:has(.normalpackage_box) > .normalpackage_box.section {
+	width:100%;
+	max-width:none;
+	margin-left:0;
+	margin-right:0;
+	padding-left:var(--st-gutter);
+	padding-right:var(--st-gutter);
+	box-sizing:border-box;
+}
+#container #contents:has(.normalpackage_box) > .titleArea.section {
+	display:block;
+	padding-top:clamp(42px, 5vw, 78px);
+	text-align:center;
+}
+#container #contents:has(.normalpackage_box) > .titleArea.section h2 {
+	font-size:clamp(32px, 3.4vw, 52px);
+	line-height:1;
+	width:auto;
+}
+#container #contents:has(.normalpackage_box) > .titleArea.section .likeButton { display:none; }
+
+/* 하위분류는 있을 때만 제목 아래 중앙에 평문 링크로 표시한다. */
+#container #contents:has(.normalpackage_box) > .ec-base-tab.typeMenu.section {
+	display:block;
+	text-align:center;
+	margin-bottom:clamp(42px, 5vw, 78px);
+}
+#container #contents:has(.normalpackage_box) > .ec-base-tab.typeMenu.section .display_pc_only {
+	display:inline-block !important;
+	width:auto !important;
+}
+#container #contents:has(.normalpackage_box) > .ec-base-tab.typeMenu.section .menuCategory {
+	display:inline-flex;
+	width:auto;
+	gap:0;
+}
+#container #contents:has(.normalpackage_box) > .ec-base-tab.typeMenu.section .menuCategory > li {
+	flex:0 0 auto;
+	width:auto !important;
+	margin:0 !important;
+	padding:0 !important;
+}
+#container #contents:has(.normalpackage_box) > .ec-base-tab.typeMenu.section .menuCategory > li + li {
+	margin-left:28px !important;
+}
+#container #contents:has(.normalpackage_box) > .ec-base-tab.typeMenu.section .menuCategory > li > a.button,
+#container #contents:has(.normalpackage_box) > .ec-base-tab.typeMenu.section .menuCategory > li > a {
+	padding:0;
+	border:0;
+	border-radius:0;
+	background:transparent;
+	font-size:13px;
+	font-weight:400;
+	letter-spacing:0;
+	text-transform:none;
+	color:var(--st-ink-35);
+}
+#container #contents:has(.normalpackage_box) > .ec-base-tab.typeMenu.section .menuCategory > li.selected > a {
+	background:transparent;
+	border-color:transparent;
+	color:var(--st-ink);
+}
+#container #contents:has(.normalpackage_box) > .ec-base-tab.typeMenu.section .menuCategory .count { display:none !important; }
+#container #contents:has(.normalpackage_box) > .ec-base-tab.typeMenu.section:not(:has(.menuCategory > li)) { display:none; }
+
+/* 상품 수 문구는 제거하고 정렬 메뉴만 우측에 남긴다. */
+#container #contents:has(.normalpackage_box) .product_scrollx .function .prdCount { display:none !important; }
+#container #contents:has(.normalpackage_box) .product_scrollx .function .sort { margin-left:auto; }
+
+@media all and (max-width:767px) {
+	#container #contents:has(.normalpackage_box) > .titleArea.section { padding-top:38px; }
+	#container #contents:has(.normalpackage_box) > .ec-base-tab.typeMenu.section { margin-bottom:42px; }
+	#container #contents:has(.normalpackage_box) > .ec-base-tab.typeMenu.section .menuCategory > li + li { margin-left:18px !important; }
+}
+
+/* 상품목록 추가 이미지 — 등록된 두 번째 이미지만 오버 시 부드럽게 전환한다. */
+#contents .ec-base-product .prdList .thumbnail > a {
+	position:relative;
+	display:block;
+	overflow:hidden;
+	background:#f6f6f6;
+}
+#contents .ec-base-product .prdList .thumbnail > a > img {
+	display:block;
+	width:100%;
+	transition:opacity .35s ease;
+}
+#contents .ec-base-product .prdList .thumbnail .prdList__hover {
+	position:absolute;
+	inset:0;
+	display:block;
+	overflow:hidden;
+	opacity:0;
+	transition:opacity .35s ease;
+	pointer-events:none;
+}
+#contents .ec-base-product .prdList .thumbnail .prdList__hover img {
+	display:block;
+	width:100%;
+	height:100%;
+	object-fit:cover;
+}
+#contents .ec-base-product .prdList .thumbnail:has(.prdList__hover img):hover > a > img,
+#contents .ec-base-product .prdList .thumbnail:has(.prdList__hover img):focus-within > a > img { opacity:0; }
+#contents .ec-base-product .prdList .thumbnail:has(.prdList__hover img):hover .prdList__hover,
+#contents .ec-base-product .prdList .thumbnail:has(.prdList__hover img):focus-within .prdList__hover { opacity:1; }
+@media (hover:none), (pointer:coarse) {
+	#contents .ec-base-product .prdList .thumbnail .prdList__hover { display:none; }
+}
+
+/* ===========================================================================
+   로그인 화면
+   로그인 모듈이 기본 스타일 충돌로 접히지 않도록 로그인 페이지만 표시를
+   고정한다. 회원가입 화면에는 적용하지 않는다.
+   ========================================================================== */
+#contents .st-login-module,
+#contents .st-login-module .st-login-form,
+#contents .st-login-module .login,
+#contents .st-login-module .login label {
+	display:block !important;
+	visibility:visible !important;
+	opacity:1 !important;
+}
+#contents .st-login-module {
+	width:min(100% - (var(--st-gutter) * 2), 400px);
+	margin:0 auto;
+	text-align:center;
+}
+#contents .st-login-module .st-login-form { width:100%; }
+#contents .st-login-module .login input[type='text'],
+#contents .st-login-module .login input[type='password'] {
+	display:block !important;
+	width:100% !important;
+	box-sizing:border-box;
+	margin:0 0 8px;
+}
+#contents .st-login-module .wrap_security {
+	display:flex !important;
+	justify-content:flex-end;
+	visibility:visible !important;
+	opacity:1 !important;
+}
+
+/* 로그인·회원가입 제목은 같은 회원 흐름으로 중앙에 맞춘다. */
+#contents:has(.st-login-module) > .titleArea.section,
+#contents:has(.xans-member-join) > .titleArea.section {
+	justify-content:center !important;
+	text-align:center !important;
+}
+
+/* 로그인 푸터 간격은 회원가입과 같은 기본 간격을 사용한다.
+   #wrap 을 flex 로 두면 여백이 겹치지 않아 회원가입보다 100px 더 벌어진다. */
+#wrap:has(.st-login-module) { display:block !important; min-height:550px !important; }
+#wrap:has(.st-login-module) #container { flex:none !important; }
+#wrap:has(.st-login-module) .footer_margin {
+	height:auto !important;
+	margin-top:100px !important;
+}
+#wrap:has(.st-login-module) #footer {
+	margin-top:var(--st-section-gap) !important;
+}
+@media all and (max-width:767px) {
+	#wrap:has(.st-login-module) .footer_margin { margin-top:50px !important; }
+}
+
+/* ==========================================================================
+   입력 안전망 — 구매자가 아주 긴 문구를 넣어도 화면 밖으로 밀려 나가지 않게 한다.
+   기본 문구(샘플)처럼 폭 안에 들어오는 글자에는 아무 변화가 없고, 넘칠 때만 줄을 바꾼다.
+   store-content.js 의 문구를 실제 브랜드 문구로 바꿀 때를 위한 보호 장치이며,
+   글자 크기·자간·색·위치 같은 디자인 값은 건드리지 않는다.
+   ========================================================================== */
+/* 한 단어가 크게 놓이는 자리 : 공백이 없는 긴 이름은 글자 단위로 줄을 바꾼다 */
+#contents .st-hero__title,
+#contents .st-hero__title .st-word,
+#contents .st-hero__title .st-word > span,
+#contents .st-reel__line,
+html.st-sale-on #contents .sl-hero__title,
+html.st-sale-on #contents .sl-banner__title,
+html.st-sale-on #contents .sl-card__title,
+html.st-sale-on #contents .sl-head__title,
+html.st-sale-on #contents .sl-end__title { overflow-wrap:anywhere; }
+/* 문장·제목·버튼 : 공백 없이 길게 이어진 주소나 단어가 칸을 밀어내지 않게 한다 */
+#contents .main_title_txt01,
+#contents .main_title_txt02,
+#contents .st-hero__tag,
+#contents .st-hero__cta,
+#contents .st-reel__cta,
+#contents .st-type__lead,
+#contents .st-type__cta,
+#contents .st-striphead,
+html.st-sale-on #contents .sl-hero__lead,
+html.st-sale-on #contents .sl-tile__name,
+html.st-sale-on #contents .sl-tile__ko,
+html.st-sale-on #contents .sl-card__sub,
+html.st-sale-on #contents .sl-banner__sub,
+html.st-sale-on #contents .sl-end__sub { overflow-wrap:break-word; }

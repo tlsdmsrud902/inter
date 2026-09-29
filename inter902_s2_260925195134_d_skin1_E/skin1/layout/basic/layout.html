@@ -1,0 +1,598 @@
+<!doctype html>
+<html lang="ko">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="format-detection" content="telephone=no"/>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, minimum-scale=1.0, user-scalable=yes">
+
+    <!-- PG크로스브라우징필수내용 -->
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <!-- // PG크로스브라우징필수내용 -->
+
+    <title>inter | 북유럽풍 인테리어 가구</title>
+    <!--@css(/layout/basic/css/common.css)--><!-- 해당 CSS는 쇼핑몰 전체 페이지에 영향을 줍니다. 삭제와 수정에 주의해주세요. -->
+    <!--@css(/layout/basic/css/layout.css)-->
+    <!--@css(/layout/basic/css/ec-base-ui.css)-->
+    <!--@css(/layout/basic/css/ec-base-button.css)-->
+    <!--@css(/layout/basic/css/ec-base-tab.css)-->
+    <!--@css(/layout/basic/css/ec-base-table.css)-->
+    <!--@css(/layout/basic/css/ec-base-tooltip.css)-->
+    <!--@css(/layout/basic/css/ec-base-help.css)-->
+    <!--@css(/layout/basic/css/ec-base-fold.css)-->
+    <!--@css(/layout/basic/css/ec-base-box.css)-->
+    <!--@css(/layout/basic/css/ec-base-desc.css)-->
+    <!--@css(/layout/basic/css/ec-base-product.css)-->
+  	<!--@css(/layout/basic/css/ec-base-prdInfo.css)-->
+    <!--@css(/layout/basic/css/ec-base-paginate.css)-->
+
+	<!-- inter DESIGN SYSTEM : 첫 화면이 기존 스킨으로 그려졌다가 바뀌는 현상을 막기 위해
+	     모든 최종 테마 스타일을 head에서 미리 불러온다. 아래 순서는 최종 우선순위이므로 유지한다. -->
+	<!--@css(/layout/basic/css/sub_style.css)-->
+	<!--@css(/layout/basic/css/sub_theme.css)-->
+	<!--@css(/layout/basic/css/add_theme01.css)-->
+	<!--@css(/layout/basic/css/add_theme02.css)-->
+	<!--@css(/layout/basic/css/add_theme03.css)-->
+	<!--@css(/layout/basic/css/add_layout.css)-->
+	<!--@css(/layout/basic/css/seraphin.css)-->
+	<!--@css(/layout/basic/css/st-sub.css)-->
+	<!--@css(/layout/basic/css/st-studio9.css)-->
+	<!--@css(/layout/basic/css/st-home-s9.css)-->
+	<!--@css(/layout/basic/css/inter-brand.css)-->
+	<!--@css(/layout/basic/css/inter-subpages.css)-->
+	<!--@css(/layout/basic/css/inter-pastel.css)-->
+	<!--@css(/layout/basic/css/inter-cozy-global.css)-->
+
+	<!-- DO NOT EDIT - DESIGN SYSTEM : 첫 페인트부터 JS 초기화 이후와 같은 레이아웃을 쓰도록 모션 클래스를 미리 붙인다.
+	     seraphin.js 는 카페24 번들로 본문 맨 끝에서 실행되어, 이 클래스가 늦으면 히어로 높이가 뒤늦게 바뀌며 화면이 밀린다(CLS).
+	     판별 조건은 seraphin.js 의 ST.useMotion 과 같아야 한다. 스크립트가 끝내 실행되지 않으면 8초 뒤 되돌려 콘텐츠가 숨겨진 채 남지 않게 한다. -->
+	<script>try{(function(){var d=document.documentElement,u=location.href;if(!/[?&]stmotion=off/.test(location.search)&&!/[?&]ezedit|smartdesign\.cafe24/i.test(u)&&!(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches)){d.classList.add('st-motion');setTimeout(function(){if(!window.__seraphinBooted){d.classList.remove('st-motion')}},8000)}})()}catch(e){}</script>
+
+	<!-- 폰트 : 원본 테마용 Montserrat·Noto Sans KR·Spoqa·Open Sans·Nanum Gothic·Red Hat Display 링크는 뺐다.
+	     seraphin.css 가 전 페이지 글꼴을 Anton·Archivo·Pretendard 로 덮어써서 쓰이지 않았고, 렌더링을 막는 요청만 늘렸다. -->
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+	<!-- SERAPHIN 폰트 : Anton(디스플레이) + Archivo(라벨) + Pretendard(한글)
+	     + Montserrat 300·Pinyon Script = 메인 인트로 로고 전용. 폰트 파일은 실제로 쓰이는 메인 첫 진입 때만 내려받는다. -->
+	<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;600;700&family=Jost:wght@400;500;600;700&family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0..100;1,9..144,300..700,0..100&display=swap" rel="stylesheet">
+	<!-- 인트로 폰트는 display=block — 대체 글꼴로 먼저 그렸다가 바뀌며 튀는 것을 막는다 -->
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300&family=Pinyon+Script&display=block" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+
+	<!-- BUYER EDITABLE : 구매자 콘텐츠 설정 파일 (브랜드명·로고·문구·링크·이미지·영상). 이 파일만 고치면 된다.
+	     뒤에 붙은 ?v=숫자 는 캐시 무효화용이다. 파일을 고쳤는데 카페24 서버 캐시가 안 지워져
+	     예전 내용이 계속 보이면, 숫자를 하나 올려서 저장한다(예: v=20260923 → v=20260924). -->
+	<script src="/layout/basic/js/store-content.js?v=20260928c"></script>
+	<!-- 게시판 화면 관리 : 메인의 사진·글자를 게시판 글로 바꾼다 (설정 = store-content.js 의 cms) -->
+	<script src="/layout/basic/js/inter-cms.js?v=20260929b"></script>
+
+	<!-- DO NOT EDIT - DESIGN SYSTEM : 메인 인트로(SERAPHIN ✕ Be yourself)
+	     스타일을 반드시 <head> 에 둔다. seraphin.css 는 본문 맨 끝에서 불러오므로, 거기에 두면 인트로가
+	     덮기 전에 상단 메뉴·히어로 글자가 먼저 한 번 그려졌다 사라진다. 여기 있으면 첫 화면부터 아이보리 + 로고다.
+	     띄우는 조건: 메인 페이지 + 사이트 바깥(주소 입력·검색·SNS)에서 들어옴 + 모션 사용 + intro.enabled.
+	     순서: 글자 한 자씩 → 가는 ✕ → 필기체 쓰기 → 아이보리 막과 로고가 3초에 걸쳐 함께 옅어지며 영상이 드러남(본문 맨 위 인라인 스크립트). -->
+	<script>try{(function(){var d=document.documentElement,c=(window.STORE_CONTENT||{}).intro||{},r=document.referrer,inside=false;try{inside=!!r&&new URL(r).host===location.host}catch(e){}if(c.enabled!==false&&d.classList.contains('st-motion')&&/^\/(index\.html)?$/.test(location.pathname)&&(!inside||/[?&]intro=1/.test(location.search))){d.classList.add('st-intro-on','st-intro-active')}})()}catch(e){}</script>
+	<style>
+		.st-intro{display:none}
+		html.st-intro-on .st-intro{--e:cubic-bezier(.33,0,.2,1);--x:cubic-bezier(.45,0,.25,1);display:flex;align-items:center;justify-content:center;position:fixed;inset:0;z-index:4000;color:#6d6760;animation:st-intro-failsafe 1.5s var(--e) 12s forwards}
+		@keyframes st-intro-failsafe{to{opacity:0;visibility:hidden;pointer-events:none}}
+		html.st-intro-on .st-intro::before{content:'';position:absolute;inset:0;background:#fff9f7;transition:opacity var(--st-intro-out,3s) var(--x)}
+		html.st-intro-on .st-intro.is-out{pointer-events:none}
+		html.st-intro-on .st-intro.is-out::before{opacity:0}
+		html.st-intro-on .st-intro.is-out .st-intro__logo{opacity:0;filter:blur(3px);transform:scale(1.015);transition:opacity calc(var(--st-intro-out,3s) * .8) var(--x) calc(var(--st-intro-out,3s) * .2),filter calc(var(--st-intro-out,3s) * .8) var(--x) calc(var(--st-intro-out,3s) * .2),transform var(--st-intro-out,3s) var(--x)}
+		.st-intro__logo{position:relative;display:flex;align-items:center;font-size:clamp(13px,1.6vw,28px);line-height:1;white-space:nowrap}
+		.st-intro__word{font-family:'Montserrat',sans-serif!important;font-weight:300;text-transform:uppercase;letter-spacing:.42em;margin-right:-.3em}
+		.st-intro__ch{display:inline-block;white-space:pre;opacity:0;filter:blur(7px)}
+		.st-intro.is-play .st-intro__ch{animation:st-intro-ch 1s var(--e) forwards;animation-delay:calc(.1s + var(--st-i,0) * .12s)}
+		@keyframes st-intro-ch{to{opacity:1;filter:blur(0)}}
+		.st-intro__cross{position:relative;flex:none;width:1.9em;height:1em}
+		.st-intro__cross i{position:absolute;left:50%;top:50%;width:.5em;height:1px;background:currentColor;transform-origin:0 50%;opacity:0;transform:rotate(var(--a)) translateX(32vmax)}
+		.st-intro__cross i:nth-child(1){--a:-135deg}.st-intro__cross i:nth-child(2){--a:45deg}.st-intro__cross i:nth-child(3){--a:-45deg}.st-intro__cross i:nth-child(4){--a:135deg}
+		.st-intro.is-play .st-intro__cross i{animation:st-intro-cross 1.4s var(--e) var(--st-intro-cross-at,1s) forwards}
+		.st-intro.is-play .st-intro__cross i:nth-child(n+3){animation-delay:calc(var(--st-intro-cross-at,1s) + .18s)}
+		@keyframes st-intro-cross{to{opacity:.8;transform:rotate(var(--a)) translateX(0)}}
+		.st-intro__script{font-family:'Pinyon Script',cursive!important;font-weight:400;font-size:2.05em;letter-spacing:0;text-transform:none;padding:.15em .1em .2em 0;transform:translateY(.06em);-webkit-mask-image:linear-gradient(90deg,#000 45%,transparent 55%);mask-image:linear-gradient(90deg,#000 45%,transparent 55%);-webkit-mask-size:220% 100%;mask-size:220% 100%;-webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;-webkit-mask-position:100% 0;mask-position:100% 0}
+		.st-intro.is-play .st-intro__script{animation:st-intro-write 1.6s cubic-bezier(.45,.05,.35,1) var(--st-intro-write-at,1.3s) forwards}
+		@keyframes st-intro-write{to{-webkit-mask-position:0 0;mask-position:0 0}}
+		.st-intro.is-single .st-intro__cross,.st-intro.is-single .st-intro__script{display:none}
+		@media (max-width:640px){.st-intro__logo{font-size:3.3vw}.st-intro__cross{width:1.7em}}
+		@media (prefers-reduced-motion:reduce){.st-intro{display:none!important}}
+	</style>
+	<!-- DO NOT EDIT - DESIGN SYSTEM : 스크롤 엔진. 차단되어도 콘텐츠는 정상 노출되도록 방어 처리됨 -->
+	<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js" defer></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+
+    <!--@css(/layout/basic/css/swiper.min.css)-->
+	<!--@js(/layout/basic/js/swiper-bundle.min.js)-->
+	<!--@js(/js/module/product/sale_price.js)-->
+
+    <!--@js(/layout/basic/js/basic.js)-->
+    <!--@js(/layout/basic/js/layout.js)-->
+    <!--@js(/js/common.js)-->
+    <!--@js(/layout/basic/js/seraphin.js)-->
+    <!--@js(/layout/basic/js/inter-reviews.js)-->
+    <script>try{window.EZST={q:[],register:function(a,b){this.push([a,(b.init||b)(),arguments])}}}catch(e){}</script>
+    <!--ez-favicon[-->
+    <!--ez-favicon]-->
+    <!--@js(/ez/init.js)-->
+<script type="text/ez-prop">
+	<ez-prop data-version="1.0.0">
+		<ez-var data-prop="theme" data-namespace="ez.layout.theme" data-type="array">
+			<ez-item data-id="theme01" data-name="MODERN" data-desc="(블랙+노토산스)" data-font="Noto Sans KR" data-background-color="#f5f5f5" override-value="html" data-font-css="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap">
+				모던하고 차분한 스타일
+				<!-- HTML도 <b>이렇게</b> 가능합니다.<br>
+				세부 옵션은 <a href="https://sample.cafe24.com/theme01" target="_blank">이곳을</a> 통해 확인 할 수 있습니다. -->
+			</ez-item>
+			<ez-item data-id="theme02" data-name="SOFT" data-desc="은은하고 부드러운 스타일	" data-font="Noto Sans KR" data-background-color="#d8d9ed" data-font-css="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Noto+Sans+KR:wght@300;400;500;700&display=swap"></ez-item>
+			<ez-item data-id="theme03" data-name="BREEZY" data-desc="밝고 경쾌한 스타일" data-font="Spoqa Han Sans Neo" data-background-color="#ffc1a8" data-font-css="//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css"></ez-item>
+			<ez-item data-id="theme04" data-name="FRESH" data-desc="시원하고 산뜻한 스타일" data-font="Nanum Gothic" data-background-color="#c3e7e7" data-font-css="https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700&family=Red+Hat+Display:wght@400;500;700&display=swap"></ez-item>
+		</ez-var>
+	</ez-prop>
+</script>
+</head>
+<body class="theme01" data-ez-theme="theme01">
+	<!-- ==========================================================================
+	     인트로 — 메인 첫 진입 때 히어로 영상이 준비되는 동안 보이는 로고 화면
+	     BUYER EDITABLE : 글자·필기체 문구·켜고 끄기 = /layout/basic/js/store-content.js 의 intro
+	       (intro.enabled 를 false 로 두면 이 화면 자체가 완전히 꺼지고 사이트가 바로 열린다)
+	     DO NOT EDIT - DESIGN SYSTEM : 구조·클래스·아래 인라인 스크립트. 스타일은 <head> 의 인트로 <style>,
+	       진행(그리기 → 영상으로 걷기 → 건너뛰기)은 바로 아래 인라인 스크립트.
+	     ========================================================================== -->
+	<div id="stIntro" class="st-intro" aria-hidden="true">
+		<div class="st-intro__logo">
+			<span class="st-intro__word">STUDIO9</span>
+			<span class="st-intro__cross"><i></i><i></i><i></i><i></i></span>
+			<span class="st-intro__script">Be yourself</span>
+		</div>
+	</div>
+	<!-- DO NOT EDIT - DESIGN SYSTEM : 인트로 전체 진행(글자 채우기 → 그리기 → 영상으로 걷기 → 제거)을 여기서 끝까지 맡는다.
+	     seraphin.js 에 기대지 않으므로 접속 즉시 시작되고, 다른 스크립트가 늦거나 막혀도 자연스럽게 끝난다.
+	     클릭·스크롤·키 입력이 들어오면 1초 만에 걷힌다. -->
+	<script>
+	try{(function(){
+	var d=document.documentElement,o=document.getElementById('stIntro');
+	if(!o||!d.classList.contains('st-intro-on'))return;
+	var HOLD=600,OUT=3000,SKIP=1000,ASSET_WAIT=2000;
+	var c=window.STORE_CONTENT||{},b=(c.brand&&c.brand.name)||'',i=c.intro||{};
+	function f(v,x){return typeof v==='string'?v.replace(/\{brand\}/g,b):x}
+	var w=o.querySelector('.st-intro__word'),s=o.querySelector('.st-intro__script'),t=f(i.text,w.textContent),sc=f(i.script,s.textContent);
+	w.textContent='';
+	for(var k=0;k<t.length;k++){var e=document.createElement('span');e.className='st-intro__ch';e.textContent=t[k];e.style.setProperty('--st-i',k);w.appendChild(e)}
+	var one=!sc.replace(/\s/g,'');
+	if(one){o.classList.add('is-single')}else{s.textContent=sc}
+	var end=.1+Math.max(0,t.length-1)*.12+1,x=Math.round(end*55)/100;
+	o.style.setProperty('--st-intro-cross-at',x+'s');
+	o.style.setProperty('--st-intro-write-at',(x+.3)+'s');
+	var drawn=Math.round(1000*(one?end:Math.max(end,x+1.58,x+1.9)));
+	o.classList.add('is-play');
+
+	var done=false,timers=[],inputs=['wheel','touchstart','keydown','pointerdown'];
+	function later(fn,ms){timers.push(setTimeout(fn,ms))}
+	function finish(fast){
+		if(done)return;done=true;
+		for(var n=0;n<timers.length;n++)clearTimeout(timers[n]);
+		for(var m=0;m<inputs.length;m++)window.removeEventListener(inputs[m],skip,true);
+		/* 막이 걷히는 순간 영상을 처음 장면부터 — 인트로 동안 뒤에서 이미 재생되던 것을 되감는다 */
+		var v=document.querySelector('.st-hero .st-world__video');
+		if(v&&!v.paused&&window.scrollY<2){try{v.currentTime=0}catch(err){}}
+		var dur=fast?SKIP:OUT;
+		o.style.setProperty('--st-intro-out',dur+'ms');
+		o.classList.add('is-out');
+		setTimeout(function(){
+			d.classList.remove('st-intro-active','st-intro-on');
+			if(o.parentNode)o.parentNode.removeChild(o);
+		},dur+100);
+	}
+	function skip(){finish(true)}
+	for(var m=0;m<inputs.length;m++)window.addEventListener(inputs[m],skip,{capture:true,passive:true});
+
+	/* 로고가 다 그려진 뒤, 히어로 포스터가 준비되면(최대 ASSET_WAIT) 한 번에 천천히 걷는다 */
+	later(function(){
+		var p=document.querySelector('.st-hero .st-world__poster');
+		if(!p||p.complete){finish(false);return}
+		p.addEventListener('load',function(){finish(false)},{once:true});
+		p.addEventListener('error',function(){finish(false)},{once:true});
+		later(function(){finish(false)},ASSET_WAIT);
+	},drawn+HOLD);
+	})()}catch(e){document.documentElement.classList.remove('st-intro-on','st-intro-active')}
+	</script>
+	<div id="skipNavigation">
+		<p><a href="#category">전체상품목록 바로가기</a></p>
+		<p><a href="#contents">본문 바로가기</a></p>
+	</div>
+	<div id="wrap">
+<!--@import(/layout/basic/header.html)-->
+<!--@import(/layout/basic/sidebar.html)-->
+<div id="container" data-ez="layout-0g1qxbv-1">
+			<div id="contents">
+				<span module="Layout_MobileAction" class="RTMB">
+					<a href="#none" onclick="{$go_back}"><!--@import(/svg/icon-go-back.html)-->뒤로가기</a>
+				</span>
+				<!--@contents-->
+			</div>
+		</div>
+<!--@import(/layout/basic/footer.html)-->
+<!--#ez="1/1"-->
+<!-- DO NOT EDIT - DESIGN SYSTEM : 본문이 모두 그려진 직후 store-content.js 의 값을 채운다(첫 화면 깜빡임 방지) -->
+<script>/* DO NOT EDIT - DESIGN SYSTEM : store-content.js 의 값을 본문 직후 바로 채운다(첫 화면에 예전 문구·사진이 보였다 바뀌는 깜빡임 방지).
+   seraphin.js 의 initStoreConfig 와 같은 코드다. seraphin.js 는 카페24 번들로 이보다 늦게 실행되므로 여기서 먼저 채운다(같은 요소는 두 번 채우지 않음). */
+try{(function(){var doc=document;var IS_MOBILE=window.matchMedia("(max-width:1024px)").matches;
+	function initStoreConfig() {
+		var content = window.STORE_CONTENT;
+		if (!content) { return; }
+		var brand = content.brand || {};
+		var brandName = typeof brand.name === 'string' ? brand.name : '';
+
+		function get(path) {
+			var value = content;
+			var parts = String(path || '').split('.');
+			for (var i = 0; i < parts.length; i++) {
+				if (value === null || value === undefined) { return undefined; }
+				value = value[parts[i]];
+			}
+			return value;
+		}
+		function fill(value) { return typeof value === 'string' ? value.replace(/\{brand\}/g, brandName) : value; }
+		function usable(value) { return typeof value === 'string' && value !== ''; }
+		function each(selector, fn) { Array.prototype.forEach.call(doc.querySelectorAll(selector), fn); }
+		// 같은 요소를 두 번 채우지 않는다 (본문 끝 즉시 적용 + 부팅 시 재적용).
+		function once(el, kind) {
+			var done = el.__stDone || (el.__stDone = {});
+			if (done[kind]) { return false; }
+			done[kind] = true;
+			return true;
+		}
+		function pairs(el, name, fn) {
+			el.getAttribute(name).split(';').forEach(function (pair) {
+				var cut = pair.indexOf(':');
+				if (cut < 1) { return; }
+				fn(pair.slice(0, cut).replace(/^\s+|\s+$/g, ''), fill(get(pair.slice(cut + 1).replace(/^\s+|\s+$/g, ''))));
+			});
+		}
+
+		each('[data-st-logo]', function (logo) {
+			if (!once(logo, 'logo')) { return; }
+			if (usable(brand.logo)) { logo.setAttribute('src', brand.logo); }
+			if (usable(brandName)) { logo.setAttribute('alt', brandName); }
+		});
+		each('[data-st-text]', function (el) {
+			if (!once(el, 'text')) { return; }
+			var value = fill(get(el.getAttribute('data-st-text')));
+			if (typeof value !== 'string') { return; }
+			if (value === '') { el.style.display = 'none'; } else { el.textContent = value; }
+		});
+		each('[data-st-html]', function (el) {
+			if (!once(el, 'html')) { return; }
+			var value = fill(get(el.getAttribute('data-st-html')));
+			if (typeof value !== 'string') { return; }
+			if (value === '') { el.style.display = 'none'; } else { el.innerHTML = value; }
+		});
+		each('[data-st-lead]', function (el) {
+			if (!once(el, 'lead')) { return; }
+			var value = fill(get(el.getAttribute('data-st-lead')));
+			if (typeof value !== 'string') { return; }
+			var node = el.firstChild;
+			while (node && node.nodeType !== 3) { node = node.nextSibling; }
+			if (node) { node.nodeValue = value; } else { el.insertBefore(doc.createTextNode(value), el.firstChild); }
+		});
+		each('[data-st-href]', function (el) {
+			if (!once(el, 'href')) { return; }
+			var value = fill(get(el.getAttribute('data-st-href')));
+			if (usable(value)) { el.setAttribute('href', value); }
+		});
+		each('[data-st-src]', function (el) {
+			if (!once(el, 'src')) { return; }
+			var value = get(el.getAttribute('data-st-src'));
+			var mobilePath = el.getAttribute('data-st-src-mobile');
+			if (IS_MOBILE && mobilePath && usable(get(mobilePath))) { value = get(mobilePath); }
+			if (usable(value) && el.getAttribute('src') !== value) { el.setAttribute('src', value); }
+		});
+		each('[data-st-srcset]', function (el) {
+			if (!once(el, 'srcset')) { return; }
+			var value = get(el.getAttribute('data-st-srcset'));
+			if (usable(value)) { el.setAttribute('srcset', value); }
+		});
+		each('[data-st-attr]', function (el) {
+			if (!once(el, 'attr')) { return; }
+			pairs(el, 'data-st-attr', function (name, value) { if (usable(value)) { el.setAttribute(name, value); } });
+		});
+		each('[data-st-media]', function (el) {
+			if (!once(el, 'media')) { return; }
+			pairs(el, 'data-st-media', function (name, value) {
+				if (typeof value !== 'string') { return; }
+				if (value === '') { el.removeAttribute(name); } else { el.setAttribute(name, value); }
+			});
+		});
+		each('video[data-st-video]', function (video) {
+			if (!once(video, 'video')) { return; }
+			var value = get(video.getAttribute('data-st-video'));
+			if (typeof value !== 'string') { return; }
+			if (value === '') { video.parentNode.removeChild(video); return; }
+			video.setAttribute('data-src', value);
+			video.removeAttribute('src');
+		});
+
+		// ON STORE 배너의 마우스오버 두 번째 컷 (CSS 변수 --st-hover-N 으로 전달)
+		var hover = get('onStore.hoverImages');
+		var gallery = doc.querySelector('.main_image_text_gallery .main_3dan_banner');
+		if (gallery && hover && hover.length && once(gallery, 'hover')) {
+			for (var i = 0; i < hover.length; i++) {
+				if (typeof hover[i] !== 'string') { continue; }
+				gallery.style.setProperty('--st-hover-' + (i + 1), hover[i] ? 'url("' + hover[i].replace(/["\\\n]/g, '') + '")' : 'none');
+			}
+		}
+
+		// SPECIAL EVENT 의 큰 글자 모양(브랜드 워드마크). 비어 있으면 CSS 의 기본 모양(SERAPHIN)을 쓴다.
+		var mask = get('specialEvent.mask');
+		var maskWidth = mask ? Number(mask.width) : 0;
+		var maskHeight = mask ? Number(mask.height) : 0;
+		if (mask && usable(mask.path) && maskWidth > 0 && maskHeight > 0) {
+			var svg = "<svg xmlns='http://www.w3.org/2000/svg' width='" + maskWidth + "' height='" + maskHeight + "' viewBox='0 0 " + maskWidth + ' ' + maskHeight + "'><path fill='#fff' d='" + mask.path.replace(/'/g, '') + "'/></svg>";
+			var image = 'url("data:image/svg+xml,' + encodeURIComponent(svg) + '"), linear-gradient(#fff, #fff)';
+			each('.st-type__mask', function (el) {
+				if (!once(el, 'mask')) { return; }
+				el.style.setProperty('-webkit-mask-image', image);
+				el.style.setProperty('mask-image', image);
+				el.setAttribute('data-st-mask-w', maskWidth);
+				el.setAttribute('data-st-mask-h', maskHeight);
+			});
+		}
+	}
+
+initStoreConfig();}());}catch(e){}</script>
+<!-- 우측 플로팅 버튼 — 주소는 store-content.js 의 social.instagram / floating.kakao -->
+<div class="s9-float" id="s9Float" aria-label="바로가기">
+	<a class="s9-float__btn s9-float__btn--insta" data-s9="instagram" href="#none" target="_blank" rel="noopener" hidden><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.3" cy="6.7" r=".8" fill="currentColor"></circle></svg><span class="displaynone">인스타그램</span></a>
+	<a class="s9-float__btn s9-float__btn--kakao" data-s9="kakao" href="#none" target="_blank" rel="noopener" hidden><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3.5c-5 0-9 3.1-9 7 0 2.5 1.7 4.7 4.2 6l-1 3.6c-.1.3.3.6.6.4l4.3-2.8c.3 0 .6.1.9.1 5 0 9-3.1 9-7s-4-7.3-9-7.3z"></path></svg><span class="displaynone">카카오톡 상담</span></a>
+	<a class="s9-float__btn s9-float__btn--recent" href="/product/recent_view_product.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5V12l3 2" stroke-linecap="round"></path></svg><span class="displaynone">최근 본 상품</span></a>
+	<a class="s9-float__btn s9-float__btn--top" href="#wrap" data-s9="top"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" stroke-linecap="round" stroke-linejoin="round"></path></svg><span class="displaynone">맨 위로</span></a>
+</div>
+<script>
+try{(function(){
+	var c=window.STORE_CONTENT||{},f=document.getElementById('s9Float');if(!f)return;
+	var urls={instagram:(c.social&&c.social.instagram)||'',kakao:(c.floating&&c.floating.kakao)||''};
+	['instagram','kakao'].forEach(function(k){var a=f.querySelector('[data-s9="'+k+'"]');if(a&&urls[k]){a.href=urls[k];a.hidden=false}});
+	/* 카카오톡 버튼은 항상 보이게 : 채널 주소가 비어 있으면 카카오톡 채널 홈으로 */
+	var kk=f.querySelector('[data-s9="kakao"]');if(kk){if(!urls.kakao)kk.href='https://pf.kakao.com/';kk.hidden=false;kk.setAttribute('aria-label','카카오톡 상담')}
+	document.querySelectorAll('[data-st-insta-link]').forEach(function(a){if(urls.instagram){a.href=urls.instagram;a.target='_blank';a.rel='noopener'}});
+	var top=f.querySelector('[data-s9="top"]');
+	top.addEventListener('click',function(e){e.preventDefault();window.scrollTo({top:0,behavior:'smooth'})});
+	function tog(){f.classList.toggle('is-on',window.scrollY>300)}
+	window.addEventListener('scroll',tog,{passive:true});tog();
+	/* 가로 슬라이드 좌우 버튼 */
+	document.querySelectorAll('.s9-slide').forEach(function(sec){
+		var h=sec.querySelector('[data-ez-holder]');if(!h)return;
+		var w=h.closest('.s9-split__list')||h;
+		var b=document.createElement('div');b.className='s9-slide__nav';
+		b.innerHTML='<button type="button" aria-label="이전">&#8249;</button><button type="button" aria-label="다음">&#8250;</button>';
+		w.style.position='relative';
+		var t=sec.querySelector('.main_title');
+		(t||sec).appendChild(b);
+		b.addEventListener('click',function(e){var btn=e.target.closest('button');if(!btn)return;
+			h.scrollBy({left:(btn===b.firstChild?-1:1)*h.clientWidth*.8,behavior:'smooth'})});
+	});
+})()}catch(e){}
+</script>
+<script>
+/* s9-fx : 스크롤 인터랙션 (페이드업 · 이미지 마스크 리빌 · 패럴랙스). 스타일은 st-home-s9.css 13번.
+   끄려면 이 <script> 블록을 지운다. */
+try{(function(){
+	if(!('IntersectionObserver' in window)||(window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches))return;
+	if(!document.querySelector('.st-hero-s9,.s9-slide'))return;
+	var root=document.documentElement;root.classList.add('s9-fx');
+	var Q=function(s){return Array.prototype.slice.call(document.querySelectorAll(s))};
+	function tag(sel,kind,step){Q(sel).forEach(function(el,i){if(el.hasAttribute('data-s9'))return;el.setAttribute('data-s9',kind);if(step)el.style.setProperty('--d',((i%6)*step)+'s')})}
+	tag('#contents .main_title','up',0);
+	tag('.st-chips-s9__list li','up',.05);
+	tag('.s9-slide .prdList > li','up',.07);
+	tag('.main_product_category .prdList > li','up',.06);
+	tag('.s9-split__banner','mask',0);
+	tag('.st-fabric-s9__media','mask',0);
+	tag('.st-fabric-s9__panel > *','up',.1);
+	tag('.s9-welcome__inner','up',0);
+	tag('.st-quote__grid > *','up',.12);
+	tag('.st-journal-s9__grid li','up',.12);
+	tag('.s9-insta__grid li','up',.06);
+	tag('.st-news-s9','up',0);
+	/* 패럴랙스 대상 */
+	var par=[];
+	Q('.st-hero-s9__media,.st-fabric-s9__media,.s9-split__banner,.st-journal-s9__grid li > a').forEach(function(box){var img=box.querySelector('img');if(!img)return;box.setAttribute('data-s9-par','');par.push({box:box,img:img,k:box.classList.contains('st-hero-s9__media')?.06:.08})});
+	var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('is-in');io.unobserve(e.target)}})},{threshold:.12,rootMargin:'0px 0px -6% 0px'});
+	Q('[data-s9]').forEach(function(el){io.observe(el)});
+	/* 스크롤 패럴랙스 : 화면 중앙에서 벗어난 만큼 이미지를 천천히 밀어낸다 */
+	var ticking=false,vh=window.innerHeight;
+	var films=Q('.s9-film'),marq=Q('.s9-marquee__row'),hero=document.querySelector('.st-hero-s9'),heroIn=Q('.st-hero-s9__inner'),bar=document.createElement('div');bar.id='s9Progress';document.body.appendChild(bar);
+	var clamp=function(v,a,b){return Math.max(a,Math.min(b,v))};
+	function run(){ticking=false;
+		var sy=window.pageYOffset,docH=document.documentElement.scrollHeight-vh;bar.style.transform='scaleX('+(docH>0?clamp(sy/docH,0,1):0).toFixed(4)+')';
+		films.forEach(function(f){var r=f.getBoundingClientRect();if(r.bottom<-50||r.top>vh+50)return;var t=clamp((vh-r.top)/(vh*.85),0,1);t=t*t*(3-2*t);f.style.setProperty('--fi',((1-t)*7).toFixed(2)+'%');f.style.setProperty('--fr',((1-t)*26).toFixed(1)+'px');f.style.setProperty('--fs',(1.12-t*.12).toFixed(3))});
+		marq.forEach(function(m,i){var s=m.firstElementChild;if(!s)return;var r=m.getBoundingClientRect();if(r.bottom<-50||r.top>vh+50)return;var d=parseFloat(m.getAttribute('data-dir'))||1;var w=s.offsetWidth,off=(r.top-vh)*.45*d;m.firstElementChild.style.setProperty('--mx',(-(w*.28)+off).toFixed(1)+'px')});
+		if(hero&&sy<vh){var k=clamp(sy/(vh*.55),0,1);heroIn.forEach(function(e){e.style.opacity=(1-k).toFixed(3);e.style.transform='translate3d(0,'+(-k*40).toFixed(1)+'px,0)'})}
+		par.forEach(function(p){var r=p.box.getBoundingClientRect();if(r.bottom<-50||r.top>vh+50)return;var c=(r.top+r.height/2-vh/2)/vh;var y=Math.max(-1,Math.min(1,c))*r.height*p.k*-1;p.img.style.setProperty('--py',y.toFixed(1)+'px')})}
+	function on(){if(!ticking){ticking=true;requestAnimationFrame(run)}}
+	window.addEventListener('scroll',on,{passive:true});window.addEventListener('resize',function(){vh=window.innerHeight;on()});run();
+})()}catch(e){}
+</script>
+<script>
+/* s9-video : 필름 밴드의 움직이는 이미지(webp)는 화면에 가까워질 때 한 번만 내려받아 교체한다(첫 화면 속도 보호). */
+try{(function(){
+	var imgs=[].slice.call(document.querySelectorAll('img.s9-film__video[data-src]'));if(!imgs.length||!('IntersectionObserver' in window))return;
+	var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion:reduce)').matches;if(reduce)return;
+	var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;var el=e.target;io.unobserve(el);
+		var a=el.getAttribute('data-src'),b=el.getAttribute('data-src2'),pre=new Image();pre.onload=function(){el.src=pre.src};pre.onerror=function(){if(!b)return;var p2=new Image();p2.onload=function(){el.src=b};p2.src=b};pre.src=a})},{rootMargin:'400px 0px'});
+	imgs.forEach(function(v){io.observe(v)});
+})()}catch(e){}
+</script>
+</div><!-- //wrap -->
+
+	<div id="progressPaybar" style="display:none;">
+		<div id="progressPaybarBackground" class="layerProgress"></div>
+		<div id="progressPaybarView">
+			<div class="box">
+				<h3>현재 결제가 진행중입니다.</h3>
+				<p class="txt">
+					본 결제 창은 결제완료 후 자동으로 닫히며,결제 진행 중에 본 결제 창을 닫으시면<br>
+					주문이 되지 않으니 결제 완료 될 때 까지 닫지 마시기 바랍니다.
+				</p>
+				<div class="progressbar"><img src="//img.echosting.cafe24.com/skin/skin/common/img_loading.gif" alt="loading" loading="lazy"></div>
+			</div>
+		</div>
+	</div>
+
+	<div module="Layout_multishopShipping">
+		<!--@css(/layout/basic/css/ec-base-layer.css)-->
+		<!--@css(/css/module/layout/multishopShipping.css)-->
+		<!--@js(/js/module/layout/multishopShipping.js)-->
+		<div class="worldshipLayer ec-base-layer typeModal">
+			<div class="header">
+				<h3>WORLD SHIPPING</h3>
+			</div>
+			<div class="content">
+				<p class="desc">PLEASE SELECT THE DESTINATION COUNTRY AND LANGUAGE :</p>
+				<select module="Layout_multishopShippingCountrylist">
+					<option value="{$country_code}" {$country_default_selected}>SHIPPING TO : {$country_name}</option>
+					<option value="{$country_code}" {$country_default_selected}>SHIPPING TO : {$country_name}</option>
+				</select>
+				<select module="Layout_multishopShippingLanguagelist">
+					<option value="{$shop_domain}" {$shop_default_selected}>LANGUAGE : {$shop_language_name}</option>
+					<option value="{$shop_domain}" {$shop_default_selected}>LANGUAGE : {$shop_language_name}</option>
+				</select>
+			</div>
+			<div class="ec-base-button">
+				<a href="#none" class="btnSubmitFix sizeM">GO</a>
+			</div>
+			<a href="#none" class="btnClose">닫기</a>
+		</div>
+	</div>
+
+	<div class="layer_shadow" id="layer_shadow"></div>
+	<div id="layoutDimmed" class="dimmed"></div>
+
+<script>
+/* 타임세일 카운트다운 : 상품 요약설명에 아래처럼 적으면 남은 시간을 표시. 시각(한국시간)이 지나면 삭제
+     #타임세일 2026-10-31 23:59
+     #타임세일 2026-10-31 23:59 배경:#e11d48 글자:#ffffff          ← 색 지정(선택). 안 적으면 store-content.js 의 timesale 기본 색, 그것도 비어 있으면 기본 디자인
+   색 항목 : 배경 · 글자(메인·상세 공통) / 카드배경 · 카드글자(메인·목록만) / 상세배경 · 상세글자(상세만)
+   색 값   : #색코드(#e11d48, #fff) 또는 색 이름(검정 흰색 빨강 주황 노랑 초록 파랑 남색 보라 분홍 회색 갈색)
+   - 목록·메인 카드 : .description[data-summary] → 사진 왼쪽 위 배지(.st-ts)
+   - 상세 페이지    : .st-ts-src[data-summary] → 사진 위 배너(.st-tsb) + 사진 왼쪽 아래 배지 */
+(function(){try{
+  var RE=/#타임세일\s*(\d{4})-(\d{1,2})-(\d{1,2})[ T](\d{1,2}):(\d{2})/;
+  var NAMES={'검정':'#111111','흰색':'#ffffff','빨강':'#e11d48','주황':'#f97316','노랑':'#facc15','초록':'#16a34a','파랑':'#2563eb','남색':'#1e3a8a','보라':'#7c3aed','분홍':'#ec4899','회색':'#6b7280','갈색':'#7c4a2d'};
+  function col(v){v=(v||'').trim();if(NAMES[v])return NAMES[v];return /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.test(v)?(v.charAt(0)==='#'?v:'#'+v):''}
+  function parse(t){var m=RE.exec(t||'');if(!m)return null;var o={e:Date.UTC(+m[1],m[2]-1,+m[3],+m[4]-9,+m[5])};
+    (t.slice(m.index+m[0].length)).replace(/(카드배경|카드글자|상세배경|상세글자|배경|글자)\s*[:=]\s*(\S+)/g,function(_,k,v){var c=col(v);if(c)o[k]=c});return o}
+  function D(k){var c=window.STORE_CONTENT||window.storeContent||{};return col((c.timesale||{})[k])}
+  function p2(n){return n<10?'0'+n:''+n}
+  function fmt(ms){var s=Math.floor(ms/1000),d=Math.floor(s/86400);s%=86400;var h=Math.floor(s/3600);s%=3600;return(d?d+'일 ':'')+p2(h)+' : '+p2(Math.floor(s/60))+' : '+p2(s%60)}
+  function make(cls,label,e,bg,fg){var b=document.createElement('div');b.className=cls;b.setAttribute('data-end',e);
+    if(cls==='st-tsb'){var U=[['d','일'],['h','시간'],['m','분'],['s','초']].map(function(u){return'<span class="st-u" data-k="'+u[0]+'"><b>00</b><em>'+u[1]+'</em></span>'}).join('');
+      b.innerHTML='<div class="st-tsb__lab"><i class="st-dot"></i>TIME SALE</div><div class="st-tsb__tt">'+label+'</div><div class="st-tsb__c">'+U+'</div>'}
+    else b.innerHTML='<i class="st-dot"></i>'+label+' <b></b>';
+    if(bg)b.style.background=bg;if(fg){b.style.color=fg;if(cls==='st-ts')b.querySelector('b').style.color=fg}return b}
+  function scan(){
+    [].forEach.call(document.querySelectorAll('ul.prdList>li .description[data-summary]'),function(ds){
+      if(ds.__ts)return;var o=parse(ds.getAttribute('data-summary'));if(!o)return;ds.__ts=1;
+      var th=ds.parentNode&&ds.parentNode.querySelector('.thumbnail');if(th)th.appendChild(make('st-ts','종료까지',o.e,o['카드배경']||o['배경']||D('cardBg'),o['카드글자']||o['글자']||D('cardFg')))});
+    [].forEach.call(document.querySelectorAll('.st-ts-src[data-summary]'),function(src){
+      if(src.__ts)return;src.__ts=1;var o=parse(src.getAttribute('data-summary'));if(!o)return;
+      var bg=o['상세배경']||o['배경']||D('detailBg'),fg=o['상세글자']||o['글자']||D('detailFg');
+      var area=src.closest('.detailArea');if(!area)return;
+      var img=area.querySelector('.imgArea');if(img)img.insertBefore(make('st-tsb','타임세일 종료까지',o.e,bg,fg),img.firstChild);
+      [].forEach.call(area.querySelectorAll('.imgArea .prdImg .thumbnail'),function(th){th.appendChild(make('st-ts','종료까지',o.e,bg,fg))})})}
+  function tick(){var now=Date.now();[].forEach.call(document.querySelectorAll('.st-ts,.st-tsb'),function(b){var l=b.getAttribute('data-end')-now;if(l<=0){b.parentNode.removeChild(b);return}
+    if(b.className==='st-tsb'){var s=Math.floor(l/1000),v={d:Math.floor(s/86400)};s%=86400;v.h=Math.floor(s/3600);s%=3600;v.m=Math.floor(s/60);v.s=s%60;
+      [].forEach.call(b.querySelectorAll('.st-u'),function(u){var k=u.getAttribute('data-k');u.style.display=(k==='d'&&!v.d)?'none':'';u.querySelector('b').textContent=k==='d'?v.d:p2(v[k])})}
+    else b.querySelector('b').textContent=fmt(l)})}
+  function hideRaw(){[].forEach.call(document.querySelectorAll('.detailArea tr,ul.prdList .spec>li'),function(tr){if(!tr.__h&&RE.test(tr.textContent)){tr.__h=1;tr.style.display='none'}})}
+  function run(){scan();tick();hideRaw()}
+  run();setInterval(run,1000);
+}catch(e){}})();
+</script>
+<script>
+/* 장바구니 무료배송 진행바 : 총 상품금액을 읽어 '○○원 더 담으면 무료배송'을 표시 (기준 금액·끄기 = store-content.js 의 shipping) */
+(function(){try{
+  var c=(window.STORE_CONTENT||window.storeContent||{}).shipping||{};if(c.freeBar===false)return;var T=+c.freeOver||50000;
+  function num(s){return +(String(s).replace(/[^\d]/g,''))||0}
+  function run(){var box=document.querySelector('.cart-total .totalSummary');if(!box)return;
+    var st=box.querySelector('.totalSummary__item .heading .data strong');if(!st)return;var sum=num(st.textContent);
+    var bar=document.getElementById('st-freebar');
+    if(!bar){bar=document.createElement('div');bar.id='st-freebar';bar.className='st-freebar';bar.innerHTML='<div class="st-freebar__top"><span class="st-freebar__ico"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5h11v9H3zM14 9.5h4l3 3v3h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg></span><p class="st-freebar__msg"></p><span class="st-freebar__pill">FREE</span></div><div class="st-freebar__track"><i></i></div><div class="st-freebar__scale"><span>0원</span><span class="st-freebar__goal"></span></div>';box.parentNode.insertBefore(bar,box)}
+    var left=T-sum;bar.querySelector('.st-freebar__msg').innerHTML=left>0?'<b>'+left.toLocaleString('ko-KR')+'원</b> 더 담으면 <em>무료배송</em>':'<em>무료배송</em> 혜택이 적용됐어요';bar.className='st-freebar'+(left>0?'':' is-done');bar.querySelector('.st-freebar__goal').textContent='무료배송 '+T.toLocaleString('ko-KR')+'원';
+    bar.querySelector('i').style.width=Math.min(100,Math.max(0,sum/T*100))+'%';bar.style.display=sum>0?'':'none'}
+  run();setInterval(run,1000);
+}catch(e){}})();
+</script>
+<script>
+/* 사장님 편의 기능 3종 : 재고 임박 · 기간 예약 배너 · 후기 작성 유도  (값은 store-content.js 의 stockAlert · banners · reviewPromo) */
+(function(){try{
+  var C=window.STORE_CONTENT||window.storeContent||{};
+  function kst(t){var m=/^(\d{4})-(\d{1,2})-(\d{1,2})(?:[ T](\d{1,2}):(\d{2}))?/.exec(t||'');return m?Date.UTC(+m[1],m[2]-1,+m[3],(+m[4]||0)-9,+m[5]||0):0}
+  function hex(v){return /^#[0-9a-f]{3,8}$/i.test(v||'')?v:''}
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function el(html,cls){var d=document.createElement('div');d.className=cls;d.innerHTML=html;return d}
+
+  /* 1) 기간 예약 배너 */
+  function banner(){var L=C.banners;if(!L||!L.length)return;var now=Date.now(),b=null;
+    for(var i=0;i<L.length;i++){var s=kst(L[i].start),e=kst(L[i].end);if((!s||now>=s)&&(!e||now<e)){b=L[i];break}}
+    if(!b)return;var box=document.querySelector('.main_top_banner'),a=box&&box.querySelector('.top_banner_text a');if(!a)return;
+    if(b.text)a.textContent=b.text;if(b.link)a.setAttribute('href',b.link);
+    if(hex(b.bg))box.style.background=hex(b.bg);if(hex(b.fg))a.style.color=hex(b.fg)}
+
+  /* 2) 재고 임박 : 재고관리를 쓰는 상품이 threshold 개 이하일 때 가격 아래에 표시 */
+  function stockLeft(){var raw=window.option_stock_data||window.single_option_stock_data,j;
+    try{j=typeof raw==='string'?JSON.parse(raw):raw}catch(e){return null}
+    if(!j||typeof j!=='object')return null;
+    if(j.use_stock!==undefined)return j.use_stock?(+j.stock_number||0):null;
+    var tot=0,any=false;for(var k in j){var o=j[k];if(o&&o.use_stock){any=true;tot+=(+o.stock_number||0)}}return any?tot:null}
+  function stock(){var o=C.stockAlert||{};if(o.enabled===false)return;var th=+o.threshold||5;
+    var price=document.querySelector('.detailArea .infoArea .totalPrice')||document.querySelector('.detailArea .infoArea .st-pd__price');if(!price||document.getElementById('st-stock'))return;
+    var n=stockLeft();if(n===null||n<1||n>th)return;
+    var d=el('<span class="st-stock__pill"><i class="st-dot"></i><b>'+esc((o.text||'{n}개 남음').replace('{n}',n))+'</b><em>품절 임박</em></span>','st-stock');d.id='st-stock';price.parentNode.insertBefore(d,price.nextSibling)}
+
+  /* 3) 후기 작성 유도 */
+  function review(){var o=C.reviewPromo||{};if(o.enabled===false)return;var rv=document.getElementById('stReview'),h=rv&&rv.querySelector('.st-rv__head');
+    if(!h||document.getElementById('st-rvpromo'))return;
+    var a=rv.querySelector('a[href*="board/product/write"]')||document.querySelector('a[href*="board/product/write.html?board_no=4"]');
+    var href=a?a.getAttribute('href'):'/board/product/list.html?board_no=4';
+    var d=el('<div class="st-rvpromo__stars" aria-hidden="true">★★★★★</div><div class="st-rvpromo__txt"><p class="st-rvpromo__t">'+esc(o.text)+'</p>'+(o.points?'<span class="st-rvpromo__pt">'+esc(o.points)+'</span>':'')+'</div><a class="st-rvpromo__b" href="'+esc(href)+'">'+esc(o.button||'후기 쓰기')+' <span aria-hidden="true">→</span></a>','st-rvpromo');
+    d.id='st-rvpromo';h.parentNode.insertBefore(d,h.nextSibling)}
+
+  /* 5) 랜덤 쿠폰 뽑기용 쿠폰은 뽑기로만 받게, 상품 상세 등 다른 쿠폰 다운로드 칸에서는 숨긴다 (설정 store-content.js 의 sale.coupon) */
+  function hideDraw(){var S=(C.sale||{}).coupon||{};if(S.enabled===false||S.hideElsewhere===false||!S.coupons||!S.coupons.length)return;
+    var nos=S.coupons.map(function(c){return String(c.no)});
+    [].forEach.call(document.querySelectorAll('.couponSkinArea li'),function(li){
+      var a=li.querySelector('a[href*="coupon_no="]');var m=a&&/coupon_no=(\d+)/.exec(a.getAttribute('href')||'');if(!m||nos.indexOf(m[1])<0)return;
+      var area=li.closest('.couponSkinArea'),wrap=area&&area.parentNode;li.parentNode.removeChild(li);
+      if(area&&!area.querySelector('li')&&wrap)wrap.style.display='none'})}
+  banner();stock();review();hideDraw();
+  setTimeout(function(){stock();review();hideDraw()},1500);setTimeout(hideDraw,3500);setTimeout(hideDraw,7000);   /* 후기 영역이 늦게 그려지는 경우 */
+}catch(e){}})();
+</script>
+<script>
+/* 최상단 띠배너 X : 누르면 닫고, 오늘 자정까지 다시 띄우지 않는다 (카페24 Easy 띠배너의 기본 닫기가 동작하지 않아 직접 처리) */
+(function(){
+  var KEY='inter-topbanner-hide';
+  function hide(b){ b.style.setProperty('display','none','important'); document.documentElement.classList.add('inter-topbanner-off'); }
+  function init(){
+    var b=document.querySelector('.main_top_banner'); if(!b) return;
+    try{ if(Number(localStorage.getItem(KEY))>Date.now()){ hide(b); return; } }catch(e){}
+    var x=b.querySelector('.top_banner_close .icoClose, .top_banner_close, .btnClose'); if(!x) return;
+    x.style.cursor='pointer';
+    x.addEventListener('click',function(e){
+      if(e.target && e.target.matches && e.target.matches('input,label')) return;   // 체크박스·문구는 그대로 둔다
+      e.preventDefault(); e.stopPropagation();
+      var end=new Date(); end.setHours(24,0,0,0);
+      try{ localStorage.setItem(KEY,String(end.getTime())); }catch(err){}
+      hide(b);
+    });
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
+}());
+</script>
+</body>
+</html>

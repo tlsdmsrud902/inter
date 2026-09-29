@@ -1,0 +1,11 @@
+/* Content identity only: keep original header/footer layout and spacing. */
+#header .inner .top_nav_box .top_logo a::before,#footer .bt_logo a::before{content:'inter';color:#293a32}
+#header .inner .top_nav_box .top_logo a::after,#footer .bt_logo a::after{content:none;display:none}
+.main_top_banner{background:#344337!important}
+#header{background:#faf9f5!important}
+#header .inner .top_nav_box .top_category>ul>li>a{color:#293a32!important}
+body{background:#faf9f5}
+#contents>.titleArea h2{color:#304234;font-family:'Pretendard Variable','Pretendard',sans-serif!important;font-weight:500!important;letter-spacing:-.045em;font-size:32px!important}
+#aside .navigation-menu__category .view{color:#304234}
+#header .count:has(span:empty){display:none!important}
+#header .count{background:#304234!important}

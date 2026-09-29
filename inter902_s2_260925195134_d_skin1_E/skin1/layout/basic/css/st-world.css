@@ -1,0 +1,894 @@
+@charset "utf-8";
+/* ==========================================================================
+   DO NOT EDIT - DESIGN SYSTEM
+   구매자는 이 파일을 수정하지 않는다. 문구·이미지·링크는 /layout/basic/js/store-content.js 에서 바꾼다.
+   ========================================================================== */
+/* ==========================================================================
+   SERAPHIN — 스크롤 인터랙션
+   SCROLL WORLD(영상 스크럽) / 카테고리 영상 타일 / 진행 레일 / FILM
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   SCROLL WORLD — 트랙 높이가 카메라 이동 거리, 스테이지는 sticky
+   -------------------------------------------------------------------------- */
+#contents .st-world { padding:0; }
+#contents .st-world .main_title { padding:0 var(--st-gutter); }
+
+.st-world__track {
+	position:relative;
+	height:var(--st-world-scroll, 300vh);
+}
+.st-world__stage {
+	position:sticky;
+	top:0;
+	height:100svh;
+	overflow:hidden;
+	background:var(--st-ink);
+}
+
+/* 미디어 */
+.st-world__media { position:absolute; inset:0; }
+.st-world__poster,
+.st-world__video {
+	position:absolute;
+	inset:0;
+	width:100%;
+	height:100%;
+	object-fit:cover;
+	display:block;
+}
+/* 첫 프레임이 그려지기 전까지 포스터를 덮어둔다 (iOS 블랙아웃 방지) */
+.st-world__video { opacity:0; transition:opacity .35s linear; }
+.st-world__media.is-painted .st-world__video { opacity:1; }
+.st-world__media.is-painted .st-world__poster { opacity:0; }
+.st-world__poster { transition:opacity .35s linear; }
+
+/* Mobile autoplay needs a visible video; keep the poster above it until decoded. */
+.st-hero__track[data-autoplay="true"] .st-world__media { isolation:isolate; }
+.st-hero__track[data-autoplay="true"] .st-world__video { opacity:1; }
+.st-hero__track[data-autoplay="true"] .st-world__poster { z-index:1; pointer-events:none; }
+
+/* 검정 그라데이션 레이어 — 영상 위에 깔아 카피 가독성을 잡고 톤을 정돈한다.
+   위/아래에서 먹이 들어오고 가운데는 비워 피사체를 살린다.
+   --------------------------------------------------------------------------
+   주의: 값이 같아도 원본 영상이 밝으면 먹이 묻혀 "그라데이션이 없어" 보인다.
+   캠페인(밝은 파티 조명)과 FILM 은 아래에서 더 강하게 덮는다. */
+.st-world__stage::after {
+	content:'';
+	position:absolute;
+	inset:0;
+	background:
+		linear-gradient(180deg,
+			rgba(0,0,0,.72) 0%,
+			rgba(0,0,0,.34) 18%,
+			rgba(0,0,0,.10) 42%,
+			rgba(0,0,0,.42) 68%,
+			rgba(0,0,0,.90) 100%),
+		linear-gradient(90deg, rgba(0,0,0,.52) 0%, rgba(0,0,0,0) 52%),
+		rgba(0,0,0,.14);
+	pointer-events:none;
+}
+
+/* 비트 카피 — 진행도에 따라 하나씩 교체 */
+.st-world__copy {
+	position:absolute;
+	inset:auto 0 0 0;
+	z-index:2;
+	box-sizing:border-box;
+	padding:0 var(--st-gutter) clamp(56px, 8vw, 110px);
+	min-height:clamp(180px, 26vw, 330px);
+}
+.st-world__beat {
+	position:absolute;
+	left:var(--st-gutter);
+	right:var(--st-gutter);
+	bottom:clamp(56px, 8vw, 110px);
+	margin:0;
+	opacity:0;
+	transform:translate3d(0, 18px, 0);
+	transition:opacity .5s var(--st-ease), transform .7s var(--st-ease);
+	pointer-events:none;
+}
+.st-world__beat.is-active { opacity:1; transform:none; pointer-events:auto; }
+
+/* 캠페인 비트와 FILM 캡션도 히어로와 같은 줄간격을 쓴다.
+   (라벨 / 대형 문구 / CTA 사이 간격) */
+.st-world__beat,
+.st-film__caption {
+	display:flex;
+	flex-direction:column;
+	align-items:flex-start;
+	gap:clamp(18px, 2.4vw, 38px);
+}
+
+.st-world__eyebrow {
+	display:block;
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	font-weight:600;
+	letter-spacing:.14em;
+	text-transform:uppercase;
+	color:var(--st-red);
+}
+.st-world__line {
+	display:block;
+	font-size:clamp(34px, 7vw, 108px);
+	line-height:.9;
+	color:var(--st-invert);
+}
+.st-world__cta {
+	color:var(--st-invert) !important;
+}
+.st-world__cta:hover { color:var(--st-red) !important; }
+
+/* HUD — 인덱스 + 진행 바 */
+.st-world__hud {
+	position:absolute;
+	left:var(--st-gutter);
+	right:var(--st-gutter);
+	bottom:clamp(20px, 3vw, 40px);
+	z-index:3;
+	display:flex;
+	align-items:center;
+	gap:16px;
+}
+.st-world__index {
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	font-weight:600;
+	letter-spacing:.14em;
+	color:rgba(255,255,255,.75);
+	flex-shrink:0;
+}
+.st-world__index i { font-style:normal; color:var(--st-invert); }
+.st-world__bar {
+	flex:1;
+	height:1px;
+	background:rgba(255,255,255,.25);
+	position:relative;
+	overflow:hidden;
+}
+.st-world__bar i {
+	display:block;
+	height:100%;
+	width:100%;
+	background:var(--st-red);
+	transform:scaleX(0);
+	transform-origin:0 50%;
+}
+
+/* JS 가 없거나 모션을 끈 경우 — 포스터 한 장짜리 배너로 성립하게 둔다 */
+html:not(.st-motion) .st-world__track { height:auto; }
+html:not(.st-motion) .st-world__stage { position:relative; height:auto; aspect-ratio:16/9; }
+html:not(.st-motion) .st-world__beat { position:relative; left:0; right:0; bottom:0; opacity:1; transform:none; }
+html:not(.st-motion) .st-world__beat + .st-world__beat { display:none; }
+
+/* --------------------------------------------------------------------------
+   히어로 — 풀사이즈 영상 스크럽
+   --st-p (0~1) 는 JS 가 넣어주는 스크롤 진행도. 타이포를 여기에 물린다.
+   -------------------------------------------------------------------------- */
+#contents .st-hero { padding:0; margin-bottom:0; }
+/* 트랙 높이는 seraphin.js(initScrollWorld)가 (data-scroll + data-hold)svh 로 넣는다. 모바일은 각각 0.7배.
+   JS 가 실행되기 전 첫 페인트에서도 같은 값을 쓰도록 기본값을 미리 둔다 — 없으면 300vh 로 그려졌다가 줄어들며 화면이 밀린다.
+   히어로의 data-scroll / data-hold 를 바꾸면 이 두 값도 함께 맞춘다. */
+.st-hero__track { --st-world-scroll:360svh; }
+@media all and (max-width:1024px) {
+	.st-hero__track { --st-world-scroll:252svh; }
+}
+.st-hero__stage {
+	top:var(--st-topbar-h, 0px);
+	height:calc(100svh - var(--st-topbar-h, 0px));
+}
+
+/* 세로로 긴 영상(모바일 9:16)에서는 위쪽을 잘라내지 않도록 기준점을 위로 붙인다 */
+.st-hero__stage .st-world__video,
+.st-hero__stage .st-world__poster {
+	object-position:50% var(--st-hero-focus, 0%);
+}
+
+/* PC 는 16:9 영상이 화면보다 가로로 넓어 좌우만 잘린다.
+   그래서 object-position 으로는 위아래가 움직이지 않는다.
+   모델 얼굴이 고정 헤더에 가리므로 영상을 통째로 아래로 내린다.
+   내린 만큼 아래가 비지 않도록 scale 로 여유분을 먼저 만든다.
+   --st-hero-drop 으로 조정 (기본 8%). */
+@media all and (min-width:1025px) {
+	.st-hero__stage .st-world__video,
+	.st-hero__stage .st-world__poster {
+		transform:scale(1.18) translateY(var(--st-hero-drop, 8%));
+		transform-origin:50% 50%;
+	}
+}
+/* PC 히어로 먹. 영상 끝부분에서 관객과 모델이 어렴풋이 보일 정도로만 어둡게 한다.
+   (이전: 아래쪽 .88, 왼쪽 .45, 스크롤 암전 .40 — 화면 대부분이 검게 덮였다)
+   맨 위는 고정 헤더 글자가 읽히도록 옅게 남기고, 아래는 제목이 읽힐 만큼만. */
+.st-hero__stage::after {
+	background:
+		linear-gradient(180deg,
+			rgba(0,0,0,.50) 0%,
+			rgba(0,0,0,.12) 20%,
+			rgba(0,0,0,0)   45%,
+			rgba(0,0,0,.12) 72%,
+			rgba(0,0,0,.40) 100%),
+		linear-gradient(90deg, rgba(0,0,0,.25) 0%, rgba(0,0,0,0) 45%),
+		rgba(0,0,0,calc(var(--st-p, 0) * .05));
+}
+
+.st-hero__inner {
+	position:absolute;
+	inset:auto 0 0 0;
+	z-index:2;
+	box-sizing:border-box;
+	padding:0 var(--st-gutter) clamp(44px, 6vw, 84px);
+	display:flex;
+	flex-direction:column;
+	align-items:flex-start;
+	/* 워드마크의 line-height 가 .82 로 바짝 붙어 있어, 위아래 라벨과 거의 닿는다.
+	   간격을 넉넉히 준다. */
+	gap:clamp(18px, 2.4vw, 38px);
+}
+/* 히어로 카피는 영상 진행도와 무관하게 같은 위치와 선명도로 유지한다. */
+.st-hero__tag {
+	color:var(--st-red) !important;
+	opacity:1;
+}
+.st-hero__title {
+	font-size:min(var(--st-fs-mega), 15vw);
+	/* 꽉 찬 흰색은 영상 위에 스티커처럼 얹혀 보인다.
+	   글자를 반투명하게 두어 런웨이 영상이 획 안으로 비치게 하고,
+	   윤곽만 얇게 살려 어두운 구간에서도 형태가 뭉개지지 않게 한다.
+	   획 전체는 같은 농도로 — 그라데이션·번짐 그림자는 쓰지 않는다. */
+	color:rgba(255,255,255,.55);
+	-webkit-text-stroke:.5px rgba(255,255,255,.28);
+	text-shadow:none;
+	mix-blend-mode:normal;
+	max-width:100%;
+	white-space:nowrap;
+	letter-spacing:-.02em;
+	transform:none;
+	opacity:1;
+	will-change:auto;
+}
+.st-hero__cta {
+	color:var(--st-invert) !important;
+	opacity:1;
+}
+.st-hero__cta:hover { color:var(--st-red) !important; }
+
+.st-hero__hint {
+	position:absolute;
+	right:var(--st-gutter);
+	bottom:clamp(44px, 6vw, 84px);
+	z-index:3;
+	color:rgba(255,255,255,.8);
+	writing-mode:vertical-rl;
+	opacity:1;
+}
+.st-hero__hud { bottom:clamp(16px, 2.2vw, 30px); }
+
+/* 모션이 없으면 포스터 한 장 + 카피로 성립 */
+html:not(.st-motion) .st-hero__track { height:auto; }
+html:not(.st-motion) .st-hero__stage { position:relative; height:auto; aspect-ratio:16/9; top:0; }
+
+/* PC 첫 페인트부터 JS 초기화 이후까지 같은 무대 높이와 제목 위치를 유지한다. */
+@media all and (min-width:1025px) {
+	.st-hero__track .st-hero__stage,
+	html:not(.st-motion) .st-hero__track .st-hero__stage {
+		height:calc(100svh - var(--st-topbar-h, 0px));
+		aspect-ratio:auto;
+	}
+}
+
+/* 모바일의 단어 등장 효과도 히어로 제목에서는 고정한다. */
+html.st-motion .st-hero__title.st-split .st-word > span {
+	transform:none;
+	transition:none;
+}
+
+@media all and (max-width:1024px) {
+	/* 88svh 로 두면 히어로 아래에 흰 띠가 남는다. 화면을 꽉 채운다.
+	   svh(가장 작은 뷰포트)를 쓰므로 사파리 툴바가 떠 있어도 딱 맞는다. */
+	/* 히어로 무대는 .st-world__stage 클래스도 함께 갖는데, 아래 레일 블록의
+	   .st-world__stage{height:88svh} 가 더 뒤에 있어 같은 특이도로는 진다.
+	   한 단계 더 좁게 써서 확실히 이긴다. */
+	.st-hero__track .st-hero__stage { height:calc(100svh - var(--st-topbar-h, 0px)); }
+	.st-hero__title { mix-blend-mode:normal; }
+	.st-hero__hint { display:none; }
+	/* 모바일 히어로는 세로로 길어 PC 값 그대로면 위아래 먹이 화면 대부분을 덮는다.
+	   좌측 먹(가로 방향)은 빼고, 위아래는 옅게, 스크롤 진행에 따른 암전도 줄인다.
+	   하단 카피가 읽힐 만큼만 아래를 남긴다. */
+	.st-hero__stage::after {
+		background:
+			linear-gradient(180deg,
+				rgba(0,0,0,.30) 0%,
+				rgba(0,0,0,.06) 18%,
+				rgba(0,0,0,0)   40%,
+				rgba(0,0,0,.14) 68%,
+				rgba(0,0,0,.46) 100%),
+			rgba(0,0,0,calc(var(--st-p, 0) * .25));
+	}
+	/* 아이폰 홈 인디케이터만큼만 피한다 (하단 탭바는 제거했다) */
+	.st-hero__inner {
+		padding-bottom:calc(clamp(44px, 6vw, 84px) + env(safe-area-inset-bottom, 0px));
+	}
+}
+
+/* --------------------------------------------------------------------------
+   카테고리 영상 타일 마퀴
+   -------------------------------------------------------------------------- */
+#contents .st-cats { padding:0; }
+#contents .st-cats .main_title { padding:0 var(--st-gutter); }
+#contents .st-cats .st-marquee + .st-marquee { margin-top:clamp(10px, 1.2vw, 20px); }
+
+.st-tile {
+	position:relative;
+	display:block;
+	flex:0 0 auto;
+	width:clamp(150px, 15vw, 230px);
+	text-decoration:none;
+	overflow:hidden;
+	background:var(--st-bg-alt);
+}
+.st-tile__media { position:relative; aspect-ratio:3/4; overflow:hidden; display:block; }
+.st-tile__media img,
+.st-tile__media video {
+	position:absolute;
+	inset:0;
+	width:100%;
+	height:100%;
+	object-fit:cover;
+	display:block;
+}
+.st-tile__media video { opacity:0; transition:opacity .4s linear; }
+/* 타일에도 하단 먹 레이어 — 라벨이 어떤 프레임에서도 읽힌다 */
+.st-tile__media::after {
+	content:'';
+	position:absolute;
+	inset:0;
+	z-index:1;
+	background:linear-gradient(180deg, rgba(0,0,0,0) 45%, rgba(0,0,0,.72) 100%);
+	pointer-events:none;
+}
+.st-tile:hover .st-tile__media video,
+.st-tile:focus-within .st-tile__media video { opacity:1; }
+.st-tile__label {
+	position:absolute;
+	left:10px;
+	right:10px;
+	bottom:10px;
+	z-index:2;
+	display:flex;
+	align-items:baseline;
+	justify-content:space-between;
+	gap:8px;
+	font-family:var(--st-label) !important;
+	font-size:var(--st-fs-xs);
+	font-weight:600;
+	letter-spacing:.1em;
+	text-transform:uppercase;
+	color:var(--st-invert);
+	text-shadow:0 1px 8px rgba(0,0,0,.5);
+}
+.st-tile__count { color:var(--st-red); }
+
+/* --------------------------------------------------------------------------
+   FILM — 스크롤에 따라 화면을 채우는 영상
+   -------------------------------------------------------------------------- */
+#contents .st-film { padding:0; }
+#contents .st-film .main_title { padding:0 var(--st-gutter); }
+.st-film__frame {
+	position:relative;
+	overflow:hidden;
+	background:var(--st-ink);
+	aspect-ratio:16/9;
+	margin:0 var(--st-gutter);
+	transition:margin .6s var(--st-ease);
+}
+html.st-motion .st-film__frame.is-in { margin:0; }
+.st-film__frame video {
+	position:absolute;
+	inset:0;
+	width:100%;
+	height:100%;
+	object-fit:cover;
+	display:block;
+}
+/* FILM 도 같은 먹 레이어. DJ 영상이 조명 때문에 밝아 히어로보다 강하게 덮는다. */
+.st-film__frame::after {
+	content:'';
+	position:absolute;
+	inset:0;
+	z-index:1;
+	background:
+		linear-gradient(180deg,
+			rgba(0,0,0,.55) 0%,
+			rgba(0,0,0,.14) 34%,
+			rgba(0,0,0,.34) 66%,
+			rgba(0,0,0,.88) 100%),
+		linear-gradient(90deg, rgba(0,0,0,.52) 0%, rgba(0,0,0,0) 52%),
+		rgba(0,0,0,.16);
+	pointer-events:none;
+}
+.st-film__caption {
+	position:absolute;
+	left:var(--st-gutter);
+	bottom:var(--st-gutter);
+	z-index:2;
+	color:var(--st-invert);
+}
+.st-film__caption .st-world__line { font-size:clamp(28px, 5vw, 78px); }
+
+/* --------------------------------------------------------------------------
+   스크롤 진행 레일 (PC)
+   -------------------------------------------------------------------------- */
+.st-rail {
+	position:fixed;
+	right:14px;
+	top:50%;
+	transform:translateY(-50%);
+	z-index:900;
+	display:flex;
+	flex-direction:column;
+	gap:10px;
+	align-items:flex-end;
+}
+.st-rail__dot {
+	display:flex;
+	align-items:center;
+	gap:8px;
+	padding:0;
+	border:0;
+	background:none;
+	cursor:pointer;
+	color:var(--st-ink-35);
+}
+.st-rail__dot i {
+	display:block;
+	width:16px;
+	height:1px;
+	background:currentColor;
+	transition:width .35s var(--st-ease), background .35s linear;
+}
+.st-rail__dot span {
+	font-family:var(--st-label) !important;
+	font-size:9px;
+	font-weight:600;
+	letter-spacing:.12em;
+	text-transform:uppercase;
+	white-space:nowrap;
+	opacity:0;
+	transform:translateX(6px);
+	transition:opacity .3s var(--st-ease), transform .3s var(--st-ease);
+	order:-1;
+}
+.st-rail:hover .st-rail__dot span { opacity:1; transform:none; }
+.st-rail__dot.is-active { color:var(--st-red); }
+.st-rail__dot.is-active i { width:28px; }
+.st-rail__dot:hover { color:var(--st-ink); }
+
+@media all and (max-width:1024px) {
+	.st-rail { display:none; }
+	.st-world__stage { height:88svh; }
+	.st-film__frame { aspect-ratio:4/5; margin:0; }
+}
+
+/* ==========================================================================
+   TEAR — 찢어진 종이로 갈라놓은 2분할
+   --------------------------------------------------------------------------
+   왼쪽은 영상, 오른쪽은 스틸. 두 장을 겹쳐 두고 오른쪽만 톱니 폴리곤으로
+   잘라내면 그 경계가 종이를 찢은 결처럼 보인다.
+   흰 섬유는 이미지를 따로 만들지 않고 drop-shadow 로 뽑는다 —
+   drop-shadow 는 clip-path 로 잘린 알파를 따라가므로 톱니 그대로 흰 테가 생긴다.
+
+   스크롤하면 찢긴 선만 좌우로 움직인다:
+   패널 B 를 --st-tear-x 만큼 밀면 폴리곤도 같이 밀리는데,
+   안쪽 미디어를 반대로 같은 양만큼 되밀어 사진은 제자리에 붙잡아 둔다.
+   ========================================================================== */
+#contents .st-tear .main_title { padding:0 var(--st-gutter); }
+
+.st-tear__stage {
+	position:relative;
+	width:100%;
+	height:min(100svh, 980px);
+	overflow:hidden;
+	background:var(--st-ink);
+	--st-tear-x:0px;
+}
+.st-tear__panel {
+	position:absolute;
+	inset:0;
+	display:block;
+	text-decoration:none;
+	color:var(--st-invert);
+	overflow:hidden;
+}
+/* 각 사진은 자기 쪽 절반 칸 안에서 구도를 잡는다.
+   패널 자체는 잘라내기 때문에 화면 전체를 덮지만, 사진까지 전체 폭에 맞추면
+   세로 컷이 가로로 늘어나 얼굴이 화면 밖으로 나갈 만큼 확대된다.
+   --st-tear-over 만큼 가운데를 넘겨 깔아, 찢긴 선이 좌우로 밀려도
+   그 아래에서 바탕이 드러나지 않게 한다. */
+.st-tear__stage { --st-tear-over:96px; }
+.st-tear__media { position:absolute; inset:0; display:block; }
+.st-tear__panel--a .st-tear__media { right:calc(50% - var(--st-tear-over)); }
+.st-tear__panel--b .st-tear__media { left:calc(50% - var(--st-tear-over)); }
+.st-tear__media img,
+.st-tear__media video {
+	position:absolute; inset:0;
+	width:100%; height:100%;
+	object-fit:cover;
+	display:block;
+}
+.st-tear__media video { opacity:0; transition:opacity .45s var(--st-ease); }
+.st-tear__panel--a.is-playing .st-tear__media video { opacity:1; }
+
+/* 오른쪽 패널 — 톱니로 잘라내고 흰 섬유 테를 덧댄다 */
+.st-tear__panel--b {
+	clip-path:polygon(51.02% 0%, 50.49% 2.17%, 50.83% 4.35%, 51.49% 6.52%, 50.85% 8.7%, 50.53% 10.87%, 51.09% 13.04%, 51.19% 15.22%, 49.81% 17.39%, 51.5% 19.57%, 50.24% 21.74%, 50.29% 23.91%, 51.71% 26.09%, 50.06% 28.26%, 50.51% 30.43%, 49.71% 32.61%, 49.54% 34.78%, 50.31% 36.96%, 50.46% 39.13%, 50.02% 41.3%, 49.72% 43.48%, 48.43% 45.65%, 49.35% 47.83%, 49.17% 50%, 48.74% 52.17%, 50.03% 54.35%, 48.71% 56.52%, 50.05% 58.7%, 48.94% 60.87%, 48.71% 63.04%, 49.82% 65.22%, 49.76% 67.39%, 49.88% 69.57%, 49.72% 71.74%, 49.72% 73.91%, 49.61% 76.09%, 48.51% 78.26%, 49.22% 80.43%, 49.14% 82.61%, 50.29% 84.78%, 50.09% 86.96%, 50.19% 89.13%, 51.22% 91.3%, 50.5% 93.48%, 51.5% 95.65%, 50.92% 97.83%, 50.22% 100%, 100% 100%, 100% 0%);
+	filter:drop-shadow(-2px 0 0 var(--st-paper)) drop-shadow(-5px 0 0 rgba(255,255,255,.55)) drop-shadow(-10px 0 9px rgba(0,0,0,.34));
+	transform:translate3d(var(--st-tear-x), 0, 0);
+	overflow:visible;
+	z-index:2;
+}
+.st-tear__panel--b .st-tear__media { transform:translate3d(calc(var(--st-tear-x) * -1), 0, 0); }
+/* 사진은 바깥쪽(각자 화면 가장자리)을 기준으로 붙여, 가운데 넘김분이
+   구도를 안쪽으로 밀지 않게 한다. */
+.st-tear__panel--a .st-tear__media img,
+.st-tear__panel--a .st-tear__media video { object-position:30% 50%; }
+.st-tear__panel--b .st-tear__media img { object-position:70% 50%; }
+
+/* 라벨 — 각 패널 아래쪽. 오른쪽 라벨은 찢긴 선을 따라 같이 움직이지 않도록
+   되밀어 둔 미디어 쪽이 아니라 별도로 고정한다. */
+.st-tear__label {
+	position:absolute;
+	left:var(--st-gutter);
+	bottom:clamp(18px, 3.2vw, 44px);
+	display:flex;
+	align-items:baseline;
+	gap:.32em;
+	font-family:var(--st-display);
+	font-size:clamp(34px, 5.4vw, 86px);
+	line-height:.92;
+	letter-spacing:-.01em;
+	text-transform:uppercase;
+	white-space:nowrap;
+	z-index:3;
+	pointer-events:none;
+}
+.st-tear__panel--b .st-tear__label {
+	left:auto;
+	right:var(--st-gutter);
+	transform:translate3d(calc(var(--st-tear-x) * -1), 0, 0);
+}
+.st-tear__sub {
+	font-family:var(--st-label);
+	font-style:normal;
+	font-size:clamp(10px, 1vw, 15px);
+	letter-spacing:.14em;
+	opacity:.8;
+}
+/* 먹 레이어 — 영상 섹션과 같은 톤.
+   두 컷 다 스튜디오 배경이 밝은 회색이라, 아래쪽만 눌러서는 위쪽이 떠 보인다.
+   위아래를 모두 눌러주고 전체에 옅은 먹을 한 겹 깔아 한 덩어리로 만든다.
+   패널 B 는 clip-path 안쪽이라 이 먹도 찢긴 결을 그대로 따라간다. */
+.st-tear__panel::after {
+	content:'';
+	position:absolute;
+	inset:0;
+	background:
+		linear-gradient(to bottom,
+			rgba(0,0,0,.58) 0%,
+			rgba(0,0,0,.20) 20%,
+			rgba(0,0,0,.04) 44%,
+			rgba(0,0,0,.40) 74%,
+			rgba(0,0,0,.86) 100%),
+		linear-gradient(90deg, rgba(0,0,0,.34) 0%, rgba(0,0,0,0) 60%),
+		rgba(0,0,0,.16);
+	pointer-events:none;
+	z-index:2;
+}
+/* 오른쪽 칸은 가로 먹을 반대쪽(바깥)에서 걸어 대칭을 맞춘다 */
+.st-tear__panel--b::after {
+	background:
+		linear-gradient(to bottom,
+			rgba(0,0,0,.58) 0%,
+			rgba(0,0,0,.20) 20%,
+			rgba(0,0,0,.04) 44%,
+			rgba(0,0,0,.40) 74%,
+			rgba(0,0,0,.86) 100%),
+		linear-gradient(270deg, rgba(0,0,0,.34) 0%, rgba(0,0,0,0) 60%),
+		rgba(0,0,0,.16);
+}
+
+/* 라벨 색 — st-sub.css 의 `#contents a { color:inherit }` 가 (0,1,1) 로
+   .st-tear__panel 의 색 지정을 이긴다. 라벨은 항상 먹 위에 얹히므로
+   같은 수준의 특이도로 흰색을 못 박는다. */
+#contents .st-tear__panel,
+#contents .st-tear__panel .st-tear__label,
+#contents .st-tear__stage .st-tear__seam { color:var(--st-invert); }
+
+/* 찢긴 선 위에 얹는 수량 표시 */
+.st-tear__seam {
+	position:absolute;
+	left:50%;
+	bottom:clamp(20px, 3.4vw, 48px);
+	transform:translate3d(calc(-50% + var(--st-tear-x)), 0, 0);
+	z-index:4;
+	font-size:clamp(10px, .95vw, 14px);
+	letter-spacing:.16em;
+	color:var(--st-invert);
+	mix-blend-mode:difference;
+	pointer-events:none;
+}
+
+
+@media all and (max-width:767px) {
+	/* 좁은 화면에서는 좌우로 쪼개면 둘 다 기둥처럼 가늘어진다.
+	   위아래로 쌓고 찢긴 결도 가로로 눕힌다. */
+	.st-tear__stage { height:min(104svh, 760px); --st-tear-x:0px; }
+	.st-tear__panel--b {
+		clip-path:polygon(0% 100%, 100% 100%, 100% 51.8%, 97.83% 51.88%, 95.65% 50.62%, 93.48% 52.7%, 91.3% 52.39%, 89.13% 50.09%, 86.96% 50.99%, 84.78% 50.78%, 82.61% 49.91%, 80.43% 48.19%, 78.26% 48.61%, 76.09% 49.3%, 73.91% 48.58%, 71.74% 49.65%, 69.57% 49.76%, 67.39% 48.06%, 65.22% 49.93%, 63.04% 49.22%, 60.87% 50.21%, 58.7% 48.54%, 56.52% 48.98%, 54.35% 47.81%, 52.17% 48.91%, 50% 48.95%, 47.83% 47.35%, 45.65% 47.69%, 43.48% 48.57%, 41.3% 49.67%, 39.13% 48.36%, 36.96% 50.8%, 34.78% 50.99%, 32.61% 51.32%, 30.43% 51.83%, 28.26% 51.73%, 26.09% 51.98%, 23.91% 50.41%, 21.74% 50.59%, 19.57% 51.29%, 17.39% 50.05%, 15.22% 50.55%, 13.04% 52.18%, 10.87% 49.44%, 8.7% 51.97%, 6.52% 51.77%, 4.35% 52.4%, 2.17% 51.58%, 0% 52.27%);
+		filter:drop-shadow(0 -2px 0 var(--st-paper)) drop-shadow(0 -5px 0 rgba(255,255,255,.55)) drop-shadow(0 -10px 9px rgba(0,0,0,.34));
+		transform:translate3d(0, var(--st-tear-x), 0);
+	}
+	.st-tear__panel--a .st-tear__media { right:0; bottom:calc(50% - var(--st-tear-over)); }
+	.st-tear__panel--b .st-tear__media { left:0; top:calc(50% - var(--st-tear-over)); }
+	.st-tear__panel--b .st-tear__media { transform:translate3d(0, calc(var(--st-tear-x) * -1), 0); }
+	.st-tear__panel--a .st-tear__media img,
+	.st-tear__panel--a .st-tear__media video,
+	.st-tear__panel--b .st-tear__media img { object-position:50% 40%; }
+	/* 위 칸은 위쪽에, 아래 칸은 아래쪽에 라벨을 둔다 */
+	.st-tear__panel--a .st-tear__label { bottom:auto; top:clamp(14px, 4vw, 30px); }
+	.st-tear__panel--b .st-tear__label {
+		left:var(--st-gutter); right:auto;
+		transform:translate3d(0, calc(var(--st-tear-x) * -1), 0);
+	}
+	.st-tear__panel--a::after {
+		top:0; bottom:auto; height:38%;
+		background:linear-gradient(to bottom, rgba(0,0,0,.72) 0%, rgba(0,0,0,.3) 42%, rgba(0,0,0,0) 100%);
+	}
+	.st-tear__seam { left:auto; right:var(--st-gutter); bottom:50%; transform:none; }
+}
+
+
+/* ==========================================================================
+   MOTION — SERAPHIN 글자 사이로 영상이 보이다가 퍼져서 화면을 덮는다
+   --------------------------------------------------------------------------
+   글자를 마스크로 쓰려면 폰트가 필요한데, 데이터 URI SVG 는 격리된 문서라
+   웹폰트를 못 받는다. 그래서 SVG 를 문서 안에 두고 문서 폰트(Anton)를 그대로 쓴다.
+   움직이는 값은 --st-type-p (0~1) 하나:
+     - 글자 크기  : 19vw -> 150vw  (글자가 커지며 획 사이가 벌어진다)
+     - 채움 사각형: 0.72 지점부터 나타나 마지막에 화면을 완전히 연다
+       (글자만으로는 획 사이 구멍이 끝까지 남는다)
+   히어로의 스크럽, 찢어진 2분할의 clip-path 와 겹치지 않는 네 번째 장치.
+   ========================================================================== */
+#contents .st-type .main_title { padding:0 var(--st-gutter); }
+
+/* SERAPHIN 글자 마스크 — Anton 으로 짠 글자를 외곽선 패스로 굳힌 것.
+   iOS·macOS 사파리는 문서 안 <mask id> 를 HTML 요소에 제대로 걸지 못한다
+   (웹킷 실측: 글자가 좌상단에 작게 박히거나 마스크가 통째로 무시된다).
+   데이터 URI 마스크는 같은 조건에서 정확히 동작한다. 다만 데이터 URI 안에서는
+   웹폰트가 실리지 않으므로 글자가 아니라 패스여야 한다 —
+   문구를 바꾸려면 폰트에서 패스를 다시 떠야 한다. */
+.st-type__track {
+	position:relative;
+	width:100%;
+	--st-type-p:0;
+	/* 글자 폭. 스크롤에 따라 커진다 (원본 font-size 19vw~150vw 와 같은 보폭) */
+	--st-type-mask-w:calc(65vw + var(--st-type-p, 0) * 445vw);
+	/* 끝에서 획 사이 구멍까지 열어 화면을 채우던 flood 사각형의 대체.
+	   투명도가 아니라 '폭' 으로 연다 — rgba() 알파 자리에 var 를 넣으면
+	   웹킷이 그 레이어를 통째로 무효로 버린다(실측). */
+	--st-type-flood-w:calc(max(0, var(--st-type-p, 0) - 0.72) * 420%);
+}
+.st-type__stage {
+	position:sticky;
+	top:0;
+	height:100svh;
+	overflow:hidden;
+	display:flex;
+	flex-direction:column;
+	align-items:center;
+	/* 문구는 위, CTA 는 아래. 가운데는 글자가 자라는 자리로 비워둔다 */
+	justify-content:space-between;
+	padding:clamp(70px, 12vh, 140px) var(--st-gutter) clamp(30px, 6vh, 72px);
+	box-sizing:border-box;
+	background:var(--st-bg, #fff9f7);
+}
+/* 마스크용 SVG 는 무대와 같은 크기여야 한다.
+   width/height 가 0 이면 그 안의 x="50%" 가 '0 의 50%' = 0 으로 풀려
+   글자가 무대 중앙이 아니라 좌상단 (0,0) 에 중심을 잡는다.
+   <defs> 안의 내용은 그려지지 않으므로 무대를 덮어도 보이는 건 없다. */
+.st-type__defs { position:absolute; inset:0; width:100%; height:100%; overflow:visible; pointer-events:none; }
+
+/* 무대 바닥을 먹으로 떨어뜨린다 — 아래에 붙는 파티 먹 띠와 색이 이어져야
+   두 구간이 한 화면처럼 읽힌다. 글자 마스크 뒤(z-index 0)에 깔아
+   글자 안쪽 영상은 가리지 않는다. */
+.st-type__stage::after {
+	content:'';
+	position:absolute;
+	left:0; right:0; bottom:0;
+	height:34%;
+	background:linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,.55) 58%, rgba(0,0,0,.97) 100%);
+	pointer-events:none;
+	z-index:1;
+	/* 스크롤 초반에는 무대가 아이보리다. 그때부터 바닥이 검으면 어색하므로
+	   글자가 퍼지는 만큼(--st-type-p) 같이 떠오르게 한다.
+	   끝에 도달하면 아래 파티 먹 띠와 색이 맞는다. */
+	opacity:calc(min(1, var(--st-type-p, 0) * 1.6));
+}
+
+.st-type__mask {
+	position:absolute;
+	inset:0;
+	/* 예전 모바일 대체 연출(clip-path 로 가운데만 열기) 이 캐시된 CSS 에 남아 있으면
+	   새 마스크를 잘라낸다. 확실히 꺼둔다. */
+	clip-path:none;
+	/* 1층 = SERAPHIN 글자, 2층 = 마지막에 화면을 여는 흰 판.
+	   URI 를 var 로 넘기면 웹킷이 크기를 잘못 잡으므로 직접 적는다(실측). */
+	-webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='3402' height='875' viewBox='0 0 3402 875'%3E%3Cpath fill='%23fff' d='M221.68 875Q104 875 52 816.41Q0 757.81 0 629.88L0 545.90L169.92 545.90L169.92 653.32Q169.92 683.11 178.96 699.95Q187.99 716.80 210.45 716.80Q233.89 716.80 242.92 703.13Q251.95 689.45 251.95 658.20Q251.95 618.65 244.14 592.04Q236.33 565.43 217.04 541.26Q197.75 517.09 163.57 484.86L86.43 411.62Q0 330.08 0 225.10Q0 115.23 51.03 57.62Q102.05 0 198.73 0Q316.89 0 366.46 62.99Q416.02 125.98 416.02 254.39L241.21 254.39L241.21 195.31Q241.21 177.73 231.20 167.97Q221.19 158.20 204.10 158.20Q183.59 158.20 174.07 169.68Q164.55 181.15 164.55 199.22Q164.55 217.29 174.32 238.28Q184.08 259.28 212.89 286.62L312.01 381.84Q341.80 410.16 366.70 441.65Q391.60 473.14 406.74 514.89Q421.88 556.64 421.88 616.70Q421.88 737.79 377.20 806.40Q332.52 875 221.68 875M823.98 867.19L469 867.19L469 7.81L812.75 7.81L812.75 173.83L643.81 173.83L643.81 341.31L805.92 341.31L805.92 502.93L643.81 502.93L643.81 699.71L823.98 699.71L823.98 867.19M1044.45 867.19L870.63 867.19L870.63 7.81L1134.30 7.81Q1200.21 7.81 1233.91 37.84Q1267.60 67.87 1279.07 121.83Q1290.55 175.78 1290.55 248.54Q1290.55 318.85 1272.72 360.84Q1254.90 402.83 1205.59 418.95Q1246.11 427.25 1262.47 459.23Q1278.83 491.21 1278.83 541.99L1278.83 867.19L1109.39 867.19L1109.39 530.76Q1109.39 493.16 1094.01 484.13Q1078.63 475.10 1044.45 475.10L1044.45 867.19M1045.43 166.99L1045.43 326.17L1086.93 326.17Q1122.58 326.17 1122.58 248.54Q1122.58 198.24 1114.77 182.62Q1106.95 166.99 1085.47 166.99L1045.43 166.99M1480.74 867.19L1313.75 867.19L1396.76 7.81L1688.26 7.81L1769.80 867.19L1607.21 867.19L1595 728.52L1491.48 728.52L1480.74 867.19M1536.41 154.30L1503.69 591.31L1581.82 591.31L1544.22 154.30L1536.41 154.30M1981.48 867.19L1812.54 867.19L1812.54 7.81L2039.59 7.81Q2110.88 7.81 2152.63 39.55Q2194.38 71.29 2212.44 129.88Q2230.51 188.48 2230.51 269.53Q2230.51 347.66 2215.37 405.52Q2200.23 463.38 2161.42 495.12Q2122.60 526.86 2051.31 526.86L1981.48 526.86L1981.48 867.19M1981.48 164.55L1981.48 372.56L1991.25 372.56Q2039.10 372.56 2049.84 345.70Q2060.59 318.85 2060.59 266.60Q2060.59 217.77 2050.09 191.16Q2039.59 164.55 2000.53 164.55L1981.48 164.55M2445.61 867.19L2274.71 867.19L2274.71 7.81L2445.61 7.81L2445.61 314.94L2526.66 314.94L2526.66 7.81L2697.56 7.81L2697.56 867.19L2526.66 867.19L2526.66 477.54L2445.61 477.54L2445.61 867.19M2921.93 867.19L2755.92 867.19L2755.92 7.81L2921.93 7.81L2921.93 867.19M3148.26 867.19L2980.29 867.19L2980.29 7.81L3157.05 7.81L3236.15 419.43L3236.15 7.81L3402.17 7.81L3402.17 867.19L3234.20 867.19L3148.26 437.50'/%3E%3C/svg%3E"), linear-gradient(#fff, #fff);
+	        mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='3402' height='875' viewBox='0 0 3402 875'%3E%3Cpath fill='%23fff' d='M221.68 875Q104 875 52 816.41Q0 757.81 0 629.88L0 545.90L169.92 545.90L169.92 653.32Q169.92 683.11 178.96 699.95Q187.99 716.80 210.45 716.80Q233.89 716.80 242.92 703.13Q251.95 689.45 251.95 658.20Q251.95 618.65 244.14 592.04Q236.33 565.43 217.04 541.26Q197.75 517.09 163.57 484.86L86.43 411.62Q0 330.08 0 225.10Q0 115.23 51.03 57.62Q102.05 0 198.73 0Q316.89 0 366.46 62.99Q416.02 125.98 416.02 254.39L241.21 254.39L241.21 195.31Q241.21 177.73 231.20 167.97Q221.19 158.20 204.10 158.20Q183.59 158.20 174.07 169.68Q164.55 181.15 164.55 199.22Q164.55 217.29 174.32 238.28Q184.08 259.28 212.89 286.62L312.01 381.84Q341.80 410.16 366.70 441.65Q391.60 473.14 406.74 514.89Q421.88 556.64 421.88 616.70Q421.88 737.79 377.20 806.40Q332.52 875 221.68 875M823.98 867.19L469 867.19L469 7.81L812.75 7.81L812.75 173.83L643.81 173.83L643.81 341.31L805.92 341.31L805.92 502.93L643.81 502.93L643.81 699.71L823.98 699.71L823.98 867.19M1044.45 867.19L870.63 867.19L870.63 7.81L1134.30 7.81Q1200.21 7.81 1233.91 37.84Q1267.60 67.87 1279.07 121.83Q1290.55 175.78 1290.55 248.54Q1290.55 318.85 1272.72 360.84Q1254.90 402.83 1205.59 418.95Q1246.11 427.25 1262.47 459.23Q1278.83 491.21 1278.83 541.99L1278.83 867.19L1109.39 867.19L1109.39 530.76Q1109.39 493.16 1094.01 484.13Q1078.63 475.10 1044.45 475.10L1044.45 867.19M1045.43 166.99L1045.43 326.17L1086.93 326.17Q1122.58 326.17 1122.58 248.54Q1122.58 198.24 1114.77 182.62Q1106.95 166.99 1085.47 166.99L1045.43 166.99M1480.74 867.19L1313.75 867.19L1396.76 7.81L1688.26 7.81L1769.80 867.19L1607.21 867.19L1595 728.52L1491.48 728.52L1480.74 867.19M1536.41 154.30L1503.69 591.31L1581.82 591.31L1544.22 154.30L1536.41 154.30M1981.48 867.19L1812.54 867.19L1812.54 7.81L2039.59 7.81Q2110.88 7.81 2152.63 39.55Q2194.38 71.29 2212.44 129.88Q2230.51 188.48 2230.51 269.53Q2230.51 347.66 2215.37 405.52Q2200.23 463.38 2161.42 495.12Q2122.60 526.86 2051.31 526.86L1981.48 526.86L1981.48 867.19M1981.48 164.55L1981.48 372.56L1991.25 372.56Q2039.10 372.56 2049.84 345.70Q2060.59 318.85 2060.59 266.60Q2060.59 217.77 2050.09 191.16Q2039.59 164.55 2000.53 164.55L1981.48 164.55M2445.61 867.19L2274.71 867.19L2274.71 7.81L2445.61 7.81L2445.61 314.94L2526.66 314.94L2526.66 7.81L2697.56 7.81L2697.56 867.19L2526.66 867.19L2526.66 477.54L2445.61 477.54L2445.61 867.19M2921.93 867.19L2755.92 867.19L2755.92 7.81L2921.93 7.81L2921.93 867.19M3148.26 867.19L2980.29 867.19L2980.29 7.81L3157.05 7.81L3236.15 419.43L3236.15 7.81L3402.17 7.81L3402.17 867.19L3234.20 867.19L3148.26 437.50'/%3E%3C/svg%3E"), linear-gradient(#fff, #fff);
+	-webkit-mask-repeat:no-repeat, no-repeat;
+	        mask-repeat:no-repeat, no-repeat;
+	-webkit-mask-position:center center, center center;
+	        mask-position:center center, center center;
+	-webkit-mask-size:var(--st-type-mask-w) auto, var(--st-type-flood-w) 100%;
+	        mask-size:var(--st-type-mask-w) auto, var(--st-type-flood-w) 100%;
+}
+.st-type__glyph {
+	font-family:var(--st-display);
+	font-size:calc(19vw + var(--st-type-p, 0) * 131vw);
+	letter-spacing:-0.01em;
+}
+.st-type__flood { opacity:calc(max(0, var(--st-type-p, 0) - 0.72) * 3.6); }
+
+.st-type__video {
+	position:absolute; inset:0;
+	width:100%; height:100%;
+	object-fit:cover;
+	display:block;
+}
+/* 먹 레이어 — 다른 영상 구간과 같은 톤. 마스크 안쪽이라 글자 모양을 그대로 따라간다. */
+.st-type__mask::after {
+	content:'';
+	position:absolute; inset:0;
+	background:
+		linear-gradient(to bottom, rgba(0,0,0,.40) 0%, rgba(0,0,0,.04) 38%, rgba(0,0,0,.30) 72%, rgba(0,0,0,.72) 88%, rgba(0,0,0,.97) 100%),
+		rgba(0,0,0,.10);
+	pointer-events:none;
+}
+
+/* 글자가 작을 때 위쪽을 채우는 안내 문구. 글자가 커지면 물러난다. */
+.st-type__lead {
+	position:relative;
+	z-index:2;
+	max-width:min(760px, 86vw);
+	margin:0;
+	text-align:center;
+	/* 레퍼런스처럼 본문도 디스플레이 서체로 — 대문자 + 좁은 자간이라
+	   문단인데도 그래픽처럼 읽힌다. 아래 글자 마스크와 같은 서체라 한 덩어리가 된다. */
+	font-family:var(--st-display);
+	font-size:clamp(15px, 1.5vw, 23px);
+	line-height:1.22;
+	letter-spacing:.005em;
+	text-transform:uppercase;
+	color:var(--st-ink);
+	opacity:calc(1 - min(1, var(--st-type-p, 0) * 2.6));
+	transform:translate3d(0, calc(var(--st-type-p, 0) * -18px), 0);
+	pointer-events:none;
+}
+.st-type__lead em { font-style:normal; color:var(--st-red); }
+
+.st-type__cta {
+	position:relative;
+	z-index:2;
+	mix-blend-mode:difference;
+}
+#contents .st-type__cta { color:var(--st-invert); }
+
+/* 좁은 화면은 글자를 조금 크게 시작한다 */
+@media all and (max-width:1024px) {
+	.st-type__track { --st-type-mask-w:calc(76vw + var(--st-type-p, 0) * 540vw); }
+}
+
+@media all and (max-width:767px) {
+	.st-type__stage { top:var(--st-topbar-h, 0px); height:calc(100svh - var(--st-topbar-h, 0px)); }
+	/* 좁은 화면에서는 글자가 금방 화면을 넘으므로 시작을 키우고 끝을 낮춘다 */
+	.st-type__glyph { font-size:calc(46vw + var(--st-type-p, 0) * 180vw); }
+	.st-type__lead { font-size:15px; }
+}
+
+/* ==========================================================================
+   REEL — 스크럽하지 않는 전체 화면 루프 영상 (CAMPAIGN)
+   --------------------------------------------------------------------------
+   히어로가 이미 스크럽을 쓰므로 여기서는 반복하지 않는다.
+   그냥 재생되는 영상 한 편. 스크롤 거리를 먹지 않아 페이지도 짧아진다.
+   ========================================================================== */
+#contents .st-reel .main_title { padding:0 var(--st-gutter); }
+
+.st-reel__frame {
+	position:relative;
+	width:100%;
+	height:min(94svh, 900px);
+	overflow:hidden;
+	background:var(--st-ink);
+}
+.st-reel__video {
+	position:absolute; inset:0;
+	width:100%; height:100%;
+	object-fit:cover;
+	display:block;
+}
+.st-reel__frame::after {
+	content:'';
+	position:absolute; inset:0;
+	background:
+		linear-gradient(to bottom, rgba(0,0,0,.52) 0%, rgba(0,0,0,.16) 22%, rgba(0,0,0,.06) 46%, rgba(0,0,0,.40) 76%, rgba(0,0,0,.86) 100%),
+		linear-gradient(90deg, rgba(0,0,0,.40) 0%, rgba(0,0,0,0) 62%),
+		rgba(0,0,0,.14);
+	pointer-events:none;
+	z-index:1;
+}
+.st-reel__copy {
+	position:absolute;
+	left:var(--st-gutter);
+	bottom:clamp(26px, 4.4vw, 68px);
+	z-index:2;
+	display:flex;
+	flex-direction:column;
+	align-items:flex-start;
+	gap:clamp(18px, 2.4vw, 38px);
+	color:var(--st-invert);
+}
+#contents .st-reel__copy,
+#contents .st-reel__copy a { color:var(--st-invert); }
+.st-reel__eyebrow { font-size:var(--st-fs-xs); letter-spacing:.16em; }
+.st-reel__line {
+	font-family:var(--st-display);
+	font-size:clamp(44px, 8.4vw, 150px);
+	line-height:.9;
+	letter-spacing:-.015em;
+	text-transform:uppercase;
+}
+
+/* 모션을 끈 경우(접근성 설정 / ?stmotion=off) — 스크롤로 여는 동작이 없으니
+   글자 마스크도 걷어내고 영상 한 판만 보여준다. */
+html:not(.st-motion) .st-type__track { height:auto !important; }
+html:not(.st-motion) .st-type__stage { position:relative; height:auto; aspect-ratio:16/9; }
+html:not(.st-motion) .st-type__mask { position:relative; -webkit-mask:none; mask:none; aspect-ratio:16/9; }
+html:not(.st-motion) .st-type__lead { position:absolute; opacity:1; transform:none; }
+
+
+/* 타일 줄 머리글 — 큰 시각물(영상/찢어진 무대) 바로 아래 오는 줄에 붙인다.
+   두 곳(캠페인의 분위기 줄, 찢어진 섹션의 품목 줄)이 같은 규칙을 써서
+   간격이 구조적으로 같아진다. 값을 한 곳에서만 바꾸면 둘 다 따라온다. */
+.st-striphead {
+	margin:clamp(22px, 3vw, 44px) var(--st-gutter) clamp(12px, 1.4vw, 20px);
+	font-size:var(--st-fs-xs);
+	letter-spacing:.16em;
+	color:var(--st-ink-soft, #6b6b6b);
+}
+.st-marquee-spacer {
+	height:6px;
+	margin:clamp(11px, 1.5vw, 22px) 0 clamp(6px, .7vw, 10px);
+}
+.st-marquee + .st-striphead { margin-top:0; }
+
+/* Performance: isolate painted stages and avoid multi-pass shadows over video. */
+.st-reel__frame, .st-tear__stage, .st-type__stage { contain:paint; }
+.st-tear__panel--b { filter:none; }
+@media all and (max-width:1024px) {
+	.st-tear__panel--b { filter:none; }
+	html.st-motion .st-event__night [data-st-flash-item] {
+		filter:none;
+		transition:opacity .62s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1);
+	}
+}
+
+/* A static SVG cut-out scales above the video; video decoding no longer repaints a mask. */
+.st-type-composited .st-type__mask { -webkit-mask:none; mask:none; }
+.st-type__cover { position:absolute; inset:0; width:100%; height:100%; z-index:1; pointer-events:none; transform-origin:center; will-change:transform, opacity; }
+
+.st-type-composited .st-type__stage::after { display:none; }
+.st-type__shade { position:absolute; left:0; right:0; bottom:0; height:34%; z-index:1; pointer-events:none; opacity:0; background:linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,.55) 58%, rgba(0,0,0,.97) 100%); }
+
+.st-tear__seam { mix-blend-mode:normal; }
+html.st-motion .st-event__night [data-st-flash-item] { filter:none; transition:opacity .62s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1); }

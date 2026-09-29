@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="220" viewBox="0 0 900 220" role="img" aria-labelledby="title desc">
+  <title id="title">상품 후기 작성 유도 배너 예시</title>
+  <desc id="desc">상품 후기 영역 위에 포토리뷰 안내와 후기 작성 버튼을 보여주는 화면 예시</desc>
+  <rect width="900" height="220" rx="22" fill="#f4eee7"/>
+  <text x="46" y="52" fill="#a85f48" font-family="Arial,sans-serif" font-size="14" font-weight="700" letter-spacing="2">PHOTO REVIEW</text>
+  <text x="46" y="99" fill="#302821" font-family="Arial,sans-serif" font-size="23" font-weight="700">함께한 순간을 후기와 사진으로 남겨주세요</text>
+  <text x="46" y="136" fill="#786e63" font-family="Arial,sans-serif" font-size="15">리뷰 참여 혜택 안내를 상품 후기 영역 위에 보여줍니다.</text>
+  <rect x="46" y="158" width="174" height="38" rx="19" fill="#332b27"/>
+  <text x="133" y="183" text-anchor="middle" fill="#ffffff" font-family="Arial,sans-serif" font-size="14" font-weight="700">후기 쓰기</text>
+  <rect x="722" y="65" width="132" height="90" rx="16" fill="#ffffff"/>
+  <text x="788" y="106" text-anchor="middle" fill="#bb8952" font-family="Arial,sans-serif" font-size="20" font-weight="700">3,000P</text>
+  <text x="788" y="132" text-anchor="middle" fill="#786e63" font-family="Arial,sans-serif" font-size="12">포토리뷰 혜택 예시</text>
+</svg>

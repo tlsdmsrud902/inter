@@ -1,0 +1,202 @@
+<div class="main_top_banner ez-align-left" data-ez-module="top-banner" data-ez-align="left" data-ez-role="style.color" data-ez-display="visible" data-ez="contents-1uenqh6-1">
+	<div class="top_banner_box_inner">
+		<div class="top_banner_text"><!-- BUYER EDITABLE : 최상단 띠배너 문구·링크 = 스마트디자인 편집창(최상단 배너)에서 수정. 표시/숨김도 거기서 -->
+			<a data-ez-role="a" href="/product/list.html?cate_no=28" data-href="/product/list.html?cate_no=28" target="_self">오래 머물 집을 위한 북유럽 인테리어 · inter</a>
+		</div><!-- //top_banner_text -->
+
+		<div class="top_banner_close" data-ez-role="close">
+			<input type="checkbox" name="chkbox" id="top_banner_box_cloase" value="1" data-ez-role="disable-term"><label for="top_banner_box_cloase" data-ez-role="disable-text">오늘 하루 보지 않기</label>
+			<i aria-hidden="true" class="icon icoClose">닫기</i>
+		</div><!-- //top_banner_close -->
+	</div><!-- //top_banner_box_inner -->
+</div>
+<header id="header" class="layout5" data-ez-layout="layout5" data-ez="contents-1kbhajm-1">
+	<ez-prop data-version="1.0.0" type="layout">
+		<ez-var data-prop="layout" data-namespace="ez.layout.header.layout" data-type="array">
+			<ez-item data-id="layout3" data-name="1단 기본형"></ez-item>
+			<ez-item data-id="layout2" data-name="2단 좌측형"></ez-item>
+			<ez-item data-id="layout4" data-name="2단 혼합형"></ez-item>
+			<ez-item data-id="layout1" data-name="2단 중앙형 (아이콘 하단)"></ez-item>
+			<ez-item data-id="layout5" data-name="2단 중앙형 (아이콘 상단)"></ez-item>
+			<ez-item data-id="layout6" data-name="2단 슬라이딩 메뉴 노출형"></ez-item>
+  	    </ez-var>
+	</ez-prop>
+	<div class="inner">
+		<div class="toparea display_pc_only">
+			<div class="toparea_shoppinginfo">
+				<div module="Layout_multishopList">
+					<button type="button" class="toggle">{$current_language} <i aria-hidden="true" class="icon icoArrowBottom"></i></button>
+					<ul module="Layout_multishopListitem">
+						<li class="{$selected_class}">
+							<a href="//{$shop_domain}/">{$locale_language}</a>
+						</li>
+						<li class="{$selected_class}">
+							<a href="//{$shop_domain}/">{$locale_language}</a>
+						</li>
+					</ul>
+				</div>
+                <div data-ez-group="shopping-info" data-ez-role="list">
+				<ul module="Layout_shoppingInfo">
+					<li class="{$use_mileage|display}"><a href="/myshop/mileage/historyList.html">{$mileage_name} <strong>{$mileage}</strong></a></li>
+					<li class="{$use_deposit|display}"><a href="/myshop/deposits/historyList.html">{$deposit_name} <strong>{$deposit}</strong></a></li>
+					<li class="{$use_coupon_cnt|display}"><a href="/myshop/coupon/coupon.html">쿠폰 <strong>{$coupon_cnt}</strong></a></li>
+					<li class="{$use_interest_prd|display}"><a href="/myshop/wish_list.html">관심상품 <strong>{$interest_prd_cnt}</strong></a></li>
+					<li class="{$use_like_product_cnt|display}">{$like_prd_tag}</li>
+					<li class="{$use_basket_cnt|display}"><a href="/order/basket.html">장바구니 <strong>{$basket_cnt}<span class="{$use_basket_price|display}">({$basket_price})</span></strong></a></li>
+				</ul>
+                </div>
+			</div><!-- //toparea_shoppinginfo -->
+
+			<div class="toparea_state" data-ez-group="top-util-menu" data-ez-role="list">
+				<a data-ez-item="login" module="Layout_statelogoff" href="/member/login.html">LOGIN</a>
+				<a data-ez-item="modify" module="Layout_stateLogon" href="/member/modify.html">내정보수정</a>
+				<a data-ez-item="logout" module="Layout_stateLogon" href="{$action_logout}">LOGOUT</a>
+				<a data-ez-item="order" href="/myshop/order/list.html">주문조회</a>
+				<a data-ez-item="mypage" module="Layout_stateLogon" href="/myshop/index.html">마이페이지</a>
+				<a data-ez-item="recent" href="/product/recent_view_product.html">최근본상품</a>
+				<div class="toparea_state_board">
+					<a data-ez-item="board" href="#none">고객센터 <i aria-hidden="true" class="icon icoArrowBottom"></i></a>
+					<ul module="Layout_BoardInfo">
+						<li><a href="{$link_board_list}">{$board_name}</a></li>
+						<li><a href="{$link_board_list}">{$board_name}</a></li>
+					</ul>
+				</div>
+			</div><!-- //toparea_state -->
+		</div><!-- //toparea -->
+
+		<div class="top_nav_box" id="top_nav_box">
+			<!-- BUYER EDITABLE : 로고 = /layout/basic/js/store-content.js 의 brand.logo. 이 태그의 src 는 스크립트가 막혔을 때만 쓰이는 기본값. 로고 크기 CSS(.st-logo)는 수정 금지 -->
+			<div class="top_logo"><a href="/"><img class="inter-logo-img" src="/SkinImg/inter/logo-inter.webp" alt="inter" width="560" height="200"></a></div><!-- //top_logo -->
+			<div class="top_nav"><a href="javascript:;" class="eNavFold"><i aria-hidden="true" class="icon icoNav"></i></a></div>
+
+			<!-- BUYER EDITABLE : 메뉴 = 카페24 관리자 > 상품 > 상품분류 관리의 최상위 분류(최대 6개)가 자동으로 나온다. 코드 수정 불필요 -->
+			<nav class="top_category st-category-menu st-category-menu--left" aria-label="상품 분류">
+				<!-- 메뉴가 처음부터 보이도록 현재 분류를 미리 넣어 둔다. 분류가 바뀌면 아래 스크립트가 새 목록으로 바꿔 끼운다 -->
+				<ul><li><a href="/product/list.html?cate_no=28">전체 상품</a></li><li><a href="/product/list.html?cate_no=24">거실 · 수납</a></li><li><a href="/product/list.html?cate_no=25">침실 · 패브릭</a></li><li><a href="/product/list.html?cate_no=26">다이닝 · 소품</a></li><li class="inter-sale-menu"><span class="inter-sale-bubble" aria-hidden="true">50%</span><a href="/product/list.html?cate_no=27">SALE</a></li><li><a href="/board/product/list.html?board_no=4">리뷰</a></li><li><a href="javascript:;">커뮤니티</a><ul class="sub_cate01"><li><a href="/board/product/list.html?board_no=1">공지사항</a></li><li><a href="/board/product/list.html?board_no=3">자주묻는질문</a></li><li><a href="/board/product/list.html?board_no=6">상품문의</a></li></ul></li></ul>
+			</nav>
+			<script>
+				(function () {
+					function makeLink(category) {
+						var link = document.createElement('a');
+						// 분류 목록 페이지로 연결 (search.html 에 cate_no 를 붙이면 검색 결과가 비어 상품이 안 나온다)
+						link.href = '/product/list.html' + (category.param || '?cate_no=' + category.cate_no);
+						link.textContent = category.name;
+						return link;
+					}
+
+					function appendCommunity(target, config) {
+						var community = config.community;
+						if (!community || !community.items || !community.items.length) { return; }
+
+						var item = document.createElement('li');
+						var toggle = document.createElement('a');
+						// COMMUNITY 자체는 이동할 곳이 없다(게시판 메인을 안 쓴다).
+						// 클릭이 안 되게 href 를 비워 두고, 드롭다운 항목만 클릭되게 한다.
+						toggle.href = 'javascript:;';
+						toggle.textContent = community.label || 'COMMUNITY';
+						item.appendChild(toggle);
+
+						var submenu = document.createElement('ul');
+						submenu.className = 'sub_cate01';
+						community.items.forEach(function (entry) {
+							var subItem = document.createElement('li');
+							var subLink = document.createElement('a');
+							subLink.href = entry.link;
+							subLink.textContent = entry.label;
+							subItem.appendChild(subLink);
+							submenu.appendChild(subItem);
+						});
+						item.appendChild(submenu);
+						target.appendChild(item);
+					}
+
+					function buildMenu(categories, parentNo, target, start, end) {
+						// '전체상품' 분류는 맨 앞 '전체 상품' 메뉴로 따로 넣으므로 목록에서 뺀다
+						var children = categories.filter(function (category) {
+							return Number(category.parent_cate_no) === parentNo && !/^전체\s*상품$/.test(String(category.name).trim());
+						});
+
+						children.slice(start, end).forEach(function (category) {
+							var item = document.createElement('li');
+							var subItems = categories.filter(function (subCategory) {
+								return Number(subCategory.parent_cate_no) === Number(category.cate_no);
+							});
+
+							// SALE 분류는 기존 디자인처럼 할인율 말풍선을 붙인다
+							if (/^sale$/i.test(String(category.name).trim())) {
+								item.className = 'inter-sale-menu';
+								var bubble = document.createElement('span');
+								bubble.className = 'inter-sale-bubble';
+								bubble.setAttribute('aria-hidden', 'true');
+								var menuCfg = (window.STORE_CONTENT || {}).menu || {};
+								bubble.textContent = menuCfg.saleBadge || '50%';
+								item.appendChild(bubble);
+							}
+							item.appendChild(makeLink(category));
+							if (subItems.length) {
+								var submenu = document.createElement('ul');
+								submenu.className = 'sub_cate01';
+								subItems.forEach(function (subCategory) {
+									var subItem = document.createElement('li');
+									subItem.appendChild(makeLink(subCategory));
+									submenu.appendChild(subItem);
+								});
+								item.appendChild(submenu);
+							}
+							target.appendChild(item);
+						});
+					}
+
+					function initMenu() {
+						var leftTarget = document.querySelector('.st-category-menu--left > ul');
+						var config = window.STORE_CONTENT || {};
+						var parentNo = Number((config.menu && config.menu.parentCateNo) || 1);
+						if (!leftTarget) return;
+						// Use the editorial inter menu until the owner enables catalogue categories.
+						if (config.menu && config.menu.editorial) return;
+
+						// 새 목록을 따로 만든 뒤, 미리 넣어 둔 메뉴와 다를 때만 바꿔 끼운다(깜빡임 방지)
+						// 순서 : 전체 상품 → 관리자 대분류(최대 6개) → 리뷰
+						var fresh = document.createElement('ul');
+						function addPlain(label, href) {
+							var li = document.createElement('li');
+							var a = document.createElement('a');
+							a.href = href;
+							a.textContent = label;
+							li.appendChild(a);
+							fresh.appendChild(li);
+						}
+						fetch('/exec/front/Product/SubCategory')
+							.then(function (response) { return response.json(); })
+							.then(function (categories) {
+								if (!Array.isArray(categories)) return;
+								var all = categories.filter(function (c) { return /^전체\s*상품$/.test(String(c.name).trim()); })[0];
+								addPlain('전체 상품', all ? '/product/list.html?cate_no=' + all.cate_no : '/product/list.html?cate_no=28');
+								buildMenu(categories, parentNo, fresh, 0, 6);
+								addPlain('리뷰', '/board/product/list.html?board_no=4');
+								appendCommunity(fresh, config);
+							})
+							.catch(function () {})
+							.then(function () {
+								if (fresh.children.length > 2 && fresh.innerHTML !== leftTarget.innerHTML) { leftTarget.innerHTML = fresh.innerHTML; }
+							});
+					}
+
+					// 메뉴 태그 바로 뒤에 있으므로 기다리지 않고 바로 실행한다
+					initMenu();
+				}());
+			</script>
+
+			<div class="top_mypage">
+				<div class="top_member_links">
+					<a href="/member/login.html" module="Layout_statelogoff">Login</a>
+					<a href="{$action_logout}" module="Layout_stateLogon">Logout</a>
+				</div>
+				<a href="javascript:;" class="eSearch"><!--@import(/svg/icon-search.html)--></a>
+				<a href="/myshop/index.html"><!--@import(/svg/icon-user.html)--></a>
+				<a href="/order/basket.html" module="Layout_orderBasketcount"><!--@import(/svg/icon-cart.html)--><span class="count {$basket_count_display|display} {$basket_count_display_class}"><span class="{$basket_count_class}">{$basket_count}</span></span></a>
+			</div><!-- //top_mypage -->
+		</div><!-- //top_nav_box -->
+	</div><!-- //inner -->
+</header>
+<!--#ez="1/2"-->

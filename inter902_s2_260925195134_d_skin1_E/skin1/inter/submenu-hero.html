@@ -1,0 +1,47 @@
+<section class="inter-page-hero inter-menu-hero" aria-label="컬렉션 안내" data-cms="목록 위 큰 배너" data-cms-adapter="menuHero" data-cms-page="목록 공통">
+ <img src="/SkinImg/inter/scene-bookshelf.webp" alt="오크 오픈 책장이 놓인 밝은 거실" width="1600" height="900" fetchpriority="high">
+ <div><small>THE EVERYDAY COLLECTION</small><h1>Simple things.<br>For everyday home.</h1><p>머물고, 먹고, 쉬는 하루.<br>우리 집에 오래 어울릴 가구를 찾아보세요.</p>
+ <nav aria-label="컬렉션 메뉴"><a data-inter-menu="all" href="/product/list.html?cate_no=28">전체상품</a><a data-inter-menu="living" href="/product/list.html?cate_no=24">거실 · 수납</a><a data-inter-menu="bedroom" href="/product/list.html?cate_no=25">침실 · 패브릭</a><a data-inter-menu="dining" href="/product/list.html?cate_no=26">다이닝 · 소품</a><a data-inter-menu="review" href="/board/product/list.html?board_no=4">리뷰</a></nav></div>
+</section>
+<!-- 상품분류 목록에서만 보이는 검색창 (상품검색 페이지는 자체 검색창이 있다) -->
+<form class="inter-list-search" action="/product/search.html" method="get" role="search" hidden>
+ <label for="interListKeyword" class="displaynone">상품 검색</label>
+ <input id="interListKeyword" name="keyword" type="search" placeholder="찾으시는 상품을 검색해 보세요" autocomplete="off">
+ <button type="submit" aria-label="검색"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5" stroke-linecap="round"></path></svg></button>
+</form>
+<script>
+(function(){
+ var hero=document.querySelector('.inter-menu-hero');if(!hero)return;
+ var params=new URLSearchParams(location.search),word=params.get('keyword')||'',path=location.pathname,board=path.indexOf('/board/')===0;
+ var catm=path.match(/\/category\/[^\/]+\/(\d+)/),cate=String(params.get('cate_no')||(catm&&catm[1])||'');
+ var list=/\/product\/list\.html$/.test(path)||!!catm;
+ // 게시판 : 리뷰(4) · 공지사항(1) · 자주묻는질문(3) · 상품문의(6) 은 같은 배너를 쓴다
+ var boardKey={'4':'review','1':'notice','3':'faq','6':'qna'}[params.get('board_no')];
+ if(board&&!boardKey){hero.remove();return;}
+ // SALE(27)은 전용 세일 화면이 따로 있다
+ if(list&&cate==='27'){hero.remove();return;}
+ // 상품분류 번호 : 28 전체 상품 · 24 거실 · 수납 · 25 침실 · 패브릭 · 26 다이닝 · 소품 (관리자 대분류)
+ var byCate={'28':'all','24':'living','25':'bedroom','26':'dining'};
+ var key=board?boardKey:list?(byCate[cate]||'all'):/식탁|테이블|다이닝|체어|의자|접시|볼|글라스|냅킨/.test(word)?'dining':/침대|침구|리넨|베개|이불|커튼|사이드|협탁/.test(word)?'bedroom':/책장|선반|수납|소파|라운지|화병|캔들|오브제|거실/.test(word)?'living':'all';
+ // 배너 내용 : 게시판 화면 관리의 '목록 위 큰 배너' 글로 바꿀 수 있다 (inter-cms.js 가 window.INTER_MENU_HERO 를 덮어쓴다)
+ var banners=window.INTER_MENU_HERO=window.INTER_MENU_HERO||{
+  all:['scene-bookshelf.webp','오크 오픈 책장이 놓인 밝은 거실','THE EVERYDAY COLLECTION','Simple things.<br>For everyday home.','머물고, 먹고, 쉬는 하루.<br>우리 집에 오래 어울릴 가구를 찾아보세요.'],
+  living:['scene-chair.webp','부클 원단의 오크 라운지 체어','THE LIVING COLLECTION','Light rooms.<br>Quiet corners.','책장과 선반, 좋아하는 의자 하나.<br>밝고 가벼운 거실을 위한 가구.'],
+  bedroom:['scene-bed.webp','오크 침대 프레임과 흰 리넨 침구','THE BEDROOM COLLECTION','Soft linen.<br>Slow mornings.','단단한 원목 침대와 부드러운 리넨.<br>푹 쉬어 가는 침실을 만들어 보세요.'],
+  dining:['scene-table.webp','원형 오크 식탁과 페이퍼코드 체어','THE DINING COLLECTION','Gather slowly.<br>Eat together.','둥근 식탁과 손으로 엮은 체어,<br>매일의 식사를 위한 다이닝 · 테이블웨어.'],
+  review:['scene-wallshelf.webp','오크 벽 선반 위의 화병과 캔들 홀더','HOMES, SHARED','Real homes.<br>Real stories.','우리 집에 놓아 본 경험이 더 좋은 선택으로.<br>inter 고객의 공간 후기를 만나보세요.'],
+  notice:['scene-bed.webp','오크 침대 프레임과 흰 리넨 침구','NEWS &amp; NOTICE','Little news.<br>From inter.','inter의 새로운 소식과<br>꼭 알아 두실 안내를 전해 드려요.'],
+  faq:['scene-bed.webp','오크 침대 프레임과 흰 리넨 침구','GOOD TO KNOW','Questions?<br>We have answers.','주문 · 배송 · 설치 · 교환 · 반품에 대해<br>자주 묻는 질문을 모았어요.'],
+  qna:['scene-bed.webp','오크 침대 프레임과 흰 리넨 침구','ASK US','Ask anything.<br>We are here to help.','사이즈 · 소재 · 배송에 대해 궁금한 점을 남겨 주세요.<br>꼼꼼히 확인하고 답변드릴게요.']
+ },img=hero.querySelector('img');
+ function reveal(){hero.classList.add('is-ready')}
+ function fill(){
+  var data=banners[key]||banners.all;
+  hero.dataset.collection=key;img.alt=data[1];hero.querySelector('small').textContent=data[2];hero.querySelector('h1').innerHTML=data[3];hero.querySelector('p').innerHTML=data[4];
+  img.addEventListener('load',reveal,{once:true});img.addEventListener('error',reveal,{once:true});img.src=/^(https?:)?\/\/|^\//.test(data[0])?data[0]:'/SkinImg/inter/'+data[0];if(img.complete&&img.naturalWidth)reveal();
+ }
+ if(window.INTER_CMS)window.INTER_CMS.ready(fill,1200);else fill();
+ var cur=hero.querySelector('[data-inter-menu="'+key+'"]');if(cur)cur.setAttribute('aria-current','page');
+ var form=document.querySelector('.inter-list-search');if(form&&list)form.hidden=false;
+}());
+</script>

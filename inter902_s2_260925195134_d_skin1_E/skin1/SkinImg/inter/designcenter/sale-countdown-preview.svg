@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="190" viewBox="0 0 900 190" role="img" aria-labelledby="title desc">
+  <title id="title">SALE 이벤트 종료 카운트다운 예시</title>
+  <desc id="desc">이벤트 종료까지 남은 일, 시간, 분, 초를 보여주는 카운트다운 화면 예시</desc>
+  <rect width="900" height="190" rx="22" fill="#211e2c"/>
+  <circle cx="85" cy="88" r="7" fill="#e56568"/>
+  <text x="110" y="96" fill="#ffffff" font-family="Arial,sans-serif" font-size="22" font-weight="700">이벤트 마감까지</text>
+  <g font-family="Arial,sans-serif" text-anchor="middle">
+    <rect x="350" y="42" width="104" height="80" rx="13" fill="#111017"/><text x="402" y="96" fill="#ffffff" font-size="42" font-weight="700">33</text><text x="402" y="149" fill="#d9cec4" font-size="13">일</text>
+    <rect x="470" y="42" width="104" height="80" rx="13" fill="#111017"/><text x="522" y="96" fill="#ffffff" font-size="42" font-weight="700">19</text><text x="522" y="149" fill="#d9cec4" font-size="13">시간</text>
+    <rect x="590" y="42" width="104" height="80" rx="13" fill="#111017"/><text x="642" y="96" fill="#ffffff" font-size="42" font-weight="700">09</text><text x="642" y="149" fill="#d9cec4" font-size="13">분</text>
+    <rect x="710" y="42" width="104" height="80" rx="13" fill="#111017"/><text x="762" y="96" fill="#ffffff" font-size="42" font-weight="700">46</text><text x="762" y="149" fill="#d9cec4" font-size="13">초</text>
+  </g>
+  <text x="450" y="177" text-anchor="middle" fill="#bdb5c5" font-family="Arial,sans-serif" font-size="11">표시 예시 · 실제 남은 시간은 이벤트 종료 시각에 맞춰 자동으로 변경됩니다.</text>
+</svg>

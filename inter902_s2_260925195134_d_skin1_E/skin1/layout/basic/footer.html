@@ -1,0 +1,167 @@
+<div class="bottom-nav RMB RTB" ez-module="bottom-navigation" data-ez="module-0zkums9-1" data-ez-module="user-defined/1" data-ez-name="USER DEFINED" data-ez-type="plain">
+    <!-- 하단 고정 탭바 제거 — 히어로 문구를 덮어 가렸다. ↑ 버튼만 남긴다. -->
+   <div class="bottom-nav__top">
+        <a href="#wrap" title="화면 최상단으로 이동하기"><!--@import(/svg/icon-quick-arrow.html)--></a>
+    </div>
+</div>
+<div data-ez-module="user-defined/1" data-ez-name="USER DEFINED" data-ez-type="plain" data-ez="module-1i17arw-1"><style>
+.bottom-nav__top { display:none !important; }
+.st-totop {
+	position:fixed;
+	right:clamp(16px, 2.4vw, 36px);
+	bottom:28px;
+	z-index:800;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+	width:48px;
+	height:48px;
+	padding:0;
+	border:0;
+	border-radius:50%;
+	background:#111;
+	color:#fff;
+	box-shadow:0 0 0 1px rgba(255,255,255,.35), 0 6px 18px rgba(0,0,0,.22);
+	cursor:pointer;
+	opacity:0;
+	visibility:hidden;
+	transform:translateY(12px);
+	transition:opacity .35s ease, transform .45s cubic-bezier(.16,1,.3,1), visibility .35s, background .25s ease;
+}
+.st-totop.is-show { opacity:1; visibility:visible; transform:none; }
+.st-totop:hover, .st-totop:focus-visible { background:#ed3833; outline:0; }
+.st-totop svg { display:block; width:20px; height:20px; transition:transform .35s cubic-bezier(.16,1,.3,1); }
+.st-totop:hover svg { transform:translateY(-3px); }
+@media all and (max-width:1024px) {
+	.st-totop { width:44px; height:44px; right:14px; bottom:16px; }
+}
+@media (prefers-reduced-motion:reduce) {
+	.st-totop, .st-totop svg { transition:none; }
+}
+</style></div>
+<div data-ez-module="user-defined/1" data-ez-name="USER DEFINED" data-ez-type="plain" data-ez="module-1bsjgk5-1"><button type="button" class="st-totop" aria-label="Back to top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19.5V5M5.5 11.5L12 5l6.5 6.5"></path></svg></button></div>
+<div data-ez-module="user-defined/1" data-ez-name="USER DEFINED" data-ez-type="plain" data-ez="module-089eean-1"><script>
+	(function () {
+		var button = document.querySelector('.st-totop');
+		var footer = document.getElementById('footer');
+		if (!button) return;
+		var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		function place() {
+			var y = window.pageYOffset || document.documentElement.scrollTop || 0;
+			button.classList.toggle('is-show', y > 500);
+			var base = window.innerWidth <= 1024 ? 16 : 28;
+			var lift = 0;
+			if (footer) {
+				var top = footer.getBoundingClientRect().top;
+				if (top < window.innerHeight) lift = window.innerHeight - top;
+			}
+			button.style.bottom = 'calc(' + (base + lift) + 'px + env(safe-area-inset-bottom, 0px))';
+		}
+		button.addEventListener('click', function () {
+			window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+		});
+		window.addEventListener('scroll', place, { passive: true });
+		window.addEventListener('resize', place);
+		place();
+	}());
+</script></div>
+<div class="footer_margin" data-ez="module-1oktphz-1" data-ez-module="user-defined/1" data-ez-name="USER DEFINED" data-ez-type="plain"></div>
+<footer id="footer" class="layout1" data-ez-layout="layout1" data-ez="contents-06bwsrq-1">
+	<ez-prop data-version="1.0.0" type="layout">
+		<ez-var data-prop="layout" data-namespace="ez.layout.footer.layout" data-type="array">
+			<ez-item data-id="layout1" data-name="기본형"></ez-item>
+			<ez-item data-id="layout2" data-name="좌우반전형"></ez-item>
+			<ez-item data-id="layout3" data-name="중앙형"></ez-item>
+		</ez-var>
+	</ez-prop>
+  <div class="inner st-footer" module="Layout_footer">
+		<div class="st-footer__brand">
+			<!-- BUYER EDITABLE : 푸터 로고 = store-content.js 의 brand.logo / 저작권의 이름 = 관리자 > 기본설정 > 내 쇼핑몰 정보의 쇼핑몰 이름 -->
+			<div class="bt_logo"><a href="/"><img class="inter-logo-img" src="/SkinImg/inter/logo-inter.webp" alt="inter" width="560" height="200" loading="lazy"></a></div>
+			<p class="bt_copyright">Copyright © {$mall_name}. All rights reserved.</p>
+			<!-- 상품 분류 목록. 아래 nav.st-footer__menu(Shop/Order/Q&A/Notice) 와
+			     내용이 다른데 제목이 둘 다 "Shop menu" 라 모바일에서 같은 제목이
+			     두 번 겹쳐 보였다. 여기는 분류라는 뜻으로 바꾼다. -->
+			<details class="st-footer__menu-dropdown">
+				<summary>Categories</summary>
+				<ul aria-label="Categories"></ul>
+			</details>
+		</div>
+
+		<!-- BUYER EDITABLE : 고객센터(전화·운영시간·이메일) = 카페24 관리자 > 기본설정 > 내 쇼핑몰 정보 (코드 수정 불필요) -->
+		<div module="Layout_Info" class="bt_cscenter st-footer__column" data-ez-group="cs">
+			<h2 class="title" data-ez-role="title">Customer center</h2>
+			<div data-ez-role="list">
+				<div data-ez-item="phone" class="bt_txt01"><span data-ez-role="value">{$phone}</span></div>
+				<div data-ez-item="runtime" class="bt_txt02"><span data-ez-role="value">{$runtime}</span></div>
+				<div data-ez-item="email" class="bt_txt02"><span data-ez-role="value">{$inquiry_email}</span></div>
+			</div>
+		</div>
+
+		<!-- BUYER EDITABLE : 사업자 정보(상호·대표자·주소·사업자번호·통신판매업번호) = 카페24 관리자 > 기본설정 > 내 쇼핑몰 정보 (코드 수정 불필요) -->
+		<div class="bt_info st-footer__column" data-ez-group="info">
+			<h2 class="title" data-ez-role="title">Company info</h2>
+			<div class="bt_info_list" data-ez-role="list">
+				<div data-ez-item="company_name"><span data-ez-role="field">상호명</span> <span data-ez-role="value">{$company_name}</span></div>
+				<div data-ez-item="president_name"><span data-ez-role="field">대표자</span> <span data-ez-role="value">{$president_name}</span></div>
+				<div data-ez-item="address"><span data-ez-role="field">주소</span> <span data-ez-role="value">{$mall_zipcode} {$mall_addr1} {$mall_addr2}</span></div>
+				<div data-ez-item="company_regno"><span data-ez-role="field">사업자 등록번호</span> <span data-ez-role="value">{$company_regno}</span></div>
+				<div data-ez-item="network_regno"><span data-ez-role="field">통신판매업 신고번호</span> <span data-ez-role="value">{$network_regno} {$biz_no_link}</span></div>
+			</div>
+		</div>
+
+		<!-- BUYER EDITABLE : 링크 4개 = store-content.js 의 footerMenu. 아래 글자·주소는 스크립트가 막혔을 때만 쓰이는 기본값 -->
+		<nav class="st-footer__column st-footer__menu" aria-label="Shop menu">
+			<h2>Shop menu</h2>
+			<a href="/product/list.html?cate_no=28" data-st-text="footerMenu.0.label" data-st-href="footerMenu.0.link">Shop</a>
+			<a href="/myshop/order/list.html" data-st-text="footerMenu.1.label" data-st-href="footerMenu.1.link">Order</a>
+			<a href="/board/product/list.html?board_no=6" data-st-text="footerMenu.2.label" data-st-href="footerMenu.2.link">Q&amp;A</a>
+			<a href="/board/free/list.html" data-st-text="footerMenu.3.label" data-st-href="footerMenu.3.link">Notice</a>
+		</nav>
+
+		<!-- BUYER EDITABLE : SNS 링크 = store-content.js 의 social (비워 두면 스마트디자인 편집창 푸터의 SNS 설정값이 쓰인다) -->
+		<nav class="bt_sns st-footer__column" data-ez-group="sns" data-ez-role="list" aria-label="Follow us">
+			<h2 class="title" data-ez-role="title">Follow us</h2>
+			<a data-ez-item="instagram" href="https://instagram.com/" target="_blank" data-st-href="social.instagram">Instagram</a>
+			<a data-ez-item="youtube" href="https://youtube.com/" target="_blank" data-st-href="social.youtube">Youtube</a>
+			<a data-ez-item="facebook" href="https://facebook.com/" target="_blank" data-st-href="social.facebook">Facebook</a>
+		</nav>
+        <script>
+            (function () {
+                var list = document.querySelector('.st-footer__menu-dropdown ul');
+                if (!list) return;
+
+                fetch('/exec/front/Product/SubCategory')
+                    .then(function (response) { return response.json(); })
+                    .then(function (categories) {
+                        if (!Array.isArray(categories)) return;
+                        var config = window.STORE_CONTENT || {};
+                        categories.filter(function (category) {
+                            return Number(category.parent_cate_no) === Number((config.menu && config.menu.parentCateNo) || 1);
+                        }).slice(0, 6).forEach(function (category) {
+                            var item = document.createElement('li');
+                            var link = document.createElement('a');
+                            link.href = '/product/search.html' + (category.param || '?cate_no=' + category.cate_no);
+                            link.textContent = category.name;
+                            item.appendChild(link);
+                            list.appendChild(item);
+                        });
+                    })
+                    .catch(function () {});
+            }());
+        </script>
+    </div><!-- //inner -->
+</footer>
+<div module="Layout_SearchHeader" data-ez="contents-0hsfwhz-1">
+	<!--
+		$product_page=/product/detail.html
+		$category_page=/product/list.html
+	-->
+	<div class="title">SEARCH</div>
+	<fieldset>
+		<legend>검색</legend>
+		{$form.keyword}<button type="button" class="btnDelete">삭제</button><button type="button" class="btnSearch" onclick="{$action_search_submit}"><!--@import(/svg/icon-search.html)--> 검색</button><ul class="autoDrop" id="{$search_auto_id}"></ul>
+	</fieldset>
+	<button type="button" class="btnClose"><i aria-hidden="true" class="icon icoClose"></i>닫기</button>
+</div>
+<!--#ez="1/2"-->
