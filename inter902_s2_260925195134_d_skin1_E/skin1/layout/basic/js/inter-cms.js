@@ -282,7 +282,15 @@
     if (el.getAttribute('src') === url) return el;
     el.removeAttribute('srcset');
     if (el.hasAttribute('data-cms-reset')) el.removeAttribute('style');
-    el.setAttribute('src', url);
+    // 이미 사진이 보이는 상태에서 다시 바꿀 때는 새 사진을 미리 받아 두고 교체한다 (중간에 빈 칸이 생기지 않게)
+    if (state.smooth && el.tagName === 'IMG' && el.getAttribute('src')) {
+      var target = el, pre = new Image(), swapped = false;
+      var swap = function () { if (swapped) return; swapped = true; target.setAttribute('src', url); };
+      pre.onload = swap; pre.onerror = swap; setTimeout(swap, 3000);
+      pre.src = url;
+    } else {
+      el.setAttribute('src', url);
+    }
     el.setAttribute('data-cms-replaced', '');
     if (el.tagName === 'IMG' && el.closest('[data-cms-item]') && !el.hasAttribute('data-cms-keep-alt')) el.alt = '';
     // 장면 속 상품처럼 사진 비율로 칸 모양을 정하는 곳은 새 사진 비율을 따른다 (점 위치 % 가 사진에 맞게)
@@ -497,7 +505,9 @@
     placeUnits(want);
   }
 
-  var state = { map: null, applied: false, waiters: [], orderMoved: false };
+  var state = { map: null, applied: false, waiters: [], orderMoved: false, smooth: false, hold: false };
+  // 가림 걷기. state.hold 가 켜져 있으면(게시판을 아직 읽는 중) 걷지 않는다.
+  function unwait(force) { if (force) state.hold = false; if (!state.hold) html.classList.remove('cms-wait'); }
   function sections() { return Array.from(document.querySelectorAll('[data-cms]')); }
   function names() { return sections().map(function (s) { return s.getAttribute('data-cms'); }).concat(orderName() ? [orderName()] : []).sort(function (a, b) { return norm(b).length - norm(a).length; }); }
   function knownLabels(sec) {
@@ -513,6 +523,7 @@
   }
   function applyAll(map) {
     state.map = map;
+    state.smooth = state.applied;
     sections().forEach(function (sec) {
       var post = map[sec.getAttribute('data-cms')];
       sec.classList.toggle('cms-has-post', !!post);
@@ -526,7 +537,7 @@
       try { applyOrder(parse(map[on].content, { 순서: 1 }).fields[norm('순서')]); } catch (e) {}
     }
     state.applied = true;
-    html.classList.remove('cms-wait');
+    unwait();
     var w = state.waiters; state.waiters = [];
     w.forEach(function (fn) { try { fn(); } catch (e) {} });
     document.dispatchEvent(new CustomEvent('inter:cms', { detail: map }));
@@ -860,21 +871,23 @@
         load(names(), c && c.map, reread).then(function (map) {
           var same = c && JSON.stringify(c.map) === JSON.stringify(map);
           lsSet(CACHE_KEY, { t: Date.now(), tb: reread ? Date.now() : c.tb, map: map });
-          if (!same || !state.applied || EDIT) { state.applied = false; applyAll(map); }
-        }).catch(function () { html.classList.remove('cms-wait'); });
-      }
-    }
+          state.hold = false;   // 다 읽었으니 이제 가림을 걷어도 된다
+          if (!same || !state.applied || EDIT) { state.applied = false; applyAll(map); } else unwait();
+        }).catch(function () { unwait(true); });
+      } else unwait(true);
+    } else unwait(true);
     if (EDIT && home) startEdit();
     if (BOARD_PAGE) loadEditor();
   }
-  // 캐시가 없는 첫 방문에는 바꿀 글자·사진을 잠깐(최대 1.2초) 가려 기본값이 번쩍이지 않게 한다
-  // 편집 모드는 캐시를 무시하고 글을 늘 다시 읽으므로, 캐시가 있어도 가려야 한다.
-  // (안 가리면 고치기 전 사진이 몇 초 보이다가 고친 사진으로 바뀐다)
+  // 바꿀 글자·사진을 게시판 글이 도착할 때까지 가려 기본값(고치기 전 사진)이 번쩍이지 않게 한다.
+  // 편집 모드·저장 직후·기억한 내용이 오래됐을 때는 다 읽을 때까지 붙잡고(state.hold),
+  // 그 밖에는 짧게만 가린다. 안전장치로 최대 6초가 지나면 무조건 걷는다.
   var salePage = /\/product\/list\.html/.test(location.pathname) && (qs.match(/[?&]cate_no=(\d+)/) || [])[1] === String((SC.sale || {}).categoryNo || 27);
-  if (BOARD && (/^\/(index\.html)?$/.test(location.pathname) || salePage) && (EDIT || !(lsGet(CACHE_KEY) || {}).map)) {
+  if (BOARD && (/^\/(index\.html)?$/.test(location.pathname) || salePage)) {
     html.classList.add('cms-wait');
-    // 가림막은 applyAll 이 끝나면 바로 걷힌다. 아래 시간은 글을 못 읽었을 때를 위한 최대 대기.
-    setTimeout(function () { html.classList.remove('cms-wait'); }, EDIT ? 4000 : 1200);
+    var cached = lsGet(CACHE_KEY);
+    state.hold = EDIT || !(cached && cached.map) || Date.now() - cached.t >= TTL;
+    setTimeout(function () { unwait(true); }, state.hold ? 6000 : 1200);
   }
   // 영역 숨기기·첫 방문 가림 규칙 (메인·세일 등 어느 페이지에서나)
   if (BOARD && document.head) {
