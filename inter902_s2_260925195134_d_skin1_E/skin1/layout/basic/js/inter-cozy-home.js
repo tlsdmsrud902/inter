@@ -390,7 +390,9 @@
       track.style.transform = 'translateX(' + (-100 * cur) + '%)';
       dots.forEach(function (d, k) { d.setAttribute('aria-current', String(k === cur)); });
     }
-    function play() { stop(); if (!reduce && n > 1 && gap > 0) timer = setInterval(function () { go(cur + 1); }, gap); }
+    // 움직임 줄이기(Windows '애니메이션 효과' 끔 등)에서도 정한 간격대로 넘기되, 미끄러지는 효과만 뺀다
+    if (reduce) track.style.transition = 'none';
+    function play() { stop(); if (n > 1 && gap > 0) timer = setInterval(function () { go(cur + 1); }, gap); }
     function stop() { if (timer) clearInterval(timer); timer = null; }
     function close() { stop(); pop.hidden = true; document.removeEventListener('keydown', onKey); }
     function onKey(e) { if (e.key === 'Escape') close(); }
@@ -402,7 +404,9 @@
       close();
     });
     pop.addEventListener('click', function (e) { if (e.target === pop) close(); });
-    pop.addEventListener('mouseenter', stop); pop.addEventListener('mouseleave', play);
+    // 마우스를 팝업 카드에 올렸을 때만 멈춘다 (pop 은 화면 전체를 덮는 배경이라 거기에 걸면 늘 멈춰 있다)
+    var card = pop.querySelector('.cz-pop__box') || pop;
+    card.addEventListener('mouseenter', stop); card.addEventListener('mouseleave', play);
     document.addEventListener('keydown', onKey);
     function open() {
       // 첫 방문 인트로(로고 화면)가 끝난 뒤에 띄운다

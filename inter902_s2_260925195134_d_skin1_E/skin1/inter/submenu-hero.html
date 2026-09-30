@@ -34,13 +34,22 @@
   faq:['scene-bed.webp','오크 침대 프레임과 흰 리넨 침구','GOOD TO KNOW','Questions?<br>We have answers.','주문 · 배송 · 설치 · 교환 · 반품에 대해<br>자주 묻는 질문을 모았어요.'],
   qna:['scene-bed.webp','오크 침대 프레임과 흰 리넨 침구','ASK US','Ask anything.<br>We are here to help.','사이즈 · 소재 · 배송에 대해 궁금한 점을 남겨 주세요.<br>꼼꼼히 확인하고 답변드릴게요.']
  },img=hero.querySelector('img');
+ var C=window.INTER_CMS;
+ // 배경색은 게시판 글과 상관없으므로 기다리지 않고 바로 정한다
+ hero.dataset.collection=key;
  function reveal(){hero.classList.add('is-ready')}
  function fill(){
   var data=banners[key]||banners.all;
-  hero.dataset.collection=key;img.alt=data[1];hero.querySelector('small').textContent=data[2];hero.querySelector('h1').innerHTML=data[3];hero.querySelector('p').innerHTML=data[4];
-  img.addEventListener('load',reveal,{once:true});img.addEventListener('error',reveal,{once:true});img.src=/^(https?:)?\/\/|^\//.test(data[0])?data[0]:'/SkinImg/inter/'+data[0];if(img.complete&&img.naturalWidth)reveal();
+  // 게시판을 아직 읽는 중이면 채우기만 하고 가려 둔다 (inter-cms.js 의 cms-wait)
+  if(!C||!C.holding||!C.holding())hero.classList.add('is-filled');
+  img.alt=data[1];hero.querySelector('small').textContent=data[2];hero.querySelector('h1').innerHTML=data[3];hero.querySelector('p').innerHTML=data[4];
+  var src=/^(https?:)?\/\/|^\//.test(data[0])?data[0]:'/SkinImg/inter/'+data[0];
+  if(img.getAttribute('src')!==src){hero.classList.remove('is-ready');img.src=src}
+  img.addEventListener('load',reveal,{once:true});img.addEventListener('error',reveal,{once:true});if(img.complete&&img.naturalWidth)reveal();
  }
- if(window.INTER_CMS)window.INTER_CMS.ready(fill,1200);else fill();
+ // 기억해 둔 최신 내용이 있으면 페이지를 다 읽기 전에 바로 그린다.
+ // 없으면 게시판 글이 다 읽힐 때까지 기다렸다가 그리고, 나중에 새 글이 오면 다시 그린다
+ if(C){if(C.applyCachedSection&&C.applyCachedSection(hero))fill();C.ready(fill,1200);document.addEventListener('inter:cms',fill)}else fill();
  var cur=hero.querySelector('[data-inter-menu="'+key+'"]');if(cur)cur.setAttribute('aria-current','page');
  var form=document.querySelector('.inter-list-search');if(form&&list)form.hidden=false;
 }());

@@ -13,6 +13,10 @@
     <!-- // PG크로스브라우징필수내용 -->
 
     <title>inter | 북유럽풍 인테리어 가구</title>
+    <!-- 탭 제목 : 카페24가 대분류 페이지에 "분류 - 분류 - 쇼핑몰" 로 이름을 두 번 넣는다 → 연달아 같은 부분은 한 번만 -->
+    <script>try{(function(){function fix(){var p=document.title.split(' - '),o=[];p.forEach(function(s){if(o[o.length-1]!==s)o.push(s)});if(o.length<p.length)document.title=o.join(' - ')}fix();document.addEventListener('DOMContentLoaded',fix)})()}catch(e){}</script>
+    <!-- 최상단 띠배너 : 오늘 닫았으면 그리기 전에 숨긴다 (닫기 처리는 본문 맨 아래 스크립트, 숨김 규칙은 inter-cozy-global.css) -->
+    <script>try{if(Number(localStorage.getItem('inter-topbanner-hide'))>Date.now())document.documentElement.classList.add('inter-topbanner-off')}catch(e){}</script>
     <!--@css(/layout/basic/css/common.css)--><!-- 해당 CSS는 쇼핑몰 전체 페이지에 영향을 줍니다. 삭제와 수정에 주의해주세요. -->
     <!--@css(/layout/basic/css/layout.css)-->
     <!--@css(/layout/basic/css/ec-base-ui.css)-->
@@ -67,7 +71,7 @@
 	     예전 내용이 계속 보이면, 숫자를 하나 올려서 저장한다(예: v=20260923 → v=20260924). -->
 	<script src="/layout/basic/js/store-content.js?v=20260928c"></script>
 	<!-- 게시판 화면 관리 : 메인의 사진·글자를 게시판 글로 바꾼다 (설정 = store-content.js 의 cms) -->
-	<script src="/layout/basic/js/inter-cms.js?v=20260930c"></script>
+	<script src="/layout/basic/js/inter-cms.js?v=20260930l"></script>
 
 	<!-- DO NOT EDIT - DESIGN SYSTEM : 메인 인트로(SERAPHIN ✕ Be yourself)
 	     스타일을 반드시 <head> 에 둔다. seraphin.css 는 본문 맨 끝에서 불러오므로, 거기에 두면 인트로가
@@ -354,10 +358,18 @@ initStoreConfig();}());}catch(e){}</script>
 <script>
 try{(function(){
 	var c=window.STORE_CONTENT||{},f=document.getElementById('s9Float');if(!f)return;
-	var urls={instagram:(c.social&&c.social.instagram)||'',kakao:(c.floating&&c.floating.kakao)||''};
+	/* 카카오톡 채널 주소 : ?edit=1 의 [카카오톡 상담 버튼 고치기] 글 → 이 브라우저가 기억한 값 → store-content.js 순 */
+	var CMS=window.INTER_CMS,KK_NAME='카카오톡 상담 버튼',kkSaved=null;try{kkSaved=JSON.parse(localStorage.getItem((CMS&&CMS.kakaoKey)||'inter-cms-kakao'))}catch(e){}
+	var urls={instagram:(c.social&&c.social.instagram)||'',kakao:(typeof kkSaved==='string'?kkSaved:'')||(c.floating&&c.floating.kakao)||''};
 	['instagram','kakao'].forEach(function(k){var a=f.querySelector('[data-s9="'+k+'"]');if(a&&urls[k]){a.href=urls[k];a.hidden=false}});
 	/* 카카오톡 버튼은 항상 보이게 : 채널 주소가 비어 있으면 카카오톡 채널 홈으로 */
 	var kk=f.querySelector('[data-s9="kakao"]');if(kk){if(!urls.kakao)kk.href='https://pf.kakao.com/';kk.hidden=false;kk.setAttribute('aria-label','카카오톡 상담')}
+	if(kk&&CMS&&CMS.board){
+		/* 게시판 글로 바꾸는 페이지(메인·세일·목록 등)에서는 화면 관리 영역으로 넣어 ?edit=1 에서 고칠 수 있게 한다 */
+		if(document.querySelector('[data-cms]')){kk.setAttribute('data-cms',KK_NAME);kk.setAttribute('data-cms-adapter','kakao');kk.setAttribute('data-cms-page','모든 페이지');kk.setAttribute('data-cms-bar','')}
+		/* 주소를 아직 모르는 브라우저(상품 상세로 바로 들어온 손님 등)는 누를 때 게시판에서 읽어 연다 */
+		else if(kkSaved===null&&!urls.kakao){kk.addEventListener('click',function(e){e.preventDefault();var w=window.open('about:blank','_blank');if(w)w.opener=null;CMS.fetchField(KK_NAME,'카카오톡 채널 주소').then(function(u){u=/^https?:\/\//i.test(u||'')?u.trim().split(/\s+/)[0]:'https://pf.kakao.com/';try{localStorage.setItem(CMS.kakaoKey,JSON.stringify(u))}catch(er){}kk.href=u;if(w)w.location.href=u;else location.href=u})},{once:true})}
+	}
 	document.querySelectorAll('[data-st-insta-link]').forEach(function(a){if(urls.instagram){a.href=urls.instagram;a.target='_blank';a.rel='noopener'}});
 	var top=f.querySelector('[data-s9="top"]');
 	top.addEventListener('click',function(e){e.preventDefault();window.scrollTo({top:0,behavior:'smooth'})});
