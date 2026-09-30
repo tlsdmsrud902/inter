@@ -707,6 +707,12 @@
     + '.cms-kk__note{margin:10px 0 0;padding-top:8px;border-top:1px dashed #e5ddd3;font-size:12px;color:#6b635b}'
     + '.cms-kk__hint{margin:6px 0 0;font-size:12px;color:#8a8178}.cms-kk__preview{margin:6px 0 0;padding:6px 10px;border-radius:8px;background:#eef8ee;font-size:13px;word-break:break-all}'
     + '.cms-kk__chk span{color:#8a8178;font-size:12px}.cms-kk__lab--last{margin:14px 0 0;font-size:13px}'
+    + '.cms-kk__more{margin:0 0 10px;border:1px solid #eee7df;border-radius:10px;font-size:13px}.cms-kk__more summary{padding:9px 12px;cursor:pointer;font-weight:700;list-style:none}'
+    + '.cms-kk__more summary::-webkit-details-marker{display:none}.cms-kk__more summary::before{content:"▸ ";color:#c2410c}.cms-kk__more[open] summary::before{content:"▾ "}'
+    + '.cms-kk__more>p,.cms-kk__more>ol,.cms-kk__more>ul{margin:0 12px 10px}.cms-kk__more ol,.cms-kk__more ul{padding-left:20px}.cms-kk__more ul li{list-style:disc!important;margin-bottom:4px}.cms-kk__more a{color:#c2410c;text-decoration:underline}'
+    // 편집 모드 : 노란 카카오톡 버튼 옆에 "눌러서 연결 설정" 표시
+    + '.cms-edit [data-s9="kakao"][data-cms]{overflow:visible!important}'
+    + '.cms-edit [data-s9="kakao"][data-cms]::after{content:"✏️ 눌러서 연결 설정";position:absolute;right:calc(100% + 8px);top:50%;transform:translateY(-50%);padding:5px 10px;border-radius:999px;background:#1f1d1a;color:#fff;font:600 12px/1.2 Pretendard,system-ui,sans-serif;white-space:nowrap;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.2)}'
     // 숨긴 영역 : 편집 모드에서는 원래 모양 그대로 두고 위에 흐린 막 + 「숨김」 표시 (투명도를 쓰면 등장 효과 규칙과 부딪힌다)
     + '.cms-off-veil{position:absolute;inset:0;z-index:55;pointer-events:none;background:repeating-linear-gradient(135deg,rgba(255,255,255,.62) 0 14px,rgba(255,255,255,.78) 14px 28px)}'
     + '.cms-edit [data-cms-order]{position:relative;outline:2px dashed #8a6d5d;outline-offset:-2px}'
@@ -870,6 +876,18 @@
       box.innerHTML = '<div class="cms-kk__card"><b class="cms-kk__t">카카오톡 상담 버튼 연결</b>'
         + '<p class="cms-kk__lead">화면 오른쪽 아래 <b>노란 말풍선 버튼</b>을 손님이 누르면, 여기서 연결한 가게 카카오톡으로 상담이 이어져요.</p>'
         + '<p class="cms-kk__now">' + (curId ? '✅ 지금 연결된 채널 : <b>' + esc(curId) + '</b>' + (curChat ? ' · 누르면 1:1 채팅이 열려요' : ' · 누르면 채널 소개 화면이 열려요') : '⚪ 아직 연결된 채널이 없어요. 지금은 버튼을 누르면 카카오톡 채널 첫 화면만 나와요.') + '</p>'
+        + '<details class="cms-kk__more"><summary>카카오톡 채널이 뭔가요?</summary>'
+        + '<p>가게용 카카오톡 계정이에요. 손님이 채널을 친구로 추가하거나 1:1 채팅으로 문의를 남기면, 사장님은 관리자센터나 휴대폰의 <b>카카오톡 채널 관리자 앱</b>에서 답할 수 있어요. 만들고 쓰는 건 무료예요.</p>'
+        + '<p>개인 카카오톡 아이디나 오픈채팅방과는 달라요. 여기에는 <b>pf.kakao.com/_</b> 로 시작하는 채널 주소를 넣어요.</p></details>'
+        + '<details class="cms-kk__more"><summary>채널이 아직 없어요 — 새로 만들기</summary><ol>'
+        + '<li><a href="https://center-pf.kakao.com/" target="_blank" rel="noopener">카카오톡 채널 관리자센터 ↗</a>에 카카오 계정으로 로그인해요. (가게 공용 계정을 쓰면 직원과 함께 관리하기 편해요)</li>'
+        + '<li><b>[새 채널 만들기]</b>를 눌러요.</li>'
+        + '<li>채널 이름(예: inter 가구), 프로필 사진(가게 로고), 카테고리를 넣고 확인을 눌러요.</li>'
+        + '<li>만든 뒤 아래 <b>「꼭 켜 둘 설정 두 가지」</b>를 확인해요.</li></ol></details>'
+        + '<details class="cms-kk__more"><summary>꼭 켜 둘 설정 두 가지</summary><ol>'
+        + '<li><b>채널 공개</b> : 꺼져 있으면 손님에게 "찾을 수 없는 채널"로 나와요. 관리자센터 왼쪽 메뉴 <b>[관리] → [상세 설정]</b>에서 채널 공개와 검색 허용을 켜요.</li>'
+        + '<li><b>1:1 채팅</b> : 꺼져 있으면 손님이 채팅을 보낼 수 없어요. 같은 화면(또는 <b>[채팅]</b> 메뉴)에서 1:1 채팅을 켜요.</li></ol>'
+        + '<p>메뉴 이름은 카카오 화면이 바뀌면 조금 다를 수 있어요. 비슷한 이름을 찾아 주세요.</p></details>'
         + '<div class="cms-kk__how">'
         + '<b>1단계 · 가게 카카오톡 채널 주소 복사하기</b>'
         + '<p class="cms-kk__sub">💻 컴퓨터에서</p><ol>'
@@ -890,6 +908,15 @@
         + '<label class="cms-kk__chk"><input type="checkbox" data-kk-chat> 버튼을 누르면 <b>바로 1:1 채팅창</b>이 열리게 할게요 <span>(끄면 채널 소개 화면이 먼저 나와요)</span></label>'
         + '<p class="cms-kk__err" hidden></p>'
         + '<p class="cms-kk__lab cms-kk__lab--last">3단계 · [미리 열어 보기]로 확인한 뒤 [저장]을 눌러요.</p>'
+        + '<p class="cms-kk__hint">새 창에 우리 가게 채널(또는 채팅 화면)이 뜨면 맞는 주소예요. [저장]을 누르면 10초쯤 뒤 "연결되었습니다" 알림이 나오고, 그때부터 모든 페이지의 노란 버튼이 이 채널로 연결돼요.</p>'
+        + '<details class="cms-kk__more"><summary>잘 안 될 때</summary><ul>'
+        + '<li><b>"찾을 수 없는 채널"이 떠요</b> → 주소를 다시 복사해 붙여 넣고, 「꼭 켜 둘 설정」의 <b>채널 공개</b>가 켜져 있는지 확인해요.</li>'
+        + '<li><b>채팅 입력칸이 안 보여요</b> → <b>1:1 채팅</b>이 꺼져 있어요. 켜거나, 위 체크박스를 끄고 채널 소개 화면으로 연결해요.</li>'
+        + '<li><b>휴대폰에서 누르면 카카오톡 앱이 열려요</b> → 정상이에요. 손님도 그렇게 대화를 시작해요.</li>'
+        + '<li><b>저장했는데 버튼이 예전 곳으로 가요</b> → 화면을 새로고침해 보세요. 다른 손님 화면에는 길게는 10분 뒤에 바뀌어요.</li>'
+        + '<li><b>채널을 바꾸고 싶어요</b> → 새 주소를 넣고 다시 [저장]해요. <b>연결을 끊으려면</b> [연결 해지]를 눌러요.</li>'
+        + '<li><b>"보안 확인이 필요해 저장하지 못했어요"가 떠요</b> → 새 창에서 쇼핑몰을 한 번 열어 카페24 확인을 마친 뒤 다시 저장해요.</li>'
+        + '</ul></details>'
         + '<div class="cms-kk__btns">' + (curId ? '<button type="button" data-kk="off" class="is-off">연결 해지</button>' : '')
         + '<span></span><button type="button" data-kk="test">미리 열어 보기</button><button type="button" data-kk="cancel">닫기</button><button type="button" data-kk="save" class="is-main">저장</button></div></div>';
       var inp = box.querySelector('input.cms-kk__in'), chat = box.querySelector('[data-kk-chat]'), err = box.querySelector('.cms-kk__err'), save = box.querySelector('[data-kk=save]'), pv = box.querySelector('.cms-kk__preview');
@@ -1033,6 +1060,13 @@
       var r = fig.getBoundingClientRect(), x = Math.round((e.clientX - r.left) / r.width * 100), y = Math.round((e.clientY - r.top) / r.height * 100);
       copyText(x + ' ' + y);
       toast('이 자리 : 가로 ' + x + '% · 세로 ' + y + '%  → "' + x + ' ' + y + '" 복사됨 (상품번호 뒤에 붙여 넣으세요)');
+    }, true);
+    // 편집 모드에서는 오른쪽 아래 노란 카카오톡 버튼을 눌러도 채널로 가지 않고 연결 설정 창을 연다
+    document.addEventListener('click', function (e) {
+      var k = e.target.closest && e.target.closest('[data-s9="kakao"][data-cms]');
+      if (!k) return;
+      e.preventDefault(); e.stopPropagation();
+      openKakao(k);
     }, true);
     paint();
     document.addEventListener('inter:cms', paint);
