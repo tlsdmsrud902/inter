@@ -868,10 +868,13 @@
     if (BOARD_PAGE) loadEditor();
   }
   // 캐시가 없는 첫 방문에는 바꿀 글자·사진을 잠깐(최대 1.2초) 가려 기본값이 번쩍이지 않게 한다
+  // 편집 모드는 캐시를 무시하고 글을 늘 다시 읽으므로, 캐시가 있어도 가려야 한다.
+  // (안 가리면 고치기 전 사진이 몇 초 보이다가 고친 사진으로 바뀐다)
   var salePage = /\/product\/list\.html/.test(location.pathname) && (qs.match(/[?&]cate_no=(\d+)/) || [])[1] === String((SC.sale || {}).categoryNo || 27);
-  if (BOARD && !EDIT && (/^\/(index\.html)?$/.test(location.pathname) || salePage) && !(lsGet(CACHE_KEY) || {}).map) {
+  if (BOARD && (/^\/(index\.html)?$/.test(location.pathname) || salePage) && (EDIT || !(lsGet(CACHE_KEY) || {}).map)) {
     html.classList.add('cms-wait');
-    setTimeout(function () { html.classList.remove('cms-wait'); }, 1200);
+    // 가림막은 applyAll 이 끝나면 바로 걷힌다. 아래 시간은 글을 못 읽었을 때를 위한 최대 대기.
+    setTimeout(function () { html.classList.remove('cms-wait'); }, EDIT ? 4000 : 1200);
   }
   // 영역 숨기기·첫 방문 가림 규칙 (메인·세일 등 어느 페이지에서나)
   if (BOARD && document.head) {
