@@ -168,6 +168,13 @@
     var track = root.querySelector('[data-scroll-hero]');
     if (!track) return;
     var hero = track.querySelector('.pe-hero');
+    // 히어로 풀사이즈 : 메뉴 바로 아래까지 히어로가 깔려 있는 동안 html.cz-hero-under (메뉴 바탕을 걷는다 · 스타일은 inter-cozy-home.css 맨 아래)
+    (function () {
+      var head = document.getElementById('header'), on = null, raf = 0;
+      function check() { raf = 0; var hb = head ? head.getBoundingClientRect().bottom : 98, under = track.getBoundingClientRect().bottom > hb + 1; if (under !== on) { on = under; document.documentElement.classList.toggle('cz-hero-under', under); } }
+      window.addEventListener('scroll', function () { if (!raf) raf = requestAnimationFrame(check); }, { passive: true });
+      window.addEventListener('resize', check); window.addEventListener('load', check); check();
+    })();
     var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
     var images = Array.from(track.querySelectorAll('[data-world-image]'));
     var copies = Array.from(track.querySelectorAll('[data-world-copy]'));

@@ -728,3 +728,18 @@ html:has(#lw-home){overflow-x:hidden;overflow-x:clip}
    · 첫 방문에 게시판 내용을 읽는 동안(최대 1.2초) 바뀔 글자·사진을 잠깐 가려 기본값이 번쩍이지 않게 한다 */
 html:not(.cms-edit) .cms-off{display:none!important}
 .cms-wait [data-cms] [data-cms-text],.cms-wait [data-cms] [data-cms-src],.cms-wait [data-cms] [data-cms-links]{visibility:hidden}
+
+/* 메인 히어로 풀사이즈 (2026-10-28) : 히어로가 메뉴 아래에서 시작하던 것을 화면 맨 위(띠배너 · 메뉴 뒤)부터 화면 높이 전체로 깐다.
+   메뉴가 히어로 위에 있는 동안(html.cz-hero-under, inter-cozy-home.js)은 메뉴 바탕을 걷고 위쪽만 리넨빛으로 살짝 흐리게 해 글자를 읽히게 한다.
+   되돌리려면 이 블록과 inter-cozy-home.js 의 「히어로 풀사이즈」 줄을 지운다 */
+#lw-home .pe-hero-track{--cz-pull:calc(var(--st-topbar-h,34px) + var(--st-header-h,64px));margin-top:calc(-1 * var(--cz-pull))}
+#lw-home .pe-hero-track .pe-hero{position:sticky;top:0!important;height:100vh!important;height:100svh!important;max-height:none!important;min-height:560px}
+#lw-home .pe-hero-track .pe-hero__copy{padding-top:calc(var(--cz-pull) + 12px)!important}
+#lw-home .pe-hero-track>.cms-btn{top:calc(var(--cz-pull) + 10px)}
+html.cz-hero-under #header{background:linear-gradient(180deg,rgba(250,248,244,.78) 0%,rgba(250,248,244,.42) 62%,rgba(250,248,244,0) 100%)!important;-webkit-backdrop-filter:none;backdrop-filter:none;box-shadow:none!important}
+#header{transition:background-color .35s,box-shadow .35s}
+@media (max-width:767px){
+  #lw-home .pe-hero-track .pe-hero{min-height:520px}
+  #lw-home .pe-hero-track .pe-hero__copy{padding-top:24px!important}
+  html.cz-hero-under #header{background:linear-gradient(180deg,rgba(250,248,244,.86) 0%,rgba(250,248,244,.5) 65%,rgba(250,248,244,0) 100%)!important}
+}
