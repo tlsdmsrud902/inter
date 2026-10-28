@@ -220,7 +220,7 @@
 .st-bp__card.is-text .st-bp__text { white-space:normal; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; }
 
 @media all and (max-width:1024px) {
-	.xans-product-detail .imgArea .st-bp { margin:28px 16px 0; }
+	.xans-product-detail .imgArea .st-bp { margin:28px 0 0; } /* 제목 · 가격과 왼쪽 선을 맞춘다 (예전 좌우 16px 은 어중간하게 안으로 들어갔다) */
 	.st-bp__card { flex-basis:calc(100% - 28px); }
 }
 

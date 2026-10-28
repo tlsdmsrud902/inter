@@ -182,3 +182,31 @@ w.IMAGE.uploadSuccess(null, resp, null);
 
 - 메인 포토리뷰 영역 · 상품 카드 평점은 **스킨이 적용된 화면에서 눈으로 확인**해야 한다
 - 세일 쿠폰 번호(`store-content.js` 의 `sale.coupon.coupons[].no`)는 아직 기본값
+
+---
+
+## 10. wear902 기능 옮기기 (2026-10-28)
+
+wear902(`tlsdmsrud902/wear`, 작업 폴더의 저장 안 된 변경까지)에서 inter 에 없던 기능을 모두 옮겼다. **디자인(색 · 글꼴 · 레이아웃 · 사진 · 문구 톤)은 inter 그대로**, 새 화면은 inter 오크 · 리넨 색(`#33302b` · `#8a6541` · `#f5efe4`)으로 맞췄다.
+방법 : 파일마다 3-way 병합(기준 = wear902 HEAD, 바꾼 쪽 = wear902 작업본, 받는 쪽 = inter). 이름은 `wear902 → inter`, `WEAR902_ → INTER_` 로 바꿨다.
+
+| 기능 | 파일 |
+|---|---|
+| 쇼핑 도우미(챗봇) · 재방문 시크릿 쿠폰 · 「우리 집에 맞는 가구 추천」 · 주문서/결제 완료 기록 | `addons/shop-helper/shop-helper.js` (새 파일), `layout.html`, `order/orderform.html` · `order_result.html`, `store-content.js` 의 `helper` |
+| 상담 관리(CRM) 페이지 | `addons/shop-helper/admin.html` (새 파일, 구글 시트 `helper.logSheet` 가 있어야 기록이 보임) |
+| 무료회원 감사 쿠폰팩 (플로팅 쿠폰 버튼 → 작은 창) | `addons/welcome-pack/welcome-pack.js` · `inter/welcome.html` (새 파일), `member/join_result.html` |
+| 쿠폰 뽑기 표 : 당첨 확률 · 「내 쿠폰」 강조 · 사용기한 카운트다운 | `product/list.html`, `st-home-s9.css` 42번 |
+| 쇼핑 가이드 확장 : 치수 재는 법 · 공간별 치수표 · 배치/동선 · 소재/관리 · 배송/설치 · 교환/반품 · 주문/회원 · FAQ (가구 내용으로 새로 씀) | `inter/guide.html` (`#size` `#size-chart` `#fit` `#care` `#shipping` `#returns` `#order` `#faq`) |
+| 상품 상세 : 가이드 버튼 3개 + 상품 화면 안 가이드 레이어, Q&A 버튼 정리, 빈 SERVICE INFO 숨김, 할인율을 정가 옆에 | `product/detail.html`, `seraphin.js`, `inter-cozy-global.css` |
+| 화면 편집 : 표(`data-cms-table`) · 계산 줄(`data-cms-chips`) 칸, 게시판 여러 페이지 읽기, 글쓴이 제한(`cms.writers`), 보안 확인 뒤 저장 재시도, [쇼핑 도우미 고치기], 손님 목록에서 화면 관리 글 숨김 | `inter-cms.js`, `inter-cms-editor.js`, `board/free/list.html` |
+| 모바일 : 상세 탭 한 줄 · 페이지 번호 줄임 · Q&A 카드 · 서브 페이지 여백 12px · 글쓰기 칸 이름 · 히어로 영상 자동 재생 다시 시도 | `inter-cozy-global.css`, `inter-pastel.css`, `inter-cozy-home.js` |
+| 메뉴 · 푸터에 「쇼핑 가이드」, 댓글 버튼 글자(댓글 수정 · 삭제 · 쓰기) | `header.html`, `footer.html`, `store-content.js`, `board/*/read.html` |
+
+wear902 전용 값은 가져오지 않았다 : 카카오 채널 주소, 재방문 쿠폰 번호, 구글 시트 주소, 상담 기록 게시판 번호(1002), 푸터 블러, 히어로 영상.
+캐시 번호 : `store-content.js?v=20261028a` · `inter-cms.js?v=20261028a`.
+
+### 남은 일 (카페24 관리자 — inter902)
+1. 새 파일 4개(`addons/…` 3개 · `inter/welcome.html`)와 바뀐 파일을 코드 편집기 또는 디자인 복구로 올리기
+2. 쿠폰 만들기 : **무료회원 감사 쿠폰 3장**(조건부 자동 발급 › 회원 가입 · 14일 · 3만/7만/12만 원 이상 5천/1만/1만5천 원), **재방문 시크릿 쿠폰 10%**(고객 다운로드 · 7일 · 1인 1회) → 번호를 `?edit=1` › [쇼핑 도우미 고치기] 「재방문 쿠폰 번호」에
+3. (선택) 상담 기록 : 구글 시트 웹 앱 주소 → `helper.logSheet`, 「상담 기록」 비밀글 게시판 번호 → `helper.consultBoard`
+4. 카카오톡 채널 주소는 `?edit=1` › [카카오톡 상담 버튼 고치기]에서

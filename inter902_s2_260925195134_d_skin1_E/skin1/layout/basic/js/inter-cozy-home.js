@@ -177,8 +177,14 @@
     var video = track.querySelector('.pe-world-video');
     if (video) {
       video.muted = true; video.defaultMuted = true; video.setAttribute('muted', '');
-      var play = function () { var p = video.play(); if (p && p.catch) p.catch(function () {}); };
+      var play = function () { if (!video.paused || active > 0) return; var p = video.play(); if (p && p.catch) p.catch(function () {}); };
       video.addEventListener('canplay', play, { once: true }); play();
+      // 휴대폰(아이폰 저전력 모드 · 데이터 절약 · 카카오톡 안 브라우저)은 자동 재생을 막는다 → 화면을 처음 만지거나 내릴 때 다시 재생
+      var kick = function () { play(); if (!video.paused) ['touchstart', 'pointerdown', 'scroll', 'keydown'].forEach(function (e) { window.removeEventListener(e, kick, true); }); };
+      ['touchstart', 'pointerdown', 'scroll', 'keydown'].forEach(function (e) { window.addEventListener(e, kick, { capture: true, passive: true }); });
+      // 다른 앱에 갔다 오거나 뒤로 가기로 돌아오면 멈춰 있으므로 다시 재생
+      document.addEventListener('visibilitychange', function () { if (!document.hidden) play(); });
+      window.addEventListener('pageshow', play);
     }
     var clamp = function (n) { return Math.max(0, Math.min(1, n)); };
     var smooth = function (n) { n = clamp(n); return n * n * (3 - 2 * n); };

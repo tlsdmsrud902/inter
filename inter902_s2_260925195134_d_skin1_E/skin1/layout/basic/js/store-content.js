@@ -52,7 +52,8 @@ window.STORE_CONTENT = {
 		items: [
 			{ label: '공지사항',     link: '/board/product/list.html?board_no=1' },
 			{ label: '자주묻는질문', link: '/board/product/list.html?board_no=3' },
-			{ label: '상품문의',     link: '/board/product/list.html?board_no=6' }
+			{ label: '상품문의',     link: '/board/product/list.html?board_no=6' },
+			{ label: '쇼핑 가이드',  link: '/inter/guide.html' }   // 치수 재는 법 · 소재 관리 · 배송 · 교환 · 자주 묻는 질문
 		]
 	},
 
@@ -157,7 +158,8 @@ window.STORE_CONTENT = {
 		{ label: 'Shop',   link: '/product/list.html?cate_no=28' },
 		{ label: 'Order',  link: '/myshop/order/list.html' },
 		{ label: 'Q&A',    link: '/board/product/list.html?board_no=6' },
-		{ label: 'Notice', link: '/board/product/list.html?board_no=1' }
+		{ label: 'Notice', link: '/board/product/list.html?board_no=1' },
+		{ label: 'Guide',  link: '/inter/guide.html' }   // 쇼핑 가이드
 	],
 
 	/* ---------------------------------------------------------------------
@@ -300,7 +302,81 @@ window.STORE_CONTENT = {
 	aiNotice: '* 이 페이지의 모델 이미지와 영상은 AI로 생성된 콘텐츠입니다. 실제 상품 색상·핏과 다를 수 있으니 상세 정보를 확인해 주세요.',
 
 	floating: {
-		kakao: ''
+		kakao: ''   // 카카오톡 채널 1:1 채팅 주소 (예: https://pf.kakao.com/_채널아이디/chat). 보통은 ?edit=1 의 [카카오톡 상담 버튼 고치기]에서 넣는다 (그 값이 우선)
+	},
+
+	/* ---------------------------------------------------------------------
+	   3-4c. 쇼핑 도우미 (오른쪽 아래 말풍선 버튼 · 단독 기능 /addons/shop-helper/)   BUYER EDITABLE
+	   빼려면 layout.html 의 shop-helper.js 한 줄을 지우거나 enabled: false.
+	   보통은 이 파일을 고치지 않아도 됩니다. 메인 주소 뒤에 ?edit=1 → 위쪽 막대의 [쇼핑 도우미 고치기]에서
+	   이름 · 인사말 · 첫 화면 버튼 · 운영 시간 · 「질문과 답」을 바꾸고 늘리면, 모든 페이지의 도우미가 그 내용으로 답합니다.
+	   자주묻는질문 게시판(faqBoard 번호)의 글도 자동으로 배웁니다 (제목 = 질문, 본문 = 답, 본문에 「키워드: 환불, 반품」 줄을 쓰면 더 잘 찾아요).
+	   여기 값은 게시판 글이 아직 없을 때의 기본값입니다. 비워 두면('') 코드의 기본값을 씁니다.
+	   --------------------------------------------------------------------- */
+	helper: {
+		enabled: true,     // false 면 도우미 버튼을 숨깁니다 (편집 모드에서는 보임)
+		colors: { ink: '#33302b', soft: '#f5efe4', line: '#e7e0d5' },   // 도우미 창 색 (진한 색 · 연한 바탕 · 선) — inter 오크 · 리넨 톤
+		name: '',          // 예: 'inter 도우미'
+		hours: '',         // 비우면 운영 시간을 보이지 않습니다 (24시간 상담). 예: '평일 10:00 – 17:00 (점심 12:00 – 13:00)'
+		contact: '',       // 상담원 연결 주소. 비우면 카카오톡 상담 버튼 주소
+		faqBoard: 3,       // 자동으로 배울 자주묻는질문 게시판 번호 (0 = 끔)
+		sizeGuide: '/inter/guide.html#size',   // 「사이즈는 어떻게 골라요?」 답의 [사이즈 가이드 보기] 버튼 → 쇼핑 가이드의 치수 재는 법
+		guideLink: '/inter/guide.html#care',   // 「사용 · 관리 방법」 답의 [관리 가이드] 버튼 → 쇼핑 가이드의 소재 · 관리
+		couponText: '세일 페이지에서 회원이면 랜덤 쿠폰(최대 50%)을 직접 뽑을 수 있어요.\n받은 쿠폰은 마이쿠폰에서 확인해요.',
+		/* 재방문 시크릿 쿠폰 : 다시 찾아온 손님(지난 방문 뒤 30분 넘게 지나 다시 온 브라우저)에게 챗봇 첫 화면에서 보여 주는 쿠폰. 손님이 [받기]를 누르면 챗봇 안에서 바로 발급된다
+		   관리자 › 프로모션 › 쿠폰에서 「재방문 시크릿 쿠폰 10%」 (10% · 고객 다운로드 · 발급일로부터 7일 · 1인 1회 · 상품상세 노출안함)를 만들고 그 번호(19자리)를 넣는다.
+		   비우면 쿠폰 카드를 보이지 않는다 (?edit=1 → [쇼핑 도우미 고치기]의 「재방문 쿠폰 번호」로도 넣을 수 있다) */
+		revisitCoupon: '',
+		revisitValue: '10%',
+		revisitCond: '받은 날부터 7일 동안 사용',
+		revisitHours: 24,   // 처음 보여 준 때부터 몇 시간 동안 받을 수 있는지
+		/* 기본 답에 쇼핑 가이드(/inter/guide.html) 버튼을 붙인다 (같은 질문이면 기본 답을 덮어씀)
+		   {배송비} {배송기간} {교환기간} {환불기간} 은 카페24 관리자 › 쇼핑몰 설정 › 이용안내에 적은 값으로 자동으로 채워진다 (숫자를 여기에 적지 않는다) */
+		addQna: [
+			{ cat: '배송 안내', q: '배송은 언제 와요?', keywords: '배송, 도착, 출고, 언제', a: '결제가 확인되면 출고돼요. 받으시기까지 보통 {배송기간} 걸려요.\n큰 가구는 배송 기사님이 미리 연락드려 받으실 날을 맞춰요.', buttons: '주문 · 배송 조회 /myshop/order/list.html\n배송 안내 자세히 /inter/guide.html#shipping' },
+			{ cat: '배송 안내', q: '배송비는 얼마예요?', keywords: '배송비, 무료배송, 택배비', a: '배송비 안내 : {배송비}\n제주 · 도서산간이나 사다리차가 필요한 경우 비용이 더 들 수 있어요.', buttons: '장바구니 /order/basket.html\n배송 안내 자세히 /inter/guide.html#shipping' },
+			{ cat: '배송 안내', q: '설치도 해 주시나요?', keywords: '설치, 조립, 기사, 엘리베이터, 사다리차', a: '침대 · 식탁 · 책장처럼 큰 가구는 상세페이지에 적힌 대로 기사님이 설치해 드리거나, 쉽게 조립할 수 있게 보내 드려요.\n엘리베이터가 없거나 현관 · 복도가 좁으면 주문 전에 상담으로 알려 주세요.', buttons: '반입 경로 재는 법 /inter/guide.html#size\n배송 안내 자세히 /inter/guide.html#shipping' },
+			{ cat: '교환 · 반품 · 환불', q: '교환 · 반품은 어떻게 해요?', keywords: '교환, 반품, 반송', a: '받으신 날부터 {교환기간} 안에, 사용 흔적이 없고 포장 · 구성품이 그대로인 상품이면 교환 · 반품할 수 있어요.\n조립 · 설치한 가구는 반품이 어려울 수 있으니 받으신 뒤 먼저 상태를 확인해 주세요.', buttons: '교환 · 반품 신청 (주문 조회) /myshop/order/list.html\n교환 · 반품 안내 자세히 /inter/guide.html#returns' },
+			{ cat: '교환 · 반품 · 환불', q: '환불은 언제 돼요?', keywords: '환불, 환불 언제, 돈 언제', a: '반품 상품이 도착해 확인되면 {환불기간} 안에 결제하신 수단으로 환불해 드려요.\n카드 결제는 승인 취소로 처리돼 카드사 일정에 따라 반영돼요.', buttons: '환불 안내 자세히 /inter/guide.html#returns' },
+			{ cat: '상품 상담', q: '사이즈는 어떻게 골라요?', keywords: '사이즈, 치수, 크기, 가로, 깊이, 높이, 공간, 들어갈까, 맞을까', a: '가구를 놓을 자리의 가로 · 깊이 · 높이와, 현관 · 복도 · 엘리베이터 폭을 먼저 재 보세요.\n상세페이지의 치수와 비교해 양옆 · 앞쪽에 걸어 다닐 여유가 남는지 확인하면 실패가 줄어요.', buttons: '치수 재는 법 /inter/guide.html#size\n공간별 치수표 /inter/guide.html#size-chart' },
+			{ cat: '상품 상담', q: '사용 · 관리 방법이 궁금해요', keywords: '관리, 오일, 원목, 패브릭, 세탁, 얼룩, 보관, 사용법', a: '원목은 마른 천으로 닦고 1년에 한두 번 오일로 결을 정리해 주세요. 리넨 · 패브릭은 케어 라벨을 먼저 확인해요.\n소재별 관리법은 쇼핑 가이드에 모아 두었어요.', buttons: '소재 · 관리 가이드 /inter/guide.html#care' }
+		],
+		trail: true,       // 이동 경로 : 손님이 본 상품 · 분류 · 검색어를 손님 브라우저에만 남겨 두었다가, 상담을 요청할 때 동의하면 함께 보냅니다 (false = 끔)
+		logSheet: '',      // ★ 이 쇼핑몰 구글 계정에 설치한 상담 기록 저장소(google-sheet-script.gs) 웹 앱 주소. 비우면 기록을 남기지 않습니다. 관리자 페이지 = /addons/shop-helper/admin.html
+		consultBoard: 0,   // 상담 기록 게시판 번호 (관리자 › 게시판 관리에서 「상담 기록」 게시판 · 비밀글 전용 · 읽기 관리자로 만든 뒤 그 번호). 회원이 동의하고 상담을 넘기면 비밀글로 남습니다. 0 = 끔
+		/* 공간 추천 : 첫 메뉴 「우리 집에 맞는 가구 추천」. 질문을 고르면 상품 분류 목록에서 상품 이름에 words 낱말이 들어 있는 상품을 골라 보여 줍니다.
+		   category = 상단 메뉴의 분류 이름 그대로, words = 쉼표로 나눈 낱말(상품 이름에 들어 있으면 점수), weight = 그 질문의 중요도,
+		   min · max = 가격(원). 새 상품을 올리면 이름에 낱말이 들어가도록 짓거나, 여기 words 에 그 상품 이름의 낱말을 더하세요. 끄려면 enabled: false */
+		style: {
+			enabled: true,
+			title: '우리 집에 맞는 가구 추천',
+			desc: '네 가지만 고르면 어울리는 상품을 골라 드려요',
+			allCategory: '전체 상품',      // 「아직 모르겠어요」를 고르면 이 분류에서 찾습니다
+			exclude: '샘플상품',            // 추천에서 뺄 상품 이름 (쉼표로 여러 개)
+			count: 4,                      // 보여 줄 상품 수
+			steps: [
+				{ q: '어느 공간을 꾸미세요?', options: [
+					{ label: '거실 · 수납', category: '거실 · 수납' },
+					{ label: '침실 · 패브릭', category: '침실 · 패브릭' },
+					{ label: '다이닝 · 소품', category: '다이닝 · 소품' },
+					{ label: '아직 모르겠어요' } ] },
+				{ q: '무엇이 가장 필요하세요?', weight: 2, options: [
+					{ label: '수납 · 정리', words: '책장, 선반, 수납, 서랍, 장, 박스, 바스켓, 행거, 콘솔' },
+					{ label: '편히 쉬는 자리', words: '체어, 소파, 라운지, 침대, 쿠션, 러그, 스툴, 블랭킷' },
+					{ label: '식사 · 작업 테이블', words: '식탁, 테이블, 다이닝, 체어, 의자, 벤치, 데스크' },
+					{ label: '분위기 · 소품', words: '조명, 램프, 화병, 캔들, 액자, 플랜트, 쿠션, 트레이' } ] },
+				{ q: '좋아하는 분위기는요?', weight: 1.5, options: [
+					{ label: '밝은 오크 · 내추럴', words: '오크, 원목, 내추럴, 우드, 라탄, 리넨' },
+					{ label: '화이트 · 미니멀', words: '화이트, 미니멀, 베이직, 스틸, 세라믹' },
+					{ label: '포근한 패브릭', words: '리넨, 패브릭, 울, 부클레, 쿠션, 블랭킷, 러그' },
+					{ label: '빈티지 · 클래식', words: '빈티지, 월넛, 페이퍼코드, 클래식, 레더, 브라스' } ] },
+				{ q: '생각하는 예산은요?', options: [
+					{ label: '10만 원 이하', max: 100000 },
+					{ label: '10 ~ 30만 원', min: 100000, max: 300000 },
+					{ label: '30만 원 이상', min: 300000 },
+					{ label: '상관없어요' } ] }
+			]
+		}
 	},
 
 	/* ---------------------------------------------------------------------
@@ -349,9 +425,11 @@ window.STORE_CONTENT = {
 				{ no: '6086342019800000320', label: '10% 쿠폰', total: 100, remain: 100 },
 				{ no: '6086342024200000321', label: '5% 쿠폰',  total: 300, remain: 300 }
 			],
-			remainUrl: 'https://soft-sea-0571.senior-sujin.workers.dev',                   // (선택) 남은 수량 공용 카운터 주소. 판매자가 알려 준 주소(https://….workers.dev)만 넣으면 모든 방문자에게 같은 남은 수량이 보인다. 비워 두면 위 remain 숫자를 그대로 쓴다
+			remainUrl: 'https://soft-sea-0571.senior-sujin.workers.dev',                   // (선택) 남은 수량 공용 카운터 주소(https://….workers.dev). 넣으면 모든 방문자에게 같은 남은 수량이 보인다. 비워 두거나 카운터가 응답하지 않으면 표에 '당첨 확률'이 나오고 뽑기는 그대로 된다
 			stockTitle: '남은 쿠폰',
-			stockNote: '남은 수량은 주기적으로 업데이트돼요',
+			stockNote: '남은 수량은 주기적으로 업데이트돼요',   // 공용 카운터(remainUrl)를 쓸 때만 보이는 문구
+			probTitle: '쿠폰별 당첨 확률',      // 카운터 없이 쓸 때 표 제목(이 디자인에선 숨김). 표에는 '총 N장 · 확률 N%' 가 coupons 수량으로 자동 계산돼 나온다
+			probNote: '뽑기 확률은 준비된 쿠폰 수량 비율이에요',   // 표 아래 문구. 뒤에 '50% 쿠폰은 44명 중 1명꼴' 이 자동으로 붙는다
 			hideElsewhere: true,             // true 면 이 쿠폰들을 상품 상세 등 다른 쿠폰 다운로드 칸에서 숨겨 뽑기로만 받게 합니다
 			endAt: '',                       // 비우면 위 timer.endAt(이벤트 마감 시각)을 씁니다
 			myCouponUrl: '/myshop/coupon/coupon.html',

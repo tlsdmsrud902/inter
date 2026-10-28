@@ -1159,13 +1159,56 @@ function runCoupon() {
 
 	var $ = function (s) { return box.querySelector(s); };
 	var cardEls = [].slice.call(box.querySelectorAll('.sl-cp__card'));
+	/* 쿠폰 표 : 공용 카운터(remainUrl)에서 실제 남은 수량을 받아 오면 "N개 남음", 아니면 "당첨 확률"(쿠폰 수량 비율 = 실제 뽑기 확률)을 보여 준다.
+	   쿠폰을 뽑은 회원에게는 그 줄을 "내 쿠폰"으로 강조하고 마이쿠폰의 사용가능 기간까지 남은 시간을 센다 */
+	var stockOk = false, myNo = '', myEnd, dueTimer = null;   /* myEnd : undefined = 확인 중, 0 = 알 수 없음, 숫자 = 사용기한(ms) */
+	var baseW = cfg.coupons.map(function (c) { return c.remain != null && !isNaN(+c.remain) ? Math.max(0, +c.remain) : (+c.total || 0); });   /* 뽑기 가중치(pick 과 같은 값) — 표시 중에 remain 이 바뀌어도 확률은 그대로 */
+	function pctTxt(v) { return String(+v.toFixed(1)) + '%'; }
+	function josa(w) { var k = String(w).charCodeAt(String(w).length - 1) - 0xAC00; return k >= 0 && k <= 11171 && k % 28 === 0 ? '는' : '은'; }
+	function dueInner() {
+		if (myEnd === undefined) return '사용기한 확인 중…';
+		if (!myEnd) return '사용기한은 마이쿠폰에서 확인할 수 있어요';
+		var ms = myEnd - Date.now(); if (ms <= 0) return '사용기한이 지났어요';
+		var d = Math.floor(ms / 864e5), s = Math.floor(ms / 1000) % 86400, p2 = function (n) { return (n < 10 ? '0' : '') + n; };
+		return '사용기한까지<strong>' + (d > 0 ? 'D-' + d : 'D-DAY') + ' ' + p2(Math.floor(s / 3600)) + ':' + p2(Math.floor(s / 60) % 60) + ':' + p2(s % 60) + '</strong>';
+	}
 	function stockInner() {
-		var rows = cfg.coupons.map(function (c) {
+		var sum = baseW.reduce(function (a, w) { return a + w; }, 0), rare = null;
+		var rows = cfg.coupons.map(function (c, i) {
 			var tot = +c.total || 0; if (!tot) return '';
-			var rem = c.remain == null ? tot : Math.max(0, +c.remain), p = Math.max(0, Math.min(100, Math.round(rem / tot * 100)));
-			return '<li><div class="sl-cp__srow"><b>' + esc(c.label || '쿠폰') + '</b><span>' + (rem > 0 ? rem.toLocaleString('ko-KR') + '개 남음' : '모두 소진') + '</span></div><div class="sl-cp__bar"><i style="width:' + p + '%"></i></div></li>';
+			var mine = myNo && String(c.no) === myNo, right, p;
+			if (stockOk) {
+				var rem = c.remain == null ? tot : Math.max(0, +c.remain); p = Math.max(0, Math.min(100, Math.round(rem / tot * 100)));
+				right = rem > 0 ? rem.toLocaleString('ko-KR') + '개 남음' : '모두 소진';
+			} else {
+				if (!sum) return '';
+				var pr = baseW[i] / sum * 100; p = pr > 0 ? Math.max(1.5, pr) : 0;
+				right = '총 ' + tot.toLocaleString('ko-KR') + '장 · 확률 ' + pctTxt(pr);
+				if (baseW[i] > 0 && (!rare || baseW[i] < rare.w)) rare = { w: baseW[i], label: c.label || '쿠폰' };
+			}
+			return '<li' + (mine ? ' class="is-mine"' : '') + '><div class="sl-cp__srow"><b>' + (mine ? '<em class="sl-cp__mine">내 쿠폰</em>' : '') + esc(c.label || '쿠폰') + '</b><span>' + esc(right) + '</span></div><div class="sl-cp__bar"><i style="width:' + p + '%"></i></div>'
+				+ (mine ? '<div class="sl-cp__due">' + dueInner() + '</div>' : '') + '</li>';
 		}).join('');
-		return rows ? '<h4>' + esc(cfg.stockTitle || '남은 쿠폰') + '</h4><ul>' + rows + '</ul>' + (cfg.stockNote ? '<p>' + esc(cfg.stockNote) + '</p>' : '') : '';
+		if (!rows) return '';
+		var note = stockOk ? cfg.stockNote : (cfg.probNote || '뽑기 확률은 준비된 쿠폰 수량 비율이에요');
+		if (!stockOk && rare && Math.round(sum / rare.w) >= 2) note += ' · ' + rare.label + josa(rare.label) + ' ' + Math.round(sum / rare.w) + '명 중 1명꼴';
+		return '<h4>' + esc(stockOk ? (cfg.stockTitle || '남은 쿠폰') : (cfg.probTitle || '쿠폰별 당첨 확률')) + '</h4><ul' + (myNo ? ' class="has-mine"' : '') + '>' + rows + '</ul>' + (note ? '<p>' + esc(note) + '</p>' : '');
+	}
+	/* 마이쿠폰 페이지 글에서 그 쿠폰 이름 뒤의 "사용가능 기간 2026-10-07 14:00 ~ 2026-10-14 23:59" 끝 시각을 읽는다(한국시간) */
+	function endOf(t, name) {
+		if (!t || !name) return 0;
+		var i = t.indexOf(name); if (i < 0) return 0;
+		var j = t.indexOf('사용가능 기간', i); if (j < 0) return 0;
+		var seg = t.slice(j, j + 600).replace(/<[^>]*>/g, ' '), re = /(\d{4})[-.\/](\d{1,2})[-.\/](\d{1,2})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/g, m, all = [];
+		while ((m = re.exec(seg)) && all.length < 2) all.push(m);
+		m = all[1]; if (!m) return 0;
+		var h = m[4] != null ? +m[4] : 23, mi = m[5] != null ? +m[5] : 59, se = m[6] != null ? +m[6] : (m[4] != null ? 0 : 59);
+		return Date.UTC(+m[1], +m[2] - 1, +m[3], h - 9, mi, se);
+	}
+	function setMine(no, t) {
+		myNo = String(no); if (t != null) myEnd = endOf(t, nameOf(no));
+		refreshStock();
+		if (!dueTimer) dueTimer = setInterval(function () { var el = box.querySelector('.sl-cp__due'); if (el && myEnd) el.innerHTML = dueInner(); }, 1000);
 	}
 	function refreshStock() { var el = box.querySelector('.sl-cp__stock'); if (el) el.innerHTML = stockInner(); }
 	function notesInner() {
@@ -1182,7 +1225,7 @@ function runCoupon() {
 		if (!cfg.remainUrl) return Promise.resolve();
 		return fetch(remainBase(), { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (d) {
 			cfg.coupons.forEach(function (c) { var v = d && (d[String(c.no)] != null ? d[String(c.no)] : (d.remain && d.remain[String(c.no)])); if (v != null && !isNaN(+v)) c.remain = +v; else if (d && d.used && c.total != null && !isNaN(+c.total)) c.remain = Math.max(0, +c.total - (+d.used[String(c.no)] || 0));   /* 공용 카운터 : 총수량 - 발급 수 */ });
-			refreshStock();
+			stockOk = true; refreshStock();
 		}).catch(function () {});
 	}
 	function msg(t) { $('.sl-cp__msg').textContent = t; }
@@ -1207,14 +1250,20 @@ function runCoupon() {
 			});
 		}).catch(function () {});
 	}
+	/* 마이쿠폰에 찍히는 쿠폰 이름 — 쿠폰 정보가 아직 없으면 label 의 할인율로 이름을 추정 */
+	function nameOf(no) {
+		var x = cfg.coupons.filter(function (c) { return String(c.no) === String(no); })[0] || {}, n = info[String(no)] && info[String(no)].name;
+		if (!n) { var pc = /(\d+(?:\.\d+)?)\s*%/.exec(x.label || ''); n = pc ? (cfg.nameKey || '랜덤 쿠폰뽑기') + ' ' + Number(pc[1]) + '%' : ''; }
+		return n;
+	}
 	/* 마이쿠폰 페이지로 회원 여부와 이미 받은 쿠폰을 확인한다(비회원이면 로그인 화면으로 넘어간다) */
 	function member() {
 		return fetch(MY + (MY.indexOf('?') < 0 ? '?' : '&') + '_=' + Date.now(), { credentials: 'same-origin' }).then(function (r) {
 			if (/login/.test(r.url)) return { guest: true };
 			return r.text().then(function (t) {
 				if (/^\s*<script[^>]*>\s*location\.replace\(['"]\/member\/login\.html/.test(t)) return { guest: true };
-				var c = {}; cfg.coupons.forEach(function (x) { var n = info[String(x.no)] && info[String(x.no)].name; if (!n) { var pc = /(\d+(?:\.\d+)?)\s*%/.exec(x.label || ''); n = pc ? (cfg.nameKey || '랜덤 쿠폰뽑기') + ' ' + Number(pc[1]) + '%' : ''; }   /* 쿠폰 정보가 아직 없으면 label 의 할인율로 이름을 추정 */ c[String(x.no)] = n ? t.split(n).length - 1 : 0; });
-				return { guest: false, counts: c, any: t.split(cfg.nameKey || '랜덤 쿠폰뽑기').length - 1 };   /* any : 이름을 몰라도(정보 로딩 전) 이 이벤트 쿠폰을 이미 받았는지 */
+				var c = {}; cfg.coupons.forEach(function (x) { var n = nameOf(x.no); c[String(x.no)] = n ? t.split(n).length - 1 : 0; });
+				return { guest: false, counts: c, any: t.split(cfg.nameKey || '랜덤 쿠폰뽑기').length - 1, text: t };   /* any : 이름을 몰라도(정보 로딩 전) 이 이벤트 쿠폰을 이미 받았는지, text : 사용기한을 읽을 마이쿠폰 글 */
 			});
 		});
 	}
@@ -1255,7 +1304,7 @@ function runCoupon() {
 		/* 이미 받은 쿠폰이 있으면 남은 수량에서 그만큼 뺀다(직접 연동 전까지의 표시용) */
 		if (!cfg.remainUrl) cfg.coupons.forEach(function (c) { var k = m.counts[String(c.no)] || 0; if (k && c.remain != null && !isNaN(+c.remain)) c.remain = Math.max(0, +c.remain - k); }); refreshStock();
 		var have = cfg.coupons.filter(function (c) { return (m.counts[String(c.no)] || 0) > 0; })[0];
-		if (have || m.any) { done = true; if (have) reveal(cardEls[1], String(have.no)); msg('이미 쿠폰을 뽑으셨어요. 발급된 쿠폰은 마이쿠폰에서 사용하세요'); act(myBtn()); return; }
+		if (have || m.any) { done = true; if (have) { reveal(cardEls[1], String(have.no)); setMine(have.no, m.text); } msg('이미 쿠폰을 뽑으셨어요. 발급된 쿠폰은 마이쿠폰에서 사용하세요'); act(myBtn()); return; }
 		if (endAt && Date.now() > endAt) { msg('이벤트가 종료되었어요'); return; }
 		counts = m.counts; enable(true); msg('카드를 눌러 오늘의 쿠폰을 뽑아 보세요'); act('<button type="button" class="sl-cp__btn sl-cp__btn--wide" data-draw>랜덤 쿠폰 뽑기</button>');
 	}
@@ -1274,6 +1323,7 @@ function runCoupon() {
 				if (cfg.remainUrl) {   /* 공용 카운터(remainUrl) : 발급 성공을 알리고 모두가 같은 수량을 보게 한다 */
 					fetch(remainBase() + '/draw?no=' + encodeURIComponent(r.ok), { method: 'POST', mode: 'cors' }).catch(function () {}).then(loadRemain);
 				} else { cfg.coupons.forEach(function (c) { if (String(c.no) === r.ok && c.remain != null && +c.remain > 0) c.remain = +c.remain - 1; }); refreshStock(); }
+				setMine(r.ok); member().then(function (m) { if (!m.guest) setMine(r.ok, m.text); }).catch(function () { myEnd = 0; refreshStock(); });   /* 방금 받은 쿠폰의 사용기한을 마이쿠폰에서 읽어 온다 */
 				var o = info[r.ok] || {}; msg('축하해요! ' + (pctOf(r.ok) ? pctOf(r.ok) + ' 할인 ' : '') + '쿠폰이 발급됐어요');
 				act(myBtn()); busy = false;
 			}).catch(function () { card.classList.remove('is-loading'); msg('일시적인 오류예요. 잠시 후 다시 시도해 주세요'); enable(true); busy = false; });

@@ -184,3 +184,10 @@
     <span class="ec-base-help">{$board_function_help|replace:*,}</span>
 </div>
 <!-- // Admin only -->
+<!-- 화면 관리 글 숨기기 : 화면 관리 게시판(store-content.js 의 cms.boardNo)의 「[메인 화면] …」 같은 글은 손님 목록에서 숨긴다.
+     사장님이 보려면 주소 끝에 &cms=all 을 붙인다 (예: /board/free/list.html?board_no=2&cms=all). 화면 관리는 목록 원본을 읽으므로 영향 없음 -->
+<script>
+try{(function(){var C=window.INTER_CMS,no=(location.search.match(/[?&]board_no=(\d+)/)||[])[1];if(!C||!C.board||String(C.board)!==no||/[?&]cms=all\b/.test(location.search))return;
+var L=C.pageLabels().map(function(s){return s.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}),re=new RegExp('^\\s*\\[\\s*('+L.join('|')+')\\s*\\]');
+[].forEach.call(document.querySelectorAll('.typeList tbody tr'),function(tr){var a=tr.querySelector('td.subject a');if(a&&re.test(a.textContent))tr.hidden=true})})()}catch(e){}
+</script>

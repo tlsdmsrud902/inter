@@ -1,0 +1,142 @@
+<!--@layout(/layout/basic/layout.html)-->
+<!-- ===== 무료회원 감사 쿠폰팩 (2026-10-09) : 새로 가입한 회원에게만 주는 쿠폰 3장 (기존 회원은 받을 수 없음)
+     주소 : /inter/welcome.html  ·  플로팅 버튼(챗봇 밑 쿠폰 아이콘)을 누르면 이 페이지가 ?pop=1 로 작은 창에 열린다 (/addons/welcome-pack/welcome-pack.js)
+     쿠폰 : 관리자 › 프로모션 › 쿠폰 「무료회원 감사 쿠폰 5,000원 · 10,000원 · 15,000원」
+            발급 = 조건부 자동 발급 › 회원 가입 (가입하는 순간 카페24가 쿠폰함에 넣는다) · 발급일로부터 14일 · 주문금액 3만/7만/12만 원 이상
+     가입을 마친 화면(/member/join_result.html)에서 이 창이 「가입 축하」 화면(?joined=1)으로 한 번 열린다. 로그인한 회원에게는 버튼을 보이지 않는다
+     글자 · 사진은 /inter/welcome.html?edit=1 에서 고친다 (게시판 글 「[웰컴 쿠폰팩] …」) ===== -->
+<script>/* 작은 창(?pop=1)이면 머리글 · 푸터를 가리고 쿠폰팩만 꽉 차게 */if(/[?&]pop=1/.test(location.search))document.documentElement.classList.add('wp-pop');</script>
+<style>
+.wp{--ink:#33302b;--sub:#6f6a62;--line:#e7e0d5;--soft:#f5efe4;--tp1:#c29466;--tp2:#8a6541;--tp:#9c7650;max-width:480px;margin:40px auto 90px;border:1px solid var(--line);border-radius:26px;overflow:hidden;background:#fff;color:var(--ink);font-family:"Pretendard Variable",Pretendard,system-ui,sans-serif;word-break:keep-all;box-shadow:0 30px 60px -40px rgba(60,45,30,.35)}
+.wp *{box-sizing:border-box}
+.wp-top{display:flex;align-items:center;gap:12px;padding:16px 18px 14px;background:#fff}
+.wp-top__logo{flex:none;display:grid;place-items:center;width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--tp1),var(--tp2));color:#fff;font:600 13px/1 Jost,sans-serif;letter-spacing:-.02em}
+.wp-top__t{flex:1;min-width:0}.wp-top__t b{display:block;font-size:17px;font-weight:700;letter-spacing:-.03em}.wp-top__t small{display:block;margin-top:3px;font-size:12.5px;color:var(--sub)}
+.wp-x{display:none;flex:none;width:36px;height:36px;margin-right:-6px;border:0;border-radius:50%;background:transparent;color:var(--ink);cursor:pointer}.wp-x:hover{background:var(--soft)}.wp-x svg{display:block;width:20px;height:20px;margin:auto}
+.wp-hero{position:relative;margin:0;aspect-ratio:16/10;overflow:hidden;background:var(--soft)}
+.wp-hero img{display:block;width:100%;height:100%;object-fit:cover;object-position:60% 40%}
+.wp-hero::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(30,22,15,0) 35%,rgba(30,22,15,.62) 100%)}
+.wp-hero__t{position:absolute;left:20px;right:20px;bottom:18px;z-index:1;color:#fff}
+.wp-hero__t small{display:block;font:500 10.5px/1 Jost,sans-serif;letter-spacing:.22em;text-transform:uppercase;opacity:.85}
+.wp-hero__t h1{margin:8px 0 6px;font-size:23px;line-height:1.3;font-weight:700;letter-spacing:-.04em;color:#fff}
+.wp-hero__t p{margin:0;font-size:13px;line-height:1.55;opacity:.9}
+.wp-sum{position:absolute;top:14px;right:14px;z-index:1;display:flex;align-items:baseline;gap:3px;padding:7px 12px;border-radius:999px;background:rgba(255,255,255,.9);color:var(--ink);font-size:11px;font-weight:600;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.wp-sum b{font:600 15px/1 Jost,sans-serif;letter-spacing:-.02em}
+.wp-body{padding:22px 18px 6px}
+.wp-h{display:flex;align-items:center;justify-content:space-between;margin:0 2px 12px;font-size:15px;font-weight:700;letter-spacing:-.03em;color:var(--ink)}
+.wp-h small{font-size:12px;font-weight:500;color:var(--sub)}
+.wp-list{display:flex;flex-direction:column;gap:10px;margin:0 0 26px;padding:0;list-style:none}
+/* 쿠폰 티켓 : 왼쪽 금액(토프) | 오른쪽 이름 · 조건 */
+.wp-cp{position:relative;display:flex;align-items:stretch;min-height:82px;border-radius:16px;background:var(--soft);overflow:hidden;transition:transform .35s cubic-bezier(.2,.75,.2,1)}
+.wp-cp__v{position:relative;flex:none;display:flex;align-items:baseline;justify-content:center;align-self:stretch;padding-top:28px;width:112px;background:linear-gradient(120deg,var(--tp1),var(--tp2));color:#fff;border-right:1.5px dashed rgba(255,255,255,.45)}
+.wp-cp__v::before,.wp-cp__v::after{content:"";position:absolute;right:-8px;width:14px;height:14px;border-radius:50%;background:#fff}.wp-cp__v::before{top:-7px}.wp-cp__v::after{bottom:-7px}
+.wp-cp__v b{font:600 25px/1 Jost,sans-serif;letter-spacing:-.03em}.wp-cp__v span{margin-left:1px;font-size:13px;font-weight:700}
+.wp-cp__t{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;padding:12px 14px 12px 18px}
+.wp-cp__t small{align-self:flex-start;padding:3px 7px;border-radius:999px;background:#fff;font-size:10.5px;font-weight:600;color:var(--tp2)}
+.wp-cp__t strong{margin-top:6px;font-size:14.5px;font-weight:700;letter-spacing:-.03em}
+.wp-cp__t em{margin-top:2px;font-style:normal;font-size:12.5px;color:var(--sub)}
+.wp-cp__st{display:none;align-self:center;margin-right:14px;padding:6px 10px;border-radius:999px;background:var(--ink);color:#fff;font-size:11.5px;font-weight:600;white-space:nowrap}
+.wp.is-got .wp-cp__st{display:block}.wp.is-got .wp-cp{background:#f3efea}
+.wp.is-pop .wp-cp{animation:wp-pop .55s cubic-bezier(.2,.9,.3,1.35) both;animation-delay:calc(var(--k,0) * 110ms)}
+@keyframes wp-pop{40%{transform:scale(1.03)}}
+.wp-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 26px;padding:0;list-style:none;counter-reset:wp}
+.wp-steps li{padding:14px 10px 13px;border:1px solid var(--line);border-radius:14px;text-align:center;counter-increment:wp}
+.wp-steps li::before{content:counter(wp);display:grid;place-items:center;width:22px;height:22px;margin:0 auto 8px;border-radius:50%;background:var(--ink);color:#fff;font:600 11px/1 Jost,sans-serif}
+.wp-steps b{display:block;font-size:13px;font-weight:700;letter-spacing:-.03em}.wp-steps span{display:block;margin-top:3px;font-size:11.5px;line-height:1.45;color:var(--sub)}
+.wp-note{margin:0 0 18px;border-top:1px solid var(--line)}
+.wp-note summary{display:flex;align-items:center;justify-content:space-between;padding:14px 2px;font-size:13px;font-weight:600;color:var(--sub);cursor:pointer;list-style:none}.wp-note summary::-webkit-details-marker{display:none}
+.wp-note summary::after{content:"";width:7px;height:7px;margin-right:4px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:transform .25s}.wp-note[open] summary::after{transform:rotate(-135deg)}
+.wp-note ul{margin:0 0 6px;padding:0 0 0 16px}.wp-note li{margin-bottom:5px;list-style:disc;font-size:12px;line-height:1.6;color:var(--sub)}
+.wp-cta{position:sticky;bottom:0;z-index:2;padding:12px 18px 16px;border-top:1px solid var(--line);background:rgba(255,255,255,.96);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.wp-chip{display:flex;align-items:center;justify-content:center;gap:6px;width:max-content;max-width:100%;margin:-28px auto 10px;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:#fff;font-size:11.5px;font-weight:600;color:var(--ink);box-shadow:0 8px 18px -12px rgba(0,0,0,.35)}
+.wp-chip i{width:7px;height:7px;border-radius:50%;background:#2fb36b;box-shadow:0 0 0 3px rgba(47,179,107,.18)}
+.wp-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:54px;border:0;border-radius:14px;background:var(--ink);color:#fff!important;font-family:inherit;font-size:15.5px;font-weight:700;line-height:1;letter-spacing:-.02em;text-decoration:none;cursor:pointer;transition:background .25s,transform .25s}
+.wp-btn:hover{background:#000}.wp-btn:active{transform:scale(.985)}.wp-btn[aria-busy=true]{opacity:.7;cursor:default}
+.wp-btn svg{width:17px;height:17px}
+.wp-sub{margin:10px 0 0;text-align:center;font-size:12.5px;color:var(--sub)}.wp-sub a{margin-left:4px;color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+.wp-msg{margin:0 0 10px;padding:10px 12px;border-radius:12px;background:var(--soft);font-size:12.5px;line-height:1.5;color:var(--ink);text-align:center}
+.wp-msg[hidden],.wp-chip[hidden],.wp-btn[hidden]{display:none}
+@media (max-width:540px){.wp{margin:0 0 60px;border:0;border-radius:0;box-shadow:none}}
+/* 작은 창 */
+html.wp-pop,html.wp-pop body{overflow:hidden!important;background:#fff!important}
+html.wp-pop .wp{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;max-width:none;margin:0;border:0;border-radius:0;box-shadow:none}
+html.wp-pop .wp-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:none}html.wp-pop .wp-scroll::-webkit-scrollbar{display:none}
+html.wp-pop .wp-x{display:block}
+html.wp-pop #s9Float,html.wp-pop .wh-fab,html.wp-pop .wh,html.wp-pop .wh-hint,html.wp-pop .st-totop{display:none!important}
+@media (prefers-reduced-motion:reduce){.wp *{animation:none!important;transition:none!important}}
+</style>
+<div class="wp" id="wp" data-cms-page="웰컴 쿠폰팩">
+ <header class="wp-top" data-cms="쿠폰팩 머리글">
+  <span class="wp-top__logo" aria-hidden="true">i</span>
+  <div class="wp-top__t"><b data-cms-text="제목">무료회원 감사 쿠폰팩</b><small data-cms-text="작은 글">새로 가입하시면 3만 원 쿠폰이 바로 들어가요</small></div>
+  <button type="button" class="wp-x" data-wp-close aria-label="닫기"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+ </header>
+ <div class="wp-scroll">
+  <figure class="wp-hero" data-cms="쿠폰팩 큰 사진">
+   <img src="/SkinImg/inter/scene-chair.webp" alt="창가에 놓인 오크 라운지 체어" width="1672" height="941" data-cms-src="사진" data-cms-size="1600x1000">
+   <span class="wp-sum">총 <b data-cms-text="총 혜택">30,000</b>원 혜택</span>
+   <figcaption class="wp-hero__t"><small data-cms-text="작은 제목">Thank you for joining</small><h1 data-cms-text="제목">가입해 주셔서 고마워요<br>감사 쿠폰 3장</h1><p data-cms-text="설명">무료 회원가입을 마치면 쿠폰함에 자동으로 들어가요.</p></figcaption>
+  </figure>
+  <div class="wp-body">
+   <section data-cms="쿠폰팩 쿠폰" data-cms-grow data-cms-help="쿠폰 한 장이 번호 묶음 하나예요. 쿠폰은 관리자 › 프로모션 › 쿠폰 「무료회원 감사 쿠폰」(조건부 자동 발급 · 회원 가입)이 가입할 때 자동으로 넣어 줘요. 관리자에서 쿠폰 금액 · 조건을 바꾸면 여기 글자도 같이 맞춰 주세요.">
+    <h2 class="wp-h"><span data-cms-text="제목">감사 쿠폰 3종</span><small data-cms-text="작은 글">받은 날부터 14일</small></h2>
+    <ul class="wp-list">
+     <li class="wp-cp" data-cms-item style="--k:0"><div class="wp-cp__v"><b data-cms-text="혜택">5,000</b><span data-cms-text="단위">원</span></div><div class="wp-cp__t"><small data-cms-text="꼬리표">첫 구매 추천</small><strong data-cms-text="쿠폰 이름">무료회원 감사 쿠폰</strong><em data-cms-text="조건">3만 원 이상 구매 시</em></div><span class="wp-cp__st">지급 ✓</span></li>
+     <li class="wp-cp" data-cms-item style="--k:1"><div class="wp-cp__v"><b data-cms-text="혜택">10,000</b><span data-cms-text="단위">원</span></div><div class="wp-cp__t"><small data-cms-text="꼬리표">가장 많이 써요</small><strong data-cms-text="쿠폰 이름">무료회원 감사 쿠폰</strong><em data-cms-text="조건">7만 원 이상 구매 시</em></div><span class="wp-cp__st">지급 ✓</span></li>
+     <li class="wp-cp" data-cms-item style="--k:2"><div class="wp-cp__v"><b data-cms-text="혜택">15,000</b><span data-cms-text="단위">원</span></div><div class="wp-cp__t"><small data-cms-text="꼬리표">큰 가구 · 세트 구매</small><strong data-cms-text="쿠폰 이름">무료회원 감사 쿠폰</strong><em data-cms-text="조건">12만 원 이상 구매 시</em></div><span class="wp-cp__st">지급 ✓</span></li>
+    </ul>
+   </section>
+   <section data-cms="쿠폰팩 받는 방법" data-cms-grow data-cms-help="순서 칸 하나가 번호 묶음 하나예요.">
+    <h2 class="wp-h" data-cms-text="제목">이렇게 받아요</h2>
+    <ol class="wp-steps">
+     <li data-cms-item><b data-cms-text="제목">무료 회원가입</b><span data-cms-text="설명">1분이면 끝나요</span></li>
+     <li data-cms-item><b data-cms-text="제목">쿠폰함에 자동 지급</b><span data-cms-text="설명">가입하는 순간 3장</span></li>
+     <li data-cms-item><b data-cms-text="제목">주문서에서 사용</b><span data-cms-text="설명">조건에 맞는 쿠폰 선택</span></li>
+    </ol>
+   </section>
+   <details class="wp-note" data-cms="쿠폰팩 유의사항">
+    <summary data-cms-text="제목">꼭 확인해 주세요</summary>
+    <ul data-cms-list="안내 목록"><li>새로 회원가입하신 분께만 드려요. 이미 가입하신 회원은 받을 수 없어요.</li><li>가입을 마치면 쿠폰함에 자동으로 들어가요. 따로 받을 필요가 없어요.</li><li>쿠폰은 받은 날부터 14일 동안 쓸 수 있어요.</li><li>한 주문에 쿠폰은 1장만 쓸 수 있어요.</li><li>쿠폰마다 정해진 주문 금액 이상일 때 쓸 수 있어요.</li><li>받은 쿠폰은 마이페이지 › 쿠폰에서 확인할 수 있어요.</li></ul>
+   </details>
+  </div>
+ </div>
+ <footer class="wp-cta" data-cms="쿠폰팩 버튼" data-cms-help="손님에게는 「가입 버튼」, 가입을 막 마친 회원에게는 「가입 축하」 글과 「쿠폰함 버튼」이 나와요.">
+  <p class="wp-chip"><i aria-hidden="true"></i><span data-cms-text="안내 칩">신규 가입 회원 전용 · 가입 즉시 자동 지급</span></p>
+  <p class="wp-msg" data-wp-msg hidden></p>
+  <a class="wp-btn" href="/member/agreement.html" target="_top" data-wp-main>무료 회원가입하고 쿠폰 받기</a>
+  <span hidden data-wp-t="guest" data-cms-text="가입 버튼">무료 회원가입하고 쿠폰 받기</span>
+  <span hidden data-wp-t="joined" data-cms-text="쿠폰함 버튼">내 쿠폰함 보기</span>
+  <span hidden data-wp-t="joinedMsg" data-cms-text="가입 축하">가입을 축하드려요! 감사 쿠폰 3장이 쿠폰함에 들어갔어요.</span>
+  <span hidden data-wp-t="memberMsg" data-cms-text="기존 회원 안내">새로 가입하신 분께만 드리는 쿠폰팩이에요.</span>
+ </footer>
+</div>
+<script>
+/* 무료회원 감사 쿠폰팩 : 손님 → 회원가입으로 · 가입을 막 마친 회원(?joined=1) → 축하 + 쿠폰함 보기 · 기존 회원 → 안내만
+   쿠폰은 카페24 「조건부 자동 발급 › 회원 가입」이 가입할 때 넣는다 (이 화면은 발급하지 않는다) */
+(function () {
+  var wp = document.getElementById('wp'); if (!wp) return;
+  var POP = /[?&]pop=1/.test(location.search), JOINED = /[?&]joined=1/.test(location.search);
+  var ORIGIN = location.protocol + '//' + location.host;
+  var main = wp.querySelector('[data-wp-main]'), msg = wp.querySelector('[data-wp-msg]'), chip = wp.querySelector('.wp-chip');
+  function isMember() { return [].some.call(document.querySelectorAll('a[href]'), function (a) { return /logout/i.test(a.getAttribute('href') || ''); }); }
+  function text(k) { var e = wp.querySelector('[data-wp-t="' + k + '"]'); return e ? e.textContent.trim() : ''; }
+  function say(t) { msg.textContent = t || ''; msg.hidden = !t; }
+  function tell(o) { if (POP && window.parent !== window) try { window.parent.postMessage(o, ORIGIN); } catch (e) {} }
+  function paint() {
+    var mem = isMember(), joined = mem && JOINED;
+    wp.classList.toggle('is-got', joined);
+    chip.hidden = mem;
+    if (!mem) { main.textContent = text('guest') || main.textContent; main.href = '/member/agreement.html'; main.hidden = false; say(''); return; }
+    main.textContent = text('joined') || '내 쿠폰함 보기'; main.href = '/myshop/coupon/coupon.html'; main.hidden = false;
+    say(joined ? text('joinedMsg') : text('memberMsg'));
+  }
+  wp.querySelector('[data-wp-close]').addEventListener('click', function () { tell({ wp: 'close' }); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') tell({ wp: 'close' }); });
+  document.addEventListener('inter:cms', paint);
+  paint();
+  if (JOINED && isMember()) { wp.classList.add('is-pop'); }
+  // 작은 창은 항상 맨 위(사진)부터 보이게
+  if (POP) { var sc = wp.querySelector('.wp-scroll'); [0, 300, 900].forEach(function (t) { setTimeout(function () { sc.scrollTop = 0; window.scrollTo(0, 0); }, t); }); }
+  tell({ wp: 'ready' });
+})();
+</script>

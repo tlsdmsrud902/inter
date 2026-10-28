@@ -36,45 +36,78 @@
 
   /* ---------- 1. 게시판 읽기 ---------- */
   function articleNo(href) { var m = String(href || '').match(/\/article\/[^/]+\/\d+\/(\d+)/) || String(href || '').match(/[?&]no=(\d+)/); return m ? m[1] : ''; }
+  // 글쓴이 칸 : 목록 표의 4번째 칸(board/free/list.html 의 {$writer})
+  function writerOf(a) { var tr = a.closest('tr'), td = tr && tr.querySelectorAll('td')[3]; return td ? trim(td.textContent) : ''; }
   function parseList(text) {
     var doc = new DOMParser().parseFromString(text, 'text/html'), out = [], seen = {};
     doc.querySelectorAll('a[href*="/article/"], a[href*="read.html"]').forEach(function (a) {
       var no = articleNo(a.getAttribute('href')), subject = trim(a.textContent);
       if (!no || !subject || seen[no]) return;
-      seen[no] = 1; out.push({ no: no, subject: subject, href: a.getAttribute('href') });
+      seen[no] = 1; out.push({ no: no, subject: subject, href: a.getAttribute('href'), writer: writerOf(a) });
     });
     return out;
   }
+  // store-content.js 의 cms.writers 에 이름을 적으면 그 글쓴이의 글만 화면에 쓴다
+  // (게시판 쓰기 권한을 실수로 '회원'·'모두'로 바꿔도 손님이 쓴 글이 메인을 바꾸지 못하게)
+  var WRITERS = (CFG.writers || []).map(norm).filter(Boolean);
+  function trusted(p) { return !WRITERS.length || WRITERS.some(function (w) { return norm(p.writer).indexOf(w) > -1; }); }
   // 글 본문 : 손님도 보는 공개 글 페이지(스킨의 board/free/read.html 의 [data-inter-content])에서 읽는다.
   //          못 읽으면 카페24 기본 스킨이 쓰는 글 읽기 주소로 한 번 더 시도한다.
-  function getPost(p) {
-    if (!p.href) return getJSON(p.no);
+  function getPost(p, board) {
+    board = board || BOARD;
+    if (!p.href) return getJSON(p.no, board);
     return fetch(p.href, { credentials: 'same-origin' }).then(function (r) { return r.ok ? r.text() : ''; }).then(function (t) {
       var box = t && new DOMParser().parseFromString(t, 'text/html').querySelector('[data-inter-content], [module^="board_read"] .detail');
-      return box && box.innerHTML.trim() ? { content: box.innerHTML } : getJSON(p.no);
-    }).catch(function () { return getJSON(p.no); });
+      return box && box.innerHTML.trim() ? { content: box.innerHTML } : getJSON(p.no, board);
+    }).catch(function () { return getJSON(p.no, board); });
   }
-  function getJSON(no) {
-    return fetch('/exec/front/board/product/' + BOARD + '?no=' + no + '&board_no=' + BOARD + '&pass_check=F', { credentials: 'same-origin' })
+  function getJSON(no, board) {
+    board = board || BOARD;
+    return fetch('/exec/front/board/product/' + board + '?no=' + no + '&board_no=' + board + '&pass_check=F', { credentials: 'same-origin' })
       .then(function (r) { return r.json(); })
       .then(function (d) { return d && d.read ? { subject: trim(d.read.subject), content: String(d.read.content || '') } : null; })
       .catch(function () { return null; });
   }
   /* 목록 → 제목이 영역 이름과 맞는 글만 본문을 읽는다 (같은 영역 글이 여럿이면 최신 글) */
   // 카페24는 짧은 시간에 요청이 몰리면 접속을 잠시 막는다 → 목록은 필요한 만큼만, 본문은 2개씩 차례로, 바뀐 글만 읽는다
-  function getList(p) {
-    return fetch('/board/free/list.html?board_no=' + BOARD + '&page=' + p, { credentials: 'same-origin' })
+  function getList(p, board) {
+    return fetch('/board/free/list.html?board_no=' + (board || BOARD) + '&page=' + p, { credentials: 'same-origin' })
       .then(function (r) { return r.ok ? r.text() : ''; }).catch(function () { return ''; });
   }
+  var MAX_PAGES = Math.max(1, Number(CFG.maxPages) || 8);
+  function pause(ms) { return new Promise(function (r) { setTimeout(r, ms); }); }
+  /* 게시판 목록을 여러 페이지 읽는다. 사장님이 같은 게시판에 공지를 계속 올려 화면 관리 글이 뒤 페이지로 밀려도 찾을 수 있게
+     — 첫 페이지 글 수보다 적게 나온 페이지(마지막 페이지)에서, 또는 done(지금까지 읽은 글) 이 true 를 돌려주면 멈춘다.
+     페이지 사이에 잠깐 쉬어 카페24의 잦은 요청 차단을 피한다. → { list, blocked } */
+  function listBoard(board, done) {
+    var all = [], seen = {}, size = 0, blocked = false;
+    function page(n) {
+      return getList(n, board).then(function (t) {
+        if (n === 1) blocked = /사용할 수 없습니다|존재하지 않는 게시판/.test(t);
+        var got = parseList(t), fresh = got.filter(function (p) { return !seen[p.no]; });
+        fresh.forEach(function (p) { seen[p.no] = 1; all.push(p); });
+        if (n === 1) size = got.length;
+        // 공지·고정 글은 페이지마다 다시 나오므로 '새 글'이 없으면 끝
+        if (!fresh.length || got.length < size || size < 5 || n >= MAX_PAGES || (done && done(all))) return;
+        return pause(250).then(function () { return page(n + 1); });
+      });
+    }
+    return page(1).then(function () { return { list: all, blocked: blocked }; });
+  }
   function load(names, prev, fresh) {
-    return getList(1).then(function (t1) {
+    // 지난번에 찾은 글 중 가장 오래된 글 번호 : 그보다 오래된 글까지 내려가면 더 찾을 글이 없다
+    // (새로 만든 영역 글은 늘 앞 페이지에 생긴다). 처음 읽을 때는 최대 MAX_PAGES 페이지까지
+    var oldest = 0;
+    Object.keys(prev || {}).forEach(function (k) { var n = +prev[k].no; if (n && (!oldest || n < oldest)) oldest = n; });
+    return listBoard(BOARD, function (list) {
+      // 찾는 영역 글을 다 찾았으면 더 읽지 않는다 (최신 글이 앞 페이지에 있으므로 먼저 찾은 것이 최신)
+      var found = {}, low = Infinity;
+      list.forEach(function (p) { var n = trusted(p) && match(p.subject, names); if (n) found[n] = 1; if (+p.no < low) low = +p.no; });
+      return Object.keys(found).length >= names.length || (oldest && low < oldest);
+    }).then(function (r) {
       // 게시판이 '사용 안함·표시 안함'이거나 없으면 카페24가 목록 대신 경고만 돌려준다
-      state.blocked = /사용할 수 없습니다|존재하지 않는 게시판/.test(t1);
-      var first = parseList(t1);
-      return (first.length >= 10 ? getList(2) : Promise.resolve('')).then(function (t2) { return first.concat(parseList(t2)); });
-    }).then(function (list) {
-      var posts = [], seen = {};
-      list.forEach(function (p) { if (!seen[p.no]) { seen[p.no] = 1; posts.push(p); } });
+      state.blocked = r.blocked;
+      var posts = r.list.filter(trusted);
       posts.sort(function (a, b) { return b.no - a.no; });
       var pick = {};
       posts.forEach(function (p) { var n = match(p.subject, names); if (n && !pick[n]) pick[n] = p; });
@@ -129,7 +162,7 @@
     var root = { fields: {}, imgs: [], items: [] }, cur = root, last = null;
     tokens(content).forEach(function (tk) {
       if (tk.img) { cur.imgs.push(tk.img); last = null; return; }
-      var t = trim(tk.t.replace(/\*\*\s*\*\*|\*\s*\*/g, ''));
+      var t = trim(tk.t);   // (tokens 가 빈 굵게·기울임 표시는 만들지 않으므로 ** 를 지우지 않는다 — 글 중간의 **굵게** 를 살린다)
       if (!t) { last = null; return; }
       if (/^※/.test(t)) return;
       var m = t.match(MARK);
@@ -147,7 +180,7 @@
   function unstar(v) { return trim(v).replace(/^\*\*(.*)\*\*$/, '$1'); }
 
   /* ---------- 3. 화면에 넣기 ---------- */
-  var FIELD_SEL = '[data-cms-text],[data-cms-href],[data-cms-src],[data-cms-video],[data-cms-links],[data-cms-lines],[data-cms-spots],[data-cms-list]';
+  var FIELD_SEL = '[data-cms-text],[data-cms-href],[data-cms-src],[data-cms-video],[data-cms-links],[data-cms-lines],[data-cms-spots],[data-cms-list],[data-cms-table],[data-cms-chips]';
   function owned(el, sec) { return el.closest('[data-cms]') === sec; }
   function fieldsIn(scope, sec) {
     var all = Array.from(scope.querySelectorAll(FIELD_SEL));
@@ -250,7 +283,7 @@
   function setText(el, value) {
     lock(el);
     if (!trim(value)) { el.hidden = true; el.setAttribute('data-cms-hid', ''); return; }
-    if (el.hasAttribute('data-cms-hid')) { el.hidden = false; el.removeAttribute('data-cms-hid'); }
+    if (el.hasAttribute('data-cms-hid') || el.hasAttribute('data-cms-opt')) { el.hidden = false; el.removeAttribute('data-cms-hid'); }
     // 아이콘·화살표·코드가 채우는 조각(data-*)은 두고, 글자만 원래 자리에서 바꾼다
     var marker = null, removed = '';
     Array.from(el.childNodes).forEach(function (n) {
@@ -327,6 +360,15 @@
       ul.appendChild(li);
     });
   }
+  // **굵게** 만 알아듣고 el 안에 글자를 넣는다 (표 칸 · 목록 · 계산 줄)
+  function richInto(el, text) {
+    el.textContent = '';
+    String(text).split(/(\*\*[^*]+\*\*)/).forEach(function (p) {
+      if (!p) return;
+      var m = p.match(/^\*\*([^*]+)\*\*$/);
+      if (m) { var b = document.createElement('b'); b.textContent = m[1]; el.appendChild(b); } else el.appendChild(document.createTextNode(p));
+    });
+  }
   // 글머리 목록(<ul><li>) : 한 줄 = 한 항목
   function setList(ul, value) {
     var tpl = ul.querySelector('li');
@@ -334,8 +376,31 @@
     if (!tpl) return;
     tpl = tpl.cloneNode(false);
     ul.innerHTML = '';
-    lines.forEach(function (line) { var li = tpl.cloneNode(false); li.textContent = line; ul.appendChild(li); });
+    lines.forEach(function (line) { var li = tpl.cloneNode(false); richInto(li, line); ul.appendChild(li); });
     ul.hidden = !lines.length;
+  }
+  // 표(<table>) : 한 줄 = 한 행, 칸은 | 로 나눈다. 머리 줄(thead)이 있으면 첫 줄이 머리 줄. 칸 모양(th·td · 정렬 클래스)은 같은 번째 칸을 따른다
+  function setTable(tb, value) {
+    var rows = String(value).split('\n').map(trim).filter(Boolean).map(function (l) { return l.split('|').map(trim); });
+    var head = tb.tHead && tb.tHead.rows[0], body = tb.tBodies[0];
+    if (!rows.length || !body || !body.rows[0]) return;
+    function build(tpl, cells) {
+      var tr = tpl.cloneNode(false), tpls = Array.from(tpl.cells);
+      cells.forEach(function (t, i) { var c = tpls[Math.min(i, tpls.length - 1)].cloneNode(false); richInto(c, t); tr.appendChild(c); });
+      return tr;
+    }
+    var headTpl = head, rowTpl = body.rows[0].cloneNode(true);
+    if (headTpl) { var h = build(headTpl.cloneNode(true), rows.shift()); head.parentNode.replaceChild(h, head); }
+    body.innerHTML = '';
+    rows.forEach(function (cells) { body.appendChild(build(rowTpl, cells)); });
+  }
+  // 계산 줄(알약 모양 조각들) : 한 줄 = 한 조각. 「× 2 =」 「=」 「→」처럼 기호만 있는 줄은 작은 기호로
+  var CHIP_OP = /^[×÷=+−→\-][\s\d.×÷=+−→\-]*$/;
+  function setChips(box, value) {
+    var lines = String(value).split('\n').map(trim).filter(Boolean);
+    if (!lines.length) return;
+    box.textContent = '';
+    lines.forEach(function (t) { var e = document.createElement(CHIP_OP.test(t) ? 'i' : 'span'); richInto(e, t); box.appendChild(e); box.appendChild(document.createTextNode(' ')); });
   }
   function applyScope(scope, sec, data) {
     var imgLabels = [], urls = {};
@@ -356,6 +421,8 @@
       if ((a = el.getAttribute('data-cms-lines')) && f[norm(a)] != null) el.textContent = String(f[norm(a)]).split('\n').map(trim).filter(Boolean).join('\n');
       if ((a = el.getAttribute('data-cms-spots')) && f[norm(a)] != null) setSpots(el, f[norm(a)]);
       if ((a = el.getAttribute('data-cms-list')) && f[norm(a)] != null) setList(el, f[norm(a)]);
+      if ((a = el.getAttribute('data-cms-table')) && f[norm(a)] != null) setTable(el, f[norm(a)]);
+      if ((a = el.getAttribute('data-cms-chips')) && f[norm(a)] != null) setChips(el, f[norm(a)]);
     });
   }
   function isOff(v) { return /^(아니|아니오|아니요|숨김|숨기기|끔|끄기|no|off|x|false)$/i.test(trim(v)); }
@@ -408,6 +475,41 @@
   }
   function saleObj(key) { return function () { var s = SC.sale = SC.sale || {}; return (s[key] = s[key] || {}); }; }
   var POPUP_MAX = 5, KAKAO_KEY = 'inter-cms-kakao';
+  /* 쇼핑 도우미 글의 칸 : [칸 이름, 설정 이름, 지금 값 읽기] */
+  var HELPER_KEY = 'inter-helper-cfg', HELPER_MAX = 60;
+  function lines(v) { return Array.isArray(v) ? v.join('\n') : (v == null ? '' : String(v)); }
+  var HELPER_FIELDS = [
+    ['보이기', 'enabled', function (c) { return c.enabled === false ? '아니오' : '예'; }],
+    ['이름', 'name', function (c) { return c.name || ''; }],
+    ['버튼 글자', 'fabLabel', function (c) { return c.fabLabel || ''; }],
+    ['버튼 아이콘', 'fabIcon', function (c) { return c.fabIcon || ''; }],
+    ['안내 말풍선', 'hint', function (c) { return c.hint || ''; }],
+    ['머리글 영문', 'label', function (c) { return c.label || ''; }],
+    ['머리글 인사', 'kicker', function (c) { return c.kicker || ''; }],
+    ['입력창 안내', 'placeholder', function (c) { return c.placeholder || ''; }],
+    ['다시 온 손님 인사', 'backGreeting', function (c) { return c.backGreeting || ''; }],
+    ['재방문 쿠폰 번호', 'revisitCoupon', function (c) { return c.revisitCoupon || ''; }],
+    ['재방문 쿠폰 혜택', 'revisitValue', function (c) { return c.revisitValue || ''; }],
+    ['재방문 쿠폰 이름', 'revisitTitle', function (c) { return c.revisitTitle || ''; }],
+    ['재방문 쿠폰 조건', 'revisitCond', function (c) { return c.revisitCond || ''; }],
+    ['재방문 쿠폰 시간', 'revisitHours', function (c) { return c.revisitHours == null ? '' : String(c.revisitHours); }],
+    ['인사말', 'greeting', function (c) { return c.greeting || ''; }],
+    ['메뉴', 'menu', function (c) { return lines(c.menu); }],
+    ['못 찾았을 때', 'fallback', function (c) { return c.fallback || ''; }],
+    ['운영 시간', 'hours', function (c) { return c.hours || ''; }],
+    ['상담 연결 주소', 'contact', function (c) { return c.contact || ''; }],
+    ['문의 남기기 주소', 'askLink', function (c) { return c.askLink || ''; }],
+    ['배울 게시판 번호', 'faqBoard', function (c) { return c.faqBoard == null ? '' : String(c.faqBoard); }],
+    ['같은 말', 'synonyms', function (c) { return lines(c.synonyms); }]
+  ];
+  var HELPER_ITEM = [
+    ['분류', 'cat', function (q) { return q.cat || ''; }],
+    ['질문', 'q', function (q) { return q.q || ''; }],
+    ['키워드', 'keywords', function (q) { return lines(q.keywords).replace(/\n/g, ', '); }],
+    ['답변', 'a', function (q) { return q.a || ''; }],
+    ['버튼', 'buttons', function (q) { return lines(q.buttons); }],
+    ['이어서', 'next', function (q) { return lines(q.next).replace(/\n/g, ' / '); }]
+  ];
   /* 세일 쿠폰 뽑기 카드 앞면 사진 3장 (product/list.html 의 runCoupon 이 sale.coupon.cards 를 쓴다) */
   function withCards(base) {
     return {
@@ -492,6 +594,41 @@
         if (a) a.href = f.kakao || 'https://pf.kakao.com/';
       }
     },
+    // 오른쪽 아래 「쇼핑 도우미」(/addons/shop-helper/shop-helper.js — 단독 기능, 없으면 이 어댑터는 쓰이지 않는다). 설정 · 질문과 답을 이 글 하나에 적는다 → 모든 페이지가 이 브라우저 기억으로 쓴다
+    helper: {
+      labels: HELPER_FIELDS.map(function (f) { return f[0]; }).concat(HELPER_ITEM.map(function (f) { return f[0]; })),
+      draft: function () {
+        var H = window.INTER_HELPER, c = H ? H.config() : {}, add = H && H.takeTeach && H.takeTeach();
+        var all = c.qnaAll || c.qna || [], items = all.slice(0, HELPER_MAX).map(function (q) {
+          return { label: '질문과 답', fields: HELPER_ITEM.map(function (f) { return [f[0], f[2](q)]; }) };
+        });
+        // 도우미 창의 [이 질문 가르치기] : 같은 질문 칸이 있으면 그대로, 없으면 맨 끝에 새 칸
+        if (add && !all.some(function (q) { return norm(q.q) === norm(add); }) && items.length < HELPER_MAX) {
+          items.push({ label: '새로 가르치기', fields: HELPER_ITEM.map(function (f) { return [f[0], f[0] === '질문' ? add : '']; }) });
+        }
+        return {
+          note: '쇼핑 도우미를 열면 「메뉴」가 먼저 나오고, 메뉴를 고르면 그 「분류」의 질문이 나와요. 메뉴는 한 줄에 「이름 | 설명」(예: 배송 안내 | 출고 일정 · 배송비), 질문과 답의 분류 칸에는 메뉴 이름을 그대로 적어요. 칸을 늘리려면 번호 묶음의 [복사해서 추가]를, 줄이려면 [삭제]를 눌러요 (최대 ' + HELPER_MAX + '개). '
+            + '키워드는 쉼표로 나눠 써요 (예: 환불, 반품, 돌려받기). 버튼은 한 줄에 「이름 주소」 하나씩 (예: 주문 조회 /myshop/order/list.html). '
+            + '이어서 물어볼 것은 / 로 나눠 써요. 처음부터 들어 있던 기본 답을 쓰지 않으려면 그 칸의 답변만 비워요 (칸을 지우면 기본 답이 다시 나와요). 같은 말은 한 줄에 「환불 = 반품 = 돌려받기」처럼 써요. '
+            + '자주묻는질문 게시판 글(제목 = 질문, 본문 = 답)도 도우미가 자동으로 배워요 — 그 게시판 번호를 적어 두세요(0 이면 끔).',
+          fields: HELPER_FIELDS.map(function (f) { return [f[0], f[2](c)]; }),
+          items: items
+        };
+      },
+      apply: function (data) {
+        var o = { qna: [] }, f = data.fields;
+        HELPER_FIELDS.forEach(function (d) { var v = f[norm(d[0])]; if (v != null) o[d[1]] = v; });
+        if (f[norm('보이기')] != null) o.enabled = !isOff(f[norm('보이기')]);
+        data.items.forEach(function (it) {
+          if (!it) return;
+          var q = {};
+          HELPER_ITEM.forEach(function (d) { var v = it.fields[norm(d[0])]; if (v != null) q[d[1]] = v; });
+          if (trim(q.q || '') || trim(q.keywords || '')) o.qna.push(q);
+        });
+        lsSet(HELPER_KEY, { t: Date.now(), cfg: o });
+        if (window.INTER_HELPER) window.INTER_HELPER.setBoardConfig(o);
+      }
+    },
     popup: {
       draft: function () {
         var c = SC.popup || {}, s = c.slides || [];
@@ -566,7 +703,7 @@
     var k = { '보이기': 1 };
     k[norm('보이기')] = 1;
     [sec].concat(Array.from(sec.querySelectorAll(FIELD_SEL))).forEach(function (el) {
-      ['text', 'href', 'src', 'video', 'links', 'lines', 'spots', 'list'].forEach(function (t) { var v = el.getAttribute('data-cms-' + t); if (v) k[norm(v)] = 1; });
+      ['text', 'href', 'src', 'video', 'links', 'lines', 'spots', 'list', 'table', 'chips'].forEach(function (t) { var v = el.getAttribute('data-cms-' + t); if (v) k[norm(v)] = 1; });
     });
     if (sec.getAttribute('data-cms-adapter') === 'popup') ['배지', '작은 글', '제목', '설명', '버튼', '링크', '마감 시각', '넘김 간격(초)'].forEach(function (l) { k[norm(l)] = 1; });
     var ad = ADAPTERS[sec.getAttribute('data-cms-adapter')];
@@ -605,8 +742,8 @@
         var tag = n.tagName.toUpperCase();
         if (tag === 'BR') { out += '\n'; return; }
         if (KEEP.test(tag) || Array.from(n.attributes).some(function (a) { return /^data-/.test(a.name); })) return;
-        if (/^(EM|I)$/.test(tag)) { out += '*' + trim(n.textContent) + '*'; return; }
-        if (/^(B|STRONG)$/.test(tag) && el.tagName !== 'B') { out += '**' + trim(n.textContent) + '**'; return; }
+        if (/^(EM|I)$/.test(tag)) { out += trim(n.textContent) ? '*' + trim(n.textContent) + '*' : ''; return; }
+        if (/^(B|STRONG)$/.test(tag) && el.tagName !== 'B') { out += trim(n.textContent) ? '**' + trim(n.textContent) + '**' : ''; return; }
         walk(n);
       });
     }(el));
@@ -634,7 +771,9 @@
         texts.push('<p>' + esc(a) + ':<br>' + Array.from(el.querySelectorAll('a')).map(function (x) { return esc(trim(x.textContent) + ' ' + (x.getAttribute('href') || '')); }).join('<br>') + '</p>');
       }
       if ((a = el.getAttribute('data-cms-lines')) && !done['n' + a]) { done['n' + a] = 1; texts.push('<p>' + esc(a) + ':<br>' + el.textContent.split('\n').map(trim).filter(Boolean).map(esc).join('<br>') + '</p>'); }
-      if ((a = el.getAttribute('data-cms-list')) && !done['u' + a]) { done['u' + a] = 1; texts.push('<p>' + esc(a) + ':<br>' + Array.from(el.querySelectorAll('li')).map(function (li) { return esc(trim(li.textContent)); }).join('<br>') + '</p>'); }
+      if ((a = el.getAttribute('data-cms-list')) && !done['u' + a]) { done['u' + a] = 1; texts.push('<p>' + esc(a) + ':<br>' + Array.from(el.querySelectorAll('li')).map(function (li) { return esc(getText(li).replace(/\n/g, ' ')); }).join('<br>') + '</p>'); }
+      if ((a = el.getAttribute('data-cms-table')) && !done['b' + a]) { done['b' + a] = 1; texts.push('<p>' + esc(a) + ':<br>' + Array.from(el.rows).map(function (tr) { return esc(Array.from(tr.cells).map(function (c) { return getText(c).replace(/\n/g, ' '); }).join(' | ')); }).join('<br>') + '</p>'); }
+      if ((a = el.getAttribute('data-cms-chips')) && !done['c' + a]) { done['c' + a] = 1; texts.push('<p>' + esc(a) + ':<br>' + Array.from(el.children).map(function (c) { return esc(getText(c).replace(/\n/g, ' ')); }).join('<br>') + '</p>'); }
       if ((a = el.getAttribute('data-cms-spots')) && !done['p' + a]) {
         done['p' + a] = 1;
         var rows = Array.from(el.querySelectorAll('.cz-look__spot')).map(function (b) {
@@ -682,6 +821,7 @@
     }
     var text = body.join('');
     if (/: [^<]*\*[^*<]+\*/.test(text)) head.push('<p>※ *별표*로 감싼 글자는 기울어진 강조 글씨로 나와요.</p>');
+    if (/(표 내용|칸 내용):/.test(text)) head.push('<p>※ 표는 한 줄이 한 행이에요. 칸 사이는 | 로 나눠 쓰고, 줄을 더하거나 지우면 행이 늘고 줄어요. 맨 위 줄은 표의 제목 줄이에요(제목 줄이 없는 표는 첫 줄도 내용이에요).</p>');
     if (/바로가기:/.test(text)) head.push('<p>※ 여러 줄 항목은 한 줄에 하나씩 써요. 바로가기는 "이름 한 칸 띄고 주소" 예) 책장 /product/search.html?keyword=책장</p>');
     return { subject: '[' + page + '] ' + name, html: head.concat(body).join('') };
   }
@@ -726,6 +866,7 @@
     + '@keyframes cmsPulse{50%{box-shadow:0 0 0 8px rgba(255,90,54,.25)}}'
     + '.cms-off-tag{position:absolute;z-index:61;top:58px;right:10px;padding:8px 14px;border-radius:999px;background:#1f1d1a;color:#fff;font:700 14px/1.2 Pretendard,system-ui,sans-serif;box-shadow:0 4px 14px rgba(0,0,0,.25);pointer-events:none}'
     + '.cms-btn{position:absolute;z-index:60;top:10px;left:10px;display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border:0;border-radius:999px;background:#ff5a36;color:#fff;font:700 14px/1.2 Pretendard,system-ui,sans-serif;font-style:normal;letter-spacing:0;text-transform:none;box-shadow:0 4px 14px rgba(0,0,0,.25);cursor:pointer}'
+    + '#lw-home .cms-btn,html.cms-edit .cms-btn,html.cms-edit .cms-btn small,html.cms-edit .cms-btn *{color:#fff!important;-webkit-text-fill-color:#fff!important;mix-blend-mode:normal!important;text-shadow:none!important;opacity:1}html.cms-edit .cms-btn small{opacity:.9}'
     // 버튼이 놓인 영역의 글꼴 규칙(예: 배너의 small 기울임체)이 스며들지 않게
     + '.cms-btn small{display:inline;margin:0;font:500 12px/1.2 Pretendard,system-ui,sans-serif;font-style:normal;letter-spacing:0;text-transform:none;color:inherit;opacity:.9}'
     + '.pe-hero-track>.cms-btn{top:96px}.cms-bar .cms-btn{position:static;box-shadow:none}'
@@ -829,7 +970,7 @@
       all[name] = { subject: d.subject, html: d.html, t: Date.now(), use: true, autosave: true };
       lsSet(DRAFT_KEY, all);
       saving = true;
-      var f = document.createElement('iframe'), loads = 0, over = false;
+      var f = document.createElement('iframe'), loads = 0, over = false, checked = false;
       f.setAttribute('aria-hidden', 'true'); f.tabIndex = -1;
       f.style.cssText = 'position:fixed;left:-10000px;top:0;width:1100px;height:900px;border:0;opacity:0;pointer-events:none';
       function finish(ok, why) {
@@ -839,7 +980,7 @@
         // 처음 저장한 글이면 글 번호를 받아 두어 다음 저장은 그 글을 고친다
         if (ok) load([name], null, true).then(function (m) { if (m[name]) { state.map = state.map || {}; state.map[name] = m[name]; } }).catch(function () {});
         // 카페24가 짧은 시간에 요청이 몰리면 보안 확인을 요구한다 → 사람이 직접 확인하도록 안내
-        if (why === 'blocked') { done(false, why); alert('카페24 보안 확인이 필요해 저장하지 못했어요. 새 창에서 게시판(/board/free/list.html?board_no=' + BOARD + ')을 열어 확인을 마친 뒤 다시 저장해 주세요.'); return; }
+        if (why === 'blocked') { done(false, why); alert('카페24 보안 확인이 끝나지 않아 저장하지 못했어요. 새 창에서 ' + location.origin + '/board/free/write.html?board_no=' + BOARD + ' 을 열어 확인 화면이 지나가면(몇 초) 다시 저장해 주세요.'); return; }
         done(ok);
       }
       f.addEventListener('load', function () {
@@ -847,14 +988,18 @@
         var path = '';
         // 저장 창 안의 안내·확인 창은 띄우지 않는다 (저장이 안 되면 아래 시간 제한으로 알린다)
         try { var w = f.contentWindow; path = w.location.pathname; w.alert = function () {}; w.confirm = function () { return true; }; } catch (e) {}
-        // 다른 주소로 넘어갔으면(카페24 보안 확인 페이지 등) 저장 못 한 것
-        if (!path) { finish(false, 'blocked'); return; }
-        // 글쓰기·수정 화면을 벗어나면(글 보기·목록으로 넘어가면) 저장된 것
-        if (loads > 1 && !/\/(write|modify)\.html$/.test(path)) finish(true);
+        // 다른 주소로 넘어갔으면 카페24 보안 확인 화면(veritas-hub.cafe24.com)이다 — 보통 몇 초 뒤 저절로 통과하므로 기다린다
+        if (!path) { checked = true; return; }
+        if (/\/(write|modify)\.html$/.test(path)) { seen = true; return; }
+        // 보안 확인을 마치면 카페24가 글쓰기 화면이 아니라 원래 보던 화면으로 돌려보낸다 → 글쓰기 화면을 다시 연다
+        if (!seen) { if (tries++ < 3) f.src = src; else finish(false, 'blocked'); return; }
+        // 글쓰기·수정 화면을 거쳐 글 보기·목록으로 넘어가면 저장된 것
+        finish(true);
       });
-      f.src = (post ? '/board/free/modify.html?board_act=edit&no=' + post.no + '&board_no=' + BOARD : '/board/free/write.html?board_no=' + BOARD) + '&cms=' + encodeURIComponent(name);
+      var src = (post ? '/board/free/modify.html?board_act=edit&no=' + post.no + '&board_no=' + BOARD : '/board/free/write.html?board_no=' + BOARD) + '&cms=' + encodeURIComponent(name), seen = false, tries = 0;
+      f.src = src;
       document.body.appendChild(f);
-      setTimeout(function () { finish(false); }, 25000);
+      setTimeout(function () { finish(false, checked ? 'blocked' : ''); }, 40000);   /* 보안 확인을 끝내 통과하지 못하면 안내 */
       return true;
     }
     function saveOrder() {
@@ -1075,13 +1220,17 @@
   /* ---------- 5. 글쓰기·수정 창 : 전용 편집 화면(inter-cms-editor.js)을 띄운다 ---------- */
   var BOARD_PAGE = /\/board\/[^/]+\/(write|modify)\.html/.test(location.pathname) && BOARD && (qs.match(/[?&]board_no=(\d+)/) || [])[1] === String(BOARD);
   if (BOARD_PAGE) {
+    // 글쓰기 · 수정 화면 위쪽의 「뉴스/이벤트」 제목과 「홈 > 게시판 > 뉴스/이벤트」 경로는 숨긴다 (편집 화면만 보이게)
+    var boardHide = document.createElement('style');
+    boardHide.textContent = '[module^="board_title"] .path,[module^="board_title"] .titleArea,.xans-board-title .path,.xans-board-title .titleArea{display:none!important}';
+    (document.head || html).appendChild(boardHide);
     // 카페24 자동 저장의 "작성중이던 글이 있습니다. 불러오시겠습니까?" 를 묻지 않는다 (항상 '아니오')
     var nativeConfirm = window.confirm;
     window.confirm = function (msg) { return /작성\s*중|임시\s*저장|불러오/.test(String(msg)) ? false : nativeConfirm.apply(window, arguments); };
   }
   function loadEditor() {
     var s = document.createElement('script');
-    s.src = '/layout/basic/js/inter-cms-editor.js?v=' + (CFG.editorVersion || '20260930b');
+    s.src = '/layout/basic/js/inter-cms-editor.js?v=' + (CFG.editorVersion || '20261009b');
     document.body.appendChild(s);
   }
 
@@ -1112,6 +1261,24 @@
       }).catch(function () { return ''; });
     },
     kakaoKey: KAKAO_KEY,
+    helperKey: HELPER_KEY,
+    // 화면 관리 영역이 없는 페이지에서 글 하나를 통째로 읽는다 (쇼핑 도우미 설정) → { fields, imgs, items } 또는 null
+    fetchData: function (name, labels) {
+      if (!BOARD) return Promise.resolve(null);
+      return load([name], null, true).then(function (map) {
+        var p = map[name], known = {};
+        (labels || []).forEach(function (l) { known[norm(l)] = 1; });
+        return p ? parse(p.content, known) : null;
+      }).catch(function () { return null; });
+    },
+    helperLabels: function () { return ADAPTERS.helper.labels.slice(); },
+    applyHelper: function (data) { ADAPTERS.helper.apply(data); },
+    // 다른 게시판 읽기 (쇼핑 도우미가 자주묻는질문 게시판을 배울 때) : 여러 페이지 · 글쓴이 확인 포함
+    listBoard: function (board, done) { return listBoard(board, done).then(function (r) { return r.list.filter(trusted); }); },
+    readPost: function (p, board) { return getPost(p, board); },
+    norm: norm,
+    // 손님 화면의 게시판 목록에서 숨길 화면 관리 글의 제목 앞머리 (board/free/list.html)
+    pageLabels: function () { return [PREFIX.replace(/[\[\]]/g, ''), '세일 페이지', '가이드 페이지', '웰컴 쿠폰팩', '목록 공통', '모든 페이지']; },
     // 영역 하나에만 기억해 둔 최신 내용을 바로 넣는다 (페이지를 다 읽기 전에 그리는 목록 위 배너용).
     // 기억이 최신이면 true — 그 영역 글이 없으면 기본값이 곧 최종 내용이다.
     applyCachedSection: function (sec) {
@@ -1151,7 +1318,9 @@
   // 저장 직후(편집기가 기억을 지운다)·기억한 내용이 오래됐을 때는 다 읽을 때까지 붙잡고(state.hold),
   // 그 밖에는(편집 모드 포함) 기억한 내용을 바로 보이고 뒤에서 새로 읽는다. 안전장치로 최대 6초가 지나면 무조건 걷는다.
   var salePage = /\/product\/list\.html/.test(location.pathname) && (qs.match(/[?&]cate_no=(\d+)/) || [])[1] === String((SC.sale || {}).categoryNo || 27);
-  if (BOARD && (/^\/(index\.html)?$/.test(location.pathname) || salePage || HERO_PAGE)) {
+  // data-cms-text · data-cms-src 로 그리는 영역이 있는 페이지 : 메인 · 세일 · 가이드 (새 페이지에 data-cms 를 붙이면 여기에 경로를 추가한다)
+  var guidePage = /^\/inter\/(guide|welcome)\.html$/.test(location.pathname);   // 가이드 · 웰컴 쿠폰팩
+  if (BOARD && (/^\/(index\.html)?$/.test(location.pathname) || salePage || guidePage || HERO_PAGE)) {
     html.classList.add('cms-wait');
     var cached = lsGet(CACHE_KEY);
     state.hold = !(cached && cached.map) || Date.now() - cached.t >= TTL;
@@ -1160,7 +1329,7 @@
   // 영역 숨기기·첫 방문 가림 규칙 (메인·세일 등 어느 페이지에서나)
   if (BOARD && document.head) {
     var cmsStyle = document.createElement('style');
-    cmsStyle.textContent = 'html:not(.cms-edit) .cms-off{display:none!important}.cms-wait [data-cms] [data-cms-text],.cms-wait [data-cms] [data-cms-src],.cms-wait [data-cms] [data-cms-links],.cms-wait [data-cms][data-cms-text],.cms-wait .inter-menu-hero:not(.is-filled)>img,.cms-wait .inter-menu-hero:not(.is-filled)>div>:not(nav){visibility:hidden}';
+    cmsStyle.textContent = 'html:not(.cms-edit) .cms-off{display:none!important}.cms-wait [data-cms] [data-cms-text],.cms-wait [data-cms] [data-cms-src],.cms-wait [data-cms] [data-cms-links],.cms-wait [data-cms] [data-cms-list],.cms-wait [data-cms] [data-cms-table],.cms-wait [data-cms] [data-cms-chips],.cms-wait [data-cms] [data-cms-href][data-cms-item],.cms-wait [data-cms][data-cms-text],.cms-wait .inter-menu-hero:not(.is-filled)>img,.cms-wait .inter-menu-hero:not(.is-filled)>div>:not(nav){visibility:hidden}';
     document.head.appendChild(cmsStyle);
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();

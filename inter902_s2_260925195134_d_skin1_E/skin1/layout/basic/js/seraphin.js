@@ -1557,19 +1557,22 @@
 		var block = doc.createElement('div');
 		block.className = 'st-pd__price';
 
+		var rate = doc.createElement('span');
+		rate.className = 'st-pd__rate';
+		rate.hidden = true;
+
+		var line = doc.createElement('div');
+		line.className = 'st-pd__now';
+
 		if (custom) {
 			var was = doc.createElement('div');
 			was.className = 'st-pd__was';
 			was.appendChild(custom);				// 복사가 아니라 이동
+			was.appendChild(rate);					// 할인율은 정가 바로 옆에 (빨강)
 			block.appendChild(was);
+		} else {
+			line.appendChild(rate);
 		}
-
-		var line = doc.createElement('div');
-		line.className = 'st-pd__now';
-		var rate = doc.createElement('span');
-		rate.className = 'st-pd__rate';
-		rate.hidden = true;
-		line.appendChild(rate);
 
 		line.appendChild(now);
 		block.appendChild(line);
@@ -1578,7 +1581,11 @@
 
 		function digits(node) {
 			if (!node) { return 0; }
-			var only = node.textContent.replace(/[^0-9]/g, '');
+			// 카페24 sale_price.js 가 판매가 안에 넣는 "10%" 배지(.sale_box)가 숫자에 섞이지 않게 뺀다
+			var copy = node.cloneNode(true);
+			var junk = copy.querySelectorAll('.sale_box');
+			for (var j = 0; j < junk.length; j++) { junk[j].parentNode.removeChild(junk[j]); }
+			var only = copy.textContent.replace(/[^0-9]/g, '');
 			return only ? parseInt(only, 10) : 0;
 		}
 

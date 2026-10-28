@@ -69,9 +69,9 @@
 	<!-- BUYER EDITABLE : 구매자 콘텐츠 설정 파일 (브랜드명·로고·문구·링크·이미지·영상). 이 파일만 고치면 된다.
 	     뒤에 붙은 ?v=숫자 는 캐시 무효화용이다. 파일을 고쳤는데 카페24 서버 캐시가 안 지워져
 	     예전 내용이 계속 보이면, 숫자를 하나 올려서 저장한다(예: v=20260923 → v=20260924). -->
-	<script src="/layout/basic/js/store-content.js?v=20260928c"></script>
+	<script src="/layout/basic/js/store-content.js?v=20261028a"></script>
 	<!-- 게시판 화면 관리 : 메인의 사진·글자를 게시판 글로 바꾼다 (설정 = store-content.js 의 cms) -->
-	<script src="/layout/basic/js/inter-cms.js?v=20260930o"></script>
+	<script src="/layout/basic/js/inter-cms.js?v=20261028a"></script>
 
 	<!-- DO NOT EDIT - DESIGN SYSTEM : 메인 인트로(SERAPHIN ✕ Be yourself)
 	     스타일을 반드시 <head> 에 둔다. seraphin.css 는 본문 맨 끝에서 불러오므로, 거기에 두면 인트로가
@@ -355,11 +355,15 @@ initStoreConfig();}());}catch(e){}</script>
 	<a class="s9-float__btn s9-float__btn--recent" href="/product/recent_view_product.html"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="8.5"></circle><path d="M12 7.5V12l3 2" stroke-linecap="round"></path></svg><span class="displaynone">최근 본 상품</span></a>
 	<a class="s9-float__btn s9-float__btn--top" href="#wrap" data-s9="top"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M12 19V5M5.5 11.5 12 5l6.5 6.5" stroke-linecap="round" stroke-linejoin="round"></path></svg><span class="displaynone">맨 위로</span></a>
 </div>
+<script>/* 챗봇 상담 말풍선(모바일) : 한 번 사라지면 이 탭에서 다른 페이지로 가도 다시 나오지 않는다 (사라질 때 sessionStorage 에 기록 → html.bot-label-off · 스타일은 inter-cozy-global.css) */
+(function(){try{if(!window.matchMedia||!matchMedia('(max-width:767px)').matches)return;var K='inter-bot-label-gone',d=document.documentElement;if(sessionStorage.getItem(K)){d.classList.add('bot-label-off');return}document.addEventListener('animationend',function(e){if(e.animationName==='czBotLabelOut'){try{sessionStorage.setItem(K,'1')}catch(x){}d.classList.add('bot-label-off')}},true)}catch(e){}})();</script>
 <script>
 try{(function(){
 	var c=window.STORE_CONTENT||{},f=document.getElementById('s9Float');if(!f)return;
 	/* 카카오톡 채널 주소 : ?edit=1 의 [카카오톡 상담 버튼 고치기] 글 → 이 브라우저가 기억한 값 → store-content.js 순 */
 	var CMS=window.INTER_CMS,KK_NAME='카카오톡 상담 버튼',kkSaved=null;try{kkSaved=JSON.parse(localStorage.getItem((CMS&&CMS.kakaoKey)||'inter-cms-kakao'))}catch(e){}
+	/* 채널 아이디(pf.kakao.com/_…)가 없는 기본 주소는 기억하지 않는다 (예전에 잘못 기억한 값 무시) */
+	if(typeof kkSaved==='string'&&!/pf\.kakao\.com\/_/.test(kkSaved))kkSaved=null;
 	var urls={instagram:(c.social&&c.social.instagram)||'',kakao:(typeof kkSaved==='string'?kkSaved:'')||(c.floating&&c.floating.kakao)||''};
 	['instagram','kakao'].forEach(function(k){var a=f.querySelector('[data-s9="'+k+'"]');if(a&&urls[k]){a.href=urls[k];a.hidden=false}});
 	/* 카카오톡 버튼은 항상 보이게 : 채널 주소가 비어 있으면 카카오톡 채널 홈으로 */
@@ -368,7 +372,7 @@ try{(function(){
 		/* 게시판 글로 바꾸는 페이지(메인·세일·목록 등)에서는 화면 관리 영역으로 넣어 ?edit=1 에서 고칠 수 있게 한다 */
 		if(document.querySelector('[data-cms]')){kk.setAttribute('data-cms',KK_NAME);kk.setAttribute('data-cms-adapter','kakao');kk.setAttribute('data-cms-page','모든 페이지');kk.setAttribute('data-cms-bar','')}
 		/* 주소를 아직 모르는 브라우저(상품 상세로 바로 들어온 손님 등)는 누를 때 게시판에서 읽어 연다 */
-		else if(kkSaved===null&&!urls.kakao){kk.addEventListener('click',function(e){e.preventDefault();var w=window.open('about:blank','_blank');if(w)w.opener=null;CMS.fetchField(KK_NAME,'카카오톡 채널 주소').then(function(u){u=/^https?:\/\//i.test(u||'')?u.trim().split(/\s+/)[0]:'https://pf.kakao.com/';try{localStorage.setItem(CMS.kakaoKey,JSON.stringify(u))}catch(er){}kk.href=u;if(w)w.location.href=u;else location.href=u})},{once:true})}
+		else if(kkSaved===null&&!urls.kakao){kk.addEventListener('click',function(e){e.preventDefault();var w=window.open('about:blank','_blank');if(w)w.opener=null;CMS.fetchField(KK_NAME,'카카오톡 채널 주소').then(function(u){u=/^https?:\/\//i.test(u||'')?u.trim().split(/\s+/)[0]:(c.floating&&c.floating.kakao)||'https://pf.kakao.com/';if(/pf\.kakao\.com\/_/.test(u))try{localStorage.setItem(CMS.kakaoKey,JSON.stringify(u))}catch(er){}kk.href=u;if(w)w.location.href=u;else location.href=u})},{once:true})}
 	}
 	document.querySelectorAll('[data-st-insta-link]').forEach(function(a){if(urls.instagram){a.href=urls.instagram;a.target='_blank';a.rel='noopener'}});
 	var top=f.querySelector('[data-s9="top"]');
@@ -389,6 +393,11 @@ try{(function(){
 	});
 })()}catch(e){}
 </script>
+<!-- 쇼핑 도우미 (단독 기능 · /addons/shop-helper/) : 빼려면 아래 한 줄을 지운다. 설정 = ?edit=1 의 [쇼핑 도우미 고치기] · store-content.js 의 helper -->
+<span id="whMember" module="Layout_stateLogon" hidden>{$name}</span><!-- 쇼핑 도우미 상담 넘기기 : 로그인한 회원 이름 (화면에는 안 보임) -->
+<script src="/addons/shop-helper/shop-helper.js?v=20261010m"></script>
+<!-- 무료회원 감사 쿠폰팩 (/addons/welcome-pack/) : 챗봇 버튼 밑 쿠폰 버튼 → /inter/welcome.html 작은 창. 빼려면 아래 한 줄을 지운다 -->
+<script src="/addons/welcome-pack/welcome-pack.js?v=20261009b"></script>
 <script>
 /* s9-fx : 스크롤 인터랙션 (페이드업 · 이미지 마스크 리빌 · 패럴랙스). 스타일은 st-home-s9.css 13번.
    끄려면 이 <script> 블록을 지운다. */
